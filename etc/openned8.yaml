@@ -1,0 +1,13 @@
+Name: openned8.rpc
+ListenOn: 0.0.0.0:9190
+
+
+Log:
+  ServiceName: openned8RpcLogger
+  Mode: file
+  Path: /home/data/logs/openned8/rpc
+  Encoding: json
+  Level: info
+  Compress: false
+  KeepDays: 7
+  StackCoolDownMillis: 100

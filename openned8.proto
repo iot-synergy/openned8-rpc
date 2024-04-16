@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package openned8;
+option go_package="./openned8";
+
+message Empty {}
+
+message BeanMsg {
+  string msg = 1;
+}
+
+message PageInfo {
+  uint64 Page = 1;
+  uint64 PageSize = 2;
+}
+
+message SdkUsage {
+  string UserId = 1;
+  int64 All = 2;
+  int64 Used = 3;
+}
+
+message AppInfo {
+  string Id = 1;
+  int64 CreatedAt = 2;
+  int64 UpdatedAt = 3;
+  string UserId = 4;
+  string AppName = 5;
+  string Summary = 6;
+  int64 AppCategory = 7;
+  int64 UseIndustry = 8;
+  string AppCategoryName = 9;
+  string UseIndustryName = 10;
+  string AppKey = 11;
+  string AppSecret = 12;
+}
+
+message AppListReq {
+  PageInfo PageInfo = 1;
+  string AppName = 2;
+  string AppCategoryName = 3;
+  string UseIndustryName = 4;
+}
+message ApplistInfo {
+  uint64 Total = 1;
+  repeated AppInfo Data = 2;
+}
+
+message CategorylistResp {
+  repeated CategoryInfo Data = 1;
+}
+
+message CategoryInfo {
+  int64 Id = 1;
+  string Name = 2;
+}
+
+message IndustrylistResp {
+  repeated IndustryInfo Data = 1;
+}
+
+message IndustryInfo {
+  int64 Id = 1;
+  string Name = 2;
+}
+
+message ActiveCodeListReq {
+  PageInfo PageInfo = 1;
+  string AppId = 2;
+  int64 Status = 3;
+  int64 ExpireDate = 4;
+}
+
+message ActiveCodeListInfo {
+  uint64 Total = 1;
+  repeated ActiveCodeInfo Data = 2;
+}
+message ActiveCodeInfo {
+  string Id = 1;
+  int64 CreatedAt = 2;
+  int64 UpdatedAt = 3;
+  string ActiveKey = 4;
+  string UserId = 5;
+  string AppId = 6;
+  string ActiveIP = 7;
+  string DeviceSN = 8;
+  string DeviceMac = 9;
+  string DeviceIdentity = 10;
+  int64 ActiveDate = 11;
+  int64 ActiveType = 12;
+  string ActiveFile = 13;
+  string Version = 14;
+  int64 StartDate = 15;
+  int64 ExpireDate = 16;
+  int64 Status = 17;
+}
+
+message UserSdkUsageQueryReq {
+  string UserId = 1;
+}
+
+message UserSdkUsageUpdateReq {
+  string UserId = 1;
+}
+
+service openned8 {
+  // group: developer
+  rpc sdkUsage (Empty) returns (SdkUsage);
+  // group: developer
+  rpc appCreate (AppInfo) returns (AppInfo);
+  // group: developer
+  rpc appUpdate (AppInfo) returns (AppInfo);
+  // group: developer
+  rpc appDelete (AppInfo) returns (BeanMsg);
+  // group: developer
+  rpc appQuery (AppListReq) returns (ApplistInfo);
+  // group: developer
+  rpc categoryQuery (Empty) returns (CategorylistResp);
+  // group: developer
+  rpc industryQuery (Empty) returns (IndustrylistResp);
+  // group: developer
+  rpc activeCodeQuery (ActiveCodeListReq) returns (ActiveCodeListInfo);
+  // group: admin
+  rpc queryUserSdkUsage(UserSdkUsageQueryReq) returns (SdkUsage);
+  // group: admin
+  rpc updateUserSdkUsage(UserSdkUsageUpdateReq) returns (SdkUsage);
+
+}
