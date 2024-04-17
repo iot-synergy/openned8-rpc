@@ -24,7 +24,25 @@ func NewAppCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppCrea
 }
 
 func (l *AppCreateLogic) AppCreate(in *openned8.AppInfo) (*openned8.AppInfo, error) {
-	// todo: add your logic here and delete this line
-
-	return &openned8.AppInfo{}, nil
+	save, err := l.svcCtx.DB.AppInfo.Create().SetUserID(in.UserId).SetAppName(in.AppName).SetSummary(in.Summary).
+		SetAppCategory(in.AppCategory).SetUseIndustry(in.UseIndustry).
+		SetAppCategoryName(in.AppCategoryName).SetUseIndustryName(in.UseIndustryName).
+		SetAppKey(in.AppKey).SetAppSecret(in.AppSecret).Save(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &openned8.AppInfo{
+		Id:              save.ID.String(),
+		CreatedAt:       save.CreatedAt.UnixMilli(),
+		UpdatedAt:       save.UpdatedAt.UnixMilli(),
+		UserId:          save.UserID,
+		AppName:         save.AppName,
+		Summary:         save.Summary,
+		AppCategory:     save.AppCategory,
+		UseIndustry:     save.UseIndustry,
+		AppCategoryName: save.AppCategoryName,
+		UseIndustryName: save.UseIndustryName,
+		AppKey:          save.AppKey,
+		AppSecret:       save.AppSecret,
+	}, nil
 }

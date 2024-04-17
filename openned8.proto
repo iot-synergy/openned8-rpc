@@ -105,8 +105,6 @@ message UserSdkUsageUpdateReq {
 
 service openned8 {
   // group: developer
-  rpc sdkUsage (Empty) returns (SdkUsage);
-  // group: developer
   rpc appCreate (AppInfo) returns (AppInfo);
   // group: developer
   rpc appUpdate (AppInfo) returns (AppInfo);

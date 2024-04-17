@@ -1,5 +1,5 @@
 
-å
+´
 openned8.protoopenned8"
 Empty"
 BeanMsg
@@ -84,9 +84,8 @@ ExpireDate
 UserSdkUsageQueryReq
 UserId (	RUserId"/
 UserSdkUsageUpdateReq
-UserId (	RUserId2ë
-openned8/
-sdkUsage.openned8.Empty.openned8.SdkUsage1
+UserId (	RUserId2º
+openned81
 	appCreate.openned8.AppInfo.openned8.AppInfo1
 	appUpdate.openned8.AppInfo.openned8.AppInfo1
 	appDelete.openned8.AppInfo.openned8.BeanMsg7

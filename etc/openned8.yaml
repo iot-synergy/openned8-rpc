@@ -11,3 +11,19 @@ Log:
   Compress: false
   KeepDays: 7
   StackCoolDownMillis: 100
+
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: openned8.rpc
+
+DatabaseConf:
+  Type: mysql
+  Host: 127.0.0.1
+  Port: 3306
+  DBName: database240219
+  Username: root # set your username
+  Password: xiaocaihong # set your password
+  MaxOpenConn: 100
+  SSLMode: disable
+  CacheTime: 5

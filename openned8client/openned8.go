@@ -31,7 +31,6 @@ type (
 	UserSdkUsageUpdateReq = openned8.UserSdkUsageUpdateReq
 
 	Openned8 interface {
-		SdkUsage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SdkUsage, error)
 		AppCreate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error)
 		AppUpdate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error)
 		AppDelete(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*BeanMsg, error)
@@ -52,11 +51,6 @@ func NewOpenned8(cli zrpc.Client) Openned8 {
 	return &defaultOpenned8{
 		cli: cli,
 	}
-}
-
-func (m *defaultOpenned8) SdkUsage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SdkUsage, error) {
-	client := openned8.NewOpenned8Client(m.cli.Conn())
-	return client.SdkUsage(ctx, in, opts...)
 }
 
 func (m *defaultOpenned8) AppCreate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error) {

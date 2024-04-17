@@ -2,6 +2,7 @@ package admin
 
 import (
 	"context"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -24,7 +25,13 @@ func NewQueryUserSdkUsageLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 }
 
 func (l *QueryUserSdkUsageLogic) QueryUserSdkUsage(in *openned8.UserSdkUsageQueryReq) (*openned8.SdkUsage, error) {
-	// todo: add your logic here and delete this line
-
-	return &openned8.SdkUsage{}, nil
+	data, err := l.svcCtx.DB.SdkUsage.Query().Where(sdkusage.UserIDEQ(in.UserId)).First(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &openned8.SdkUsage{
+		UserId: data.UserID,
+		All:    data.All,
+		Used:   data.Used,
+	}, nil
 }

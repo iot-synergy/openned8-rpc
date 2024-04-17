@@ -25,6 +25,20 @@ func NewCategoryQueryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cat
 
 func (l *CategoryQueryLogic) CategoryQuery(in *openned8.Empty) (*openned8.CategorylistResp, error) {
 	// todo: add your logic here and delete this line
-
-	return &openned8.CategorylistResp{}, nil
+	return &openned8.CategorylistResp{
+		Data: []*openned8.CategoryInfo{
+			{
+				Id:   1,
+				Name: "人脸识别",
+			},
+			{
+				Id:   2,
+				Name: "行车记录",
+			},
+			{
+				Id:   3,
+				Name: "鸟类识别",
+			},
+		},
+	}, nil
 }

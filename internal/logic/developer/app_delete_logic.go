@@ -2,7 +2,8 @@ package developer
 
 import (
 	"context"
-
+	"github.com/gofrs/uuid/v5"
+	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
 
@@ -24,7 +25,11 @@ func NewAppDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppDele
 }
 
 func (l *AppDeleteLogic) AppDelete(in *openned8.AppInfo) (*openned8.BeanMsg, error) {
-	// todo: add your logic here and delete this line
+	fromString, err := uuid.FromString(in.UserId)
+	if err != nil {
+		return nil, err
+	}
+	l.svcCtx.DB.AppInfo.Delete().Where(appinfo.IDEQ(fromString))
 
-	return &openned8.BeanMsg{}, nil
+	return &openned8.BeanMsg{Msg: "成功"}, nil
 }

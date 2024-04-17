@@ -19,7 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Openned8_SdkUsage_FullMethodName           = "/openned8.openned8/sdkUsage"
 	Openned8_AppCreate_FullMethodName          = "/openned8.openned8/appCreate"
 	Openned8_AppUpdate_FullMethodName          = "/openned8.openned8/appUpdate"
 	Openned8_AppDelete_FullMethodName          = "/openned8.openned8/appDelete"
@@ -35,8 +34,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type Openned8Client interface {
-	// group: developer
-	SdkUsage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SdkUsage, error)
 	// group: developer
 	AppCreate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error)
 	// group: developer
@@ -63,15 +60,6 @@ type openned8Client struct {
 
 func NewOpenned8Client(cc grpc.ClientConnInterface) Openned8Client {
 	return &openned8Client{cc}
-}
-
-func (c *openned8Client) SdkUsage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SdkUsage, error) {
-	out := new(SdkUsage)
-	err := c.cc.Invoke(ctx, Openned8_SdkUsage_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *openned8Client) AppCreate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error) {
@@ -160,8 +148,6 @@ func (c *openned8Client) UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsag
 // for forward compatibility
 type Openned8Server interface {
 	// group: developer
-	SdkUsage(context.Context, *Empty) (*SdkUsage, error)
-	// group: developer
 	AppCreate(context.Context, *AppInfo) (*AppInfo, error)
 	// group: developer
 	AppUpdate(context.Context, *AppInfo) (*AppInfo, error)
@@ -186,9 +172,6 @@ type Openned8Server interface {
 type UnimplementedOpenned8Server struct {
 }
 
-func (UnimplementedOpenned8Server) SdkUsage(context.Context, *Empty) (*SdkUsage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SdkUsage not implemented")
-}
 func (UnimplementedOpenned8Server) AppCreate(context.Context, *AppInfo) (*AppInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppCreate not implemented")
 }
@@ -227,24 +210,6 @@ type UnsafeOpenned8Server interface {
 
 func RegisterOpenned8Server(s grpc.ServiceRegistrar, srv Openned8Server) {
 	s.RegisterService(&Openned8_ServiceDesc, srv)
-}
-
-func _Openned8_SdkUsage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(Openned8Server).SdkUsage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Openned8_SdkUsage_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(Openned8Server).SdkUsage(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Openned8_AppCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -416,10 +381,6 @@ var Openned8_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "openned8.openned8",
 	HandlerType: (*Openned8Server)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "sdkUsage",
-			Handler:    _Openned8_SdkUsage_Handler,
-		},
 		{
 			MethodName: "appCreate",
 			Handler:    _Openned8_AppCreate_Handler,

@@ -23,11 +23,6 @@ func NewOpenned8Server(svcCtx *svc.ServiceContext) *Openned8Server {
 	}
 }
 
-func (s *Openned8Server) SdkUsage(ctx context.Context, in *openned8.Empty) (*openned8.SdkUsage, error) {
-	l := developer.NewSdkUsageLogic(ctx, s.svcCtx)
-	return l.SdkUsage(in)
-}
-
 func (s *Openned8Server) AppCreate(ctx context.Context, in *openned8.AppInfo) (*openned8.AppInfo, error) {
 	l := developer.NewAppCreateLogic(ctx, s.svcCtx)
 	return l.AppCreate(in)

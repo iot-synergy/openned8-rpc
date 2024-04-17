@@ -1,16 +1,24 @@
 package svc
 
 import (
+	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/internal/config"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ServiceContext struct {
 	Config config.Config
+	DB     *ent.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-
+	db := ent.NewClient(
+		ent.Log(logx.Info), // logger
+		ent.Driver(c.DatabaseConf.NewNoCacheDriver()),
+		ent.Debug(), // debug mode
+	)
 	return &ServiceContext{
 		Config: c,
+		DB:     db,
 	}
 }
