@@ -75,7 +75,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeInfo, client *e
 		SetActiveKey(uuid.UUID{}.String()).SetUserID(in.UserId).SetAppID(in.AppId).SetActiveIP(in.ActiveIP).
 		SetDeviceSn(in.DeviceSN).SetDeviceMAC(in.DeviceMac).SetDeviceIdentity(in.DeviceIdentity).
 		SetVersion(in.Version).SetStartDate(time.Now()).SetExpireDate(time.Now().AddDate(0, 0, 3)).
-		SetStatus(1).Save(ctx)
+		SetActiveFile("").SetStatus(1).Save(ctx)
 	if err != nil {
 		return 0, "", err
 	}
