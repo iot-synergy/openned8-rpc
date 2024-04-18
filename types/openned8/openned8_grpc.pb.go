@@ -26,6 +26,7 @@ const (
 	Openned8_CategoryQuery_FullMethodName      = "/openned8.openned8/categoryQuery"
 	Openned8_IndustryQuery_FullMethodName      = "/openned8.openned8/industryQuery"
 	Openned8_ActiveCodeQuery_FullMethodName    = "/openned8.openned8/activeCodeQuery"
+	Openned8_ActiveCodeCreat_FullMethodName    = "/openned8.openned8/activeCodeCreat"
 	Openned8_QueryUserSdkUsage_FullMethodName  = "/openned8.openned8/queryUserSdkUsage"
 	Openned8_UpdateUserSdkUsage_FullMethodName = "/openned8.openned8/updateUserSdkUsage"
 )
@@ -48,6 +49,8 @@ type Openned8Client interface {
 	IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
 	// group: developer
 	ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
+	// group: developer
+	ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error)
 	// group: admin
 	QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 	// group: admin
@@ -125,6 +128,15 @@ func (c *openned8Client) ActiveCodeQuery(ctx context.Context, in *ActiveCodeList
 	return out, nil
 }
 
+func (c *openned8Client) ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error) {
+	out := new(ActiveCodeResp)
+	err := c.cc.Invoke(ctx, Openned8_ActiveCodeCreat_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *openned8Client) QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error) {
 	out := new(SdkUsage)
 	err := c.cc.Invoke(ctx, Openned8_QueryUserSdkUsage_FullMethodName, in, out, opts...)
@@ -161,6 +173,8 @@ type Openned8Server interface {
 	IndustryQuery(context.Context, *Empty) (*IndustrylistResp, error)
 	// group: developer
 	ActiveCodeQuery(context.Context, *ActiveCodeListReq) (*ActiveCodeListInfo, error)
+	// group: developer
+	ActiveCodeCreat(context.Context, *ActiveCodeInfo) (*ActiveCodeResp, error)
 	// group: admin
 	QueryUserSdkUsage(context.Context, *UserSdkUsageQueryReq) (*SdkUsage, error)
 	// group: admin
@@ -192,6 +206,9 @@ func (UnimplementedOpenned8Server) IndustryQuery(context.Context, *Empty) (*Indu
 }
 func (UnimplementedOpenned8Server) ActiveCodeQuery(context.Context, *ActiveCodeListReq) (*ActiveCodeListInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActiveCodeQuery not implemented")
+}
+func (UnimplementedOpenned8Server) ActiveCodeCreat(context.Context, *ActiveCodeInfo) (*ActiveCodeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ActiveCodeCreat not implemented")
 }
 func (UnimplementedOpenned8Server) QueryUserSdkUsage(context.Context, *UserSdkUsageQueryReq) (*SdkUsage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryUserSdkUsage not implemented")
@@ -338,6 +355,24 @@ func _Openned8_ActiveCodeQuery_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openned8_ActiveCodeCreat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActiveCodeInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Openned8Server).ActiveCodeCreat(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Openned8_ActiveCodeCreat_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Openned8Server).ActiveCodeCreat(ctx, req.(*ActiveCodeInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Openned8_QueryUserSdkUsage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserSdkUsageQueryReq)
 	if err := dec(in); err != nil {
@@ -408,6 +443,10 @@ var Openned8_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "activeCodeQuery",
 			Handler:    _Openned8_ActiveCodeQuery_Handler,
+		},
+		{
+			MethodName: "activeCodeCreat",
+			Handler:    _Openned8_ActiveCodeCreat_Handler,
 		},
 		{
 			MethodName: "queryUserSdkUsage",

@@ -26,8 +26,8 @@ func NewUpdateUserSdkUsageLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *UpdateUserSdkUsageLogic) UpdateUserSdkUsage(in *openned8.UserSdkUsageUpdateReq) (*openned8.SdkUsage, error) {
-	_, err := l.svcCtx.DB.SdkUsage.Update().Where(sdkusage.UserIDEQ(in.UserId), sdkusage.UsedGT(1)).
-		SetUpdatedAt(time.Now()).AddAll(1).AddUsed(-1).Save(l.ctx)
+	_, err := l.svcCtx.DB.SdkUsage.Update().Where(sdkusage.UserIDEQ(in.UserId)).
+		SetUpdatedAt(time.Now()).SetAll(in.All).Save(l.ctx)
 	if err != nil {
 		return nil, err
 	}

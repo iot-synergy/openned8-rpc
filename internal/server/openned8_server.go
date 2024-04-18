@@ -58,6 +58,11 @@ func (s *Openned8Server) ActiveCodeQuery(ctx context.Context, in *openned8.Activ
 	return l.ActiveCodeQuery(in)
 }
 
+func (s *Openned8Server) ActiveCodeCreat(ctx context.Context, in *openned8.ActiveCodeInfo) (*openned8.ActiveCodeResp, error) {
+	l := developer.NewActiveCodeCreatLogic(ctx, s.svcCtx)
+	return l.ActiveCodeCreat(in)
+}
+
 func (s *Openned8Server) QueryUserSdkUsage(ctx context.Context, in *openned8.UserSdkUsageQueryReq) (*openned8.SdkUsage, error) {
 	l := admin.NewQueryUserSdkUsageLogic(ctx, s.svcCtx)
 	return l.QueryUserSdkUsage(in)

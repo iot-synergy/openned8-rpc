@@ -1,5 +1,5 @@
 
-¥
+Û
 openned8.protoopenned8"
 Empty"
 BeanMsg
@@ -53,7 +53,11 @@ ExpireDate (R
 ExpireDate"X
 ActiveCodeListInfo
 Total (RTotal,
-Data (2.openned8.ActiveCodeInfoRData"ˆ
+Data (2.openned8.ActiveCodeInfoRData"d
+ActiveCodeResp
+code (Rcode
+msg (	Rmsg,
+data (2.openned8.ActiveCodeInfoRdata"ˆ
 ActiveCodeInfo
 Id (	RId
 	CreatedAt (R	CreatedAt
@@ -82,9 +86,10 @@ ExpireDate (R
 ExpireDate
 Status (RStatus".
 UserSdkUsageQueryReq
-UserId (	RUserId"/
+UserId (	RUserId"A
 UserSdkUsageUpdateReq
-UserId (	RUserId2∫
+UserId (	RUserId
+All (RAll2Å
 openned81
 	appCreate.openned8.AppInfo.openned8.AppInfo1
 	appUpdate.openned8.AppInfo.openned8.AppInfo1
@@ -92,7 +97,8 @@ ExpireDate
 appQuery.openned8.AppListReq.openned8.ApplistInfo<
 categoryQuery.openned8.Empty.openned8.CategorylistResp<
 industryQuery.openned8.Empty.openned8.IndustrylistRespL
-activeCodeQuery.openned8.ActiveCodeListReq.openned8.ActiveCodeListInfoG
+activeCodeQuery.openned8.ActiveCodeListReq.openned8.ActiveCodeListInfoE
+activeCodeCreat.openned8.ActiveCodeInfo.openned8.ActiveCodeRespG
 queryUserSdkUsage.openned8.UserSdkUsageQueryReq.openned8.SdkUsageI
 updateUserSdkUsage.openned8.UserSdkUsageUpdateReq.openned8.SdkUsageBZ
 ./openned8bproto3

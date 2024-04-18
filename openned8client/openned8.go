@@ -16,6 +16,7 @@ type (
 	ActiveCodeInfo        = openned8.ActiveCodeInfo
 	ActiveCodeListInfo    = openned8.ActiveCodeListInfo
 	ActiveCodeListReq     = openned8.ActiveCodeListReq
+	ActiveCodeResp        = openned8.ActiveCodeResp
 	AppInfo               = openned8.AppInfo
 	AppListReq            = openned8.AppListReq
 	ApplistInfo           = openned8.ApplistInfo
@@ -38,6 +39,7 @@ type (
 		CategoryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CategorylistResp, error)
 		IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
 		ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
+		ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error)
 		QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error)
 	}
@@ -86,6 +88,11 @@ func (m *defaultOpenned8) IndustryQuery(ctx context.Context, in *Empty, opts ...
 func (m *defaultOpenned8) ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.ActiveCodeQuery(ctx, in, opts...)
+}
+
+func (m *defaultOpenned8) ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.ActiveCodeCreat(ctx, in, opts...)
 }
 
 func (m *defaultOpenned8) QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error) {

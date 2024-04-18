@@ -75,6 +75,11 @@ message ActiveCodeListInfo {
   uint64 Total = 1;
   repeated ActiveCodeInfo Data = 2;
 }
+message ActiveCodeResp {
+  int32 code = 1;
+  string msg = 2;
+  ActiveCodeInfo data = 3;
+}
 message ActiveCodeInfo {
   string Id = 1;
   int64 CreatedAt = 2;
@@ -101,6 +106,7 @@ message UserSdkUsageQueryReq {
 
 message UserSdkUsageUpdateReq {
   string UserId = 1;
+  int64 All = 2;
 }
 
 service openned8 {
@@ -118,6 +124,8 @@ service openned8 {
   rpc industryQuery (Empty) returns (IndustrylistResp);
   // group: developer
   rpc activeCodeQuery (ActiveCodeListReq) returns (ActiveCodeListInfo);
+  // group: developer
+  rpc activeCodeCreat (ActiveCodeInfo) returns (ActiveCodeResp);
   // group: admin
   rpc queryUserSdkUsage(UserSdkUsageQueryReq) returns (SdkUsage);
   // group: admin
