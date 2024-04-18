@@ -63,6 +63,6 @@ func (l *ActiveCodeQueryLogic) ActiveCodeQuery(in *openned8.ActiveCodeListReq) (
 	}
 	return &openned8.ActiveCodeListInfo{
 		Total: uint64(count),
-		Data:  nil,
+		Data:  result,
 	}, nil
 }

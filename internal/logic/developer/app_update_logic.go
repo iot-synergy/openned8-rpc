@@ -3,8 +3,6 @@ package developer
 import (
 	"context"
 	"github.com/gofrs/uuid/v5"
-	"github.com/iot-synergy/openned8-rpc/ent"
-	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"time"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -28,23 +26,14 @@ func NewAppUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppUpda
 }
 
 func (l *AppUpdateLogic) AppUpdate(in *openned8.AppInfo) (*openned8.AppInfo, error) {
-	fromString, err := uuid.FromString(in.UserId)
+	fromString, err := uuid.FromString(in.Id)
 	if err != nil {
 		return nil, err
 	}
-	save, err := l.svcCtx.DB.AppInfo.UpdateOne(&ent.AppInfo{
-		ID:              uuid.UUID{},
-		UpdatedAt:       time.Now(),
-		UserID:          in.UserId,
-		AppName:         in.AppName,
-		Summary:         in.Summary,
-		AppCategory:     in.AppCategory,
-		UseIndustry:     in.UseIndustry,
-		AppCategoryName: in.AppCategoryName,
-		UseIndustryName: in.UseIndustryName,
-		AppKey:          in.AppKey,
-		AppSecret:       in.AppSecret,
-	}).Where(appinfo.IDEQ(fromString)).Save(l.ctx)
+	save, err := l.svcCtx.DB.AppInfo.UpdateOneID(fromString).SetUpdatedAt(time.Now()).SetUserID(in.UserId).SetAppName(in.AppName).
+		SetSummary(in.Summary).SetAppCategory(in.AppCategory).SetUseIndustry(in.UseIndustry).
+		SetAppCategoryName(in.AppCategoryName).SetUseIndustryName(in.UseIndustryName).
+		SetAppKey(in.AppKey).SetAppSecret(in.AppSecret).Save(l.ctx)
 	if err != nil {
 		return nil, err
 	}
