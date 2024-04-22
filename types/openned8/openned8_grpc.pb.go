@@ -50,7 +50,7 @@ type Openned8Client interface {
 	// group: developer
 	ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
 	// group: developer
-	ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error)
+	ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error)
 	// group: admin
 	QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 	// group: admin
@@ -128,7 +128,7 @@ func (c *openned8Client) ActiveCodeQuery(ctx context.Context, in *ActiveCodeList
 	return out, nil
 }
 
-func (c *openned8Client) ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error) {
+func (c *openned8Client) ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error) {
 	out := new(ActiveCodeResp)
 	err := c.cc.Invoke(ctx, Openned8_ActiveCodeCreat_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -174,7 +174,7 @@ type Openned8Server interface {
 	// group: developer
 	ActiveCodeQuery(context.Context, *ActiveCodeListReq) (*ActiveCodeListInfo, error)
 	// group: developer
-	ActiveCodeCreat(context.Context, *ActiveCodeInfo) (*ActiveCodeResp, error)
+	ActiveCodeCreat(context.Context, *ActiveCodeCreatReq) (*ActiveCodeResp, error)
 	// group: admin
 	QueryUserSdkUsage(context.Context, *UserSdkUsageQueryReq) (*SdkUsage, error)
 	// group: admin
@@ -207,7 +207,7 @@ func (UnimplementedOpenned8Server) IndustryQuery(context.Context, *Empty) (*Indu
 func (UnimplementedOpenned8Server) ActiveCodeQuery(context.Context, *ActiveCodeListReq) (*ActiveCodeListInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActiveCodeQuery not implemented")
 }
-func (UnimplementedOpenned8Server) ActiveCodeCreat(context.Context, *ActiveCodeInfo) (*ActiveCodeResp, error) {
+func (UnimplementedOpenned8Server) ActiveCodeCreat(context.Context, *ActiveCodeCreatReq) (*ActiveCodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActiveCodeCreat not implemented")
 }
 func (UnimplementedOpenned8Server) QueryUserSdkUsage(context.Context, *UserSdkUsageQueryReq) (*SdkUsage, error) {
@@ -356,7 +356,7 @@ func _Openned8_ActiveCodeQuery_Handler(srv interface{}, ctx context.Context, dec
 }
 
 func _Openned8_ActiveCodeCreat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ActiveCodeInfo)
+	in := new(ActiveCodeCreatReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -368,7 +368,7 @@ func _Openned8_ActiveCodeCreat_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: Openned8_ActiveCodeCreat_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(Openned8Server).ActiveCodeCreat(ctx, req.(*ActiveCodeInfo))
+		return srv.(Openned8Server).ActiveCodeCreat(ctx, req.(*ActiveCodeCreatReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -43,7 +43,7 @@ type (
 		CategoryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CategorylistResp, error)
 		IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
 		ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
-		ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error)
+		ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error)
 		QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error)
 	}
@@ -94,7 +94,7 @@ func (m *defaultOpenned8) ActiveCodeQuery(ctx context.Context, in *ActiveCodeLis
 	return client.ActiveCodeQuery(ctx, in, opts...)
 }
 
-func (m *defaultOpenned8) ActiveCodeCreat(ctx context.Context, in *ActiveCodeInfo, opts ...grpc.CallOption) (*ActiveCodeResp, error) {
+func (m *defaultOpenned8) ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.ActiveCodeCreat(ctx, in, opts...)
 }

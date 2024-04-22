@@ -151,7 +151,7 @@ service openned8 {
   // group: developer
   rpc activeCodeQuery (ActiveCodeListReq) returns (ActiveCodeListInfo);
   // group: developer
-  rpc activeCodeCreat (ActiveCodeInfo) returns (ActiveCodeResp);
+  rpc activeCodeCreat (ActiveCodeCreatReq) returns (ActiveCodeResp);
   // group: admin
   rpc queryUserSdkUsage(UserSdkUsageQueryReq) returns (SdkUsage);
   // group: admin
