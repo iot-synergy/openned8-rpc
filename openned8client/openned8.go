@@ -13,17 +13,21 @@ import (
 )
 
 type (
+	ActiveCodeCreatReq    = openned8.ActiveCodeCreatReq
 	ActiveCodeInfo        = openned8.ActiveCodeInfo
 	ActiveCodeListInfo    = openned8.ActiveCodeListInfo
 	ActiveCodeListReq     = openned8.ActiveCodeListReq
 	ActiveCodeResp        = openned8.ActiveCodeResp
 	AppInfo               = openned8.AppInfo
+	AppInfoCreateReq      = openned8.AppInfoCreateReq
+	AppInfoUpdateReq      = openned8.AppInfoUpdateReq
 	AppListReq            = openned8.AppListReq
 	ApplistInfo           = openned8.ApplistInfo
 	BeanMsg               = openned8.BeanMsg
 	CategoryInfo          = openned8.CategoryInfo
 	CategorylistResp      = openned8.CategorylistResp
 	Empty                 = openned8.Empty
+	IdString              = openned8.IdString
 	IndustryInfo          = openned8.IndustryInfo
 	IndustrylistResp      = openned8.IndustrylistResp
 	PageInfo              = openned8.PageInfo
@@ -32,9 +36,9 @@ type (
 	UserSdkUsageUpdateReq = openned8.UserSdkUsageUpdateReq
 
 	Openned8 interface {
-		AppCreate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error)
-		AppUpdate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error)
-		AppDelete(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*BeanMsg, error)
+		AppCreate(ctx context.Context, in *AppInfoCreateReq, opts ...grpc.CallOption) (*AppInfo, error)
+		AppUpdate(ctx context.Context, in *AppInfoUpdateReq, opts ...grpc.CallOption) (*AppInfo, error)
+		AppDelete(ctx context.Context, in *IdString, opts ...grpc.CallOption) (*BeanMsg, error)
 		AppQuery(ctx context.Context, in *AppListReq, opts ...grpc.CallOption) (*ApplistInfo, error)
 		CategoryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CategorylistResp, error)
 		IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
@@ -55,17 +59,17 @@ func NewOpenned8(cli zrpc.Client) Openned8 {
 	}
 }
 
-func (m *defaultOpenned8) AppCreate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error) {
+func (m *defaultOpenned8) AppCreate(ctx context.Context, in *AppInfoCreateReq, opts ...grpc.CallOption) (*AppInfo, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.AppCreate(ctx, in, opts...)
 }
 
-func (m *defaultOpenned8) AppUpdate(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*AppInfo, error) {
+func (m *defaultOpenned8) AppUpdate(ctx context.Context, in *AppInfoUpdateReq, opts ...grpc.CallOption) (*AppInfo, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.AppUpdate(ctx, in, opts...)
 }
 
-func (m *defaultOpenned8) AppDelete(ctx context.Context, in *AppInfo, opts ...grpc.CallOption) (*BeanMsg, error) {
+func (m *defaultOpenned8) AppDelete(ctx context.Context, in *IdString, opts ...grpc.CallOption) (*BeanMsg, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.AppDelete(ctx, in, opts...)
 }

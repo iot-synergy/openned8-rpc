@@ -2,6 +2,8 @@ package developer
 
 import (
 	"context"
+	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -23,11 +25,24 @@ func NewAppCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppCrea
 	}
 }
 
-func (l *AppCreateLogic) AppCreate(in *openned8.AppInfo) (*openned8.AppInfo, error) {
-	save, err := l.svcCtx.DB.AppInfo.Create().SetUserID(in.UserId).SetAppName(in.AppName).SetSummary(in.Summary).
-		SetAppCategory(in.AppCategory).SetUseIndustry(in.UseIndustry).
-		SetAppCategoryName(in.AppCategoryName).SetUseIndustryName(in.UseIndustryName).
-		SetAppKey(in.AppKey).SetAppSecret(in.AppSecret).Save(l.ctx)
+func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.AppInfo, error) {
+	category, err := l.svcCtx.DB.CategoryInfo.Query().Where(categoryinfo.IDEQ(uint64(in.AppCategory))).First(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	industry, err := l.svcCtx.DB.IndustryInfo.Query().Where(industryinfo.IDEQ(uint64(in.UseIndustry))).First(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	save, err := l.svcCtx.DB.AppInfo.Create().
+		SetUserID(in.UserId).
+		SetAppName(in.AppName).
+		SetSummary(in.Summary).
+		SetAppCategory(in.AppCategory).
+		SetUseIndustry(in.UseIndustry).
+		SetAppCategoryName(category.Name).
+		SetUseIndustryName(industry.Name).
+		Save(l.ctx)
 	if err != nil {
 		return nil, err
 	}

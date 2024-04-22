@@ -3,6 +3,9 @@ package developer
 import (
 	"context"
 	"github.com/gofrs/uuid/v5"
+	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
 	"time"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -25,15 +28,45 @@ func NewAppUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppUpda
 	}
 }
 
-func (l *AppUpdateLogic) AppUpdate(in *openned8.AppInfo) (*openned8.AppInfo, error) {
-	fromString, err := uuid.FromString(in.Id)
+func (l *AppUpdateLogic) AppUpdate(in *openned8.AppInfoUpdateReq) (*openned8.AppInfo, error) {
+	id, err := uuid.FromString(in.Id)
 	if err != nil {
 		return nil, err
 	}
-	save, err := l.svcCtx.DB.AppInfo.UpdateOneID(fromString).SetUpdatedAt(time.Now()).SetUserID(in.UserId).SetAppName(in.AppName).
-		SetSummary(in.Summary).SetAppCategory(in.AppCategory).SetUseIndustry(in.UseIndustry).
-		SetAppCategoryName(in.AppCategoryName).SetUseIndustryName(in.UseIndustryName).
-		SetAppKey(in.AppKey).SetAppSecret(in.AppSecret).Save(l.ctx)
+	appinfo, err := l.svcCtx.DB.AppInfo.Query().Where(appinfo.ID(id)).First(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	if appinfo == nil || appinfo.ID.IsNil() {
+		return nil, nil
+	}
+	update := l.svcCtx.DB.AppInfo.UpdateOneID(id).SetUpdatedAt(time.Now())
+	if in.UserId != "" && in.UserId != appinfo.UserID {
+		update.SetUserID(in.UserId)
+	}
+	if in.AppName != "" && in.AppName != appinfo.AppName {
+		update.SetAppName(in.AppName)
+	}
+	if in.Summary != "" && in.Summary != appinfo.Summary {
+		update.SetSummary(in.Summary)
+	}
+	if in.AppCategory != appinfo.AppCategory {
+		update.SetAppCategory(in.AppCategory)
+		category, err := l.svcCtx.DB.CategoryInfo.Query().Where(categoryinfo.IDEQ(uint64(in.AppCategory))).First(l.ctx)
+		if err != nil {
+			return nil, err
+		}
+		update.SetAppCategoryName(category.Name)
+	}
+	if in.UseIndustry != appinfo.UseIndustry {
+		update.SetUseIndustry(in.UseIndustry)
+		industry, err := l.svcCtx.DB.IndustryInfo.Query().Where(industryinfo.IDEQ(uint64(in.UseIndustry))).First(l.ctx)
+		if err != nil {
+			return nil, err
+		}
+		update.SetUseIndustryName(industry.Name)
+	}
+	save, err := update.Save(l.ctx)
 	if err != nil {
 		return nil, err
 	}

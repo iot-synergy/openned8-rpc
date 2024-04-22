@@ -23,17 +23,17 @@ func NewOpenned8Server(svcCtx *svc.ServiceContext) *Openned8Server {
 	}
 }
 
-func (s *Openned8Server) AppCreate(ctx context.Context, in *openned8.AppInfo) (*openned8.AppInfo, error) {
+func (s *Openned8Server) AppCreate(ctx context.Context, in *openned8.AppInfoCreateReq) (*openned8.AppInfo, error) {
 	l := developer.NewAppCreateLogic(ctx, s.svcCtx)
 	return l.AppCreate(in)
 }
 
-func (s *Openned8Server) AppUpdate(ctx context.Context, in *openned8.AppInfo) (*openned8.AppInfo, error) {
+func (s *Openned8Server) AppUpdate(ctx context.Context, in *openned8.AppInfoUpdateReq) (*openned8.AppInfo, error) {
 	l := developer.NewAppUpdateLogic(ctx, s.svcCtx)
 	return l.AppUpdate(in)
 }
 
-func (s *Openned8Server) AppDelete(ctx context.Context, in *openned8.AppInfo) (*openned8.BeanMsg, error) {
+func (s *Openned8Server) AppDelete(ctx context.Context, in *openned8.IdString) (*openned8.BeanMsg, error) {
 	l := developer.NewAppDeleteLogic(ctx, s.svcCtx)
 	return l.AppDelete(in)
 }

@@ -23,7 +23,7 @@ func NewAppDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppDele
 	}
 }
 
-func (l *AppDeleteLogic) AppDelete(in *openned8.AppInfo) (*openned8.BeanMsg, error) {
+func (l *AppDeleteLogic) AppDelete(in *openned8.IdString) (*openned8.BeanMsg, error) {
 	fromString, err := uuid.FromString(in.Id)
 	if err != nil {
 		return nil, err

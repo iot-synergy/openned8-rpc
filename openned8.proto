@@ -9,6 +9,10 @@ message BeanMsg {
   string msg = 1;
 }
 
+message IdString {
+  string id = 1;
+}
+
 message PageInfo {
   uint64 Page = 1;
   uint64 PageSize = 2;
@@ -33,6 +37,23 @@ message AppInfo {
   string UseIndustryName = 10;
   string AppKey = 11;
   string AppSecret = 12;
+}
+
+message AppInfoCreateReq {
+  string UserId = 1;
+  string AppName = 2;
+  string Summary = 3;
+  int64 AppCategory = 4;
+  int64 UseIndustry = 5;
+}
+
+message AppInfoUpdateReq {
+  string Id = 1;
+  string UserId = 2;
+  string AppName = 3;
+  string Summary = 4;
+  int64 AppCategory = 5;
+  int64 UseIndustry = 6;
 }
 
 message AppListReq {
@@ -78,7 +99,7 @@ message ActiveCodeListInfo {
 message ActiveCodeResp {
   int32 code = 1;
   string msg = 2;
-  ActiveCodeInfo data = 3;
+  repeated ActiveCodeInfo data = 3;
 }
 message ActiveCodeInfo {
   string Id = 1;
@@ -100,6 +121,11 @@ message ActiveCodeInfo {
   int64 Status = 17;
 }
 
+message ActiveCodeCreatReq {
+  string UserId = 1;
+  int32 Quantity = 2;
+}
+
 message UserSdkUsageQueryReq {
   string UserId = 1;
 }
@@ -111,11 +137,11 @@ message UserSdkUsageUpdateReq {
 
 service openned8 {
   // group: developer
-  rpc appCreate (AppInfo) returns (AppInfo);
+  rpc appCreate (AppInfoCreateReq) returns (AppInfo);
   // group: developer
-  rpc appUpdate (AppInfo) returns (AppInfo);
+  rpc appUpdate (AppInfoUpdateReq) returns (AppInfo);
   // group: developer
-  rpc appDelete (AppInfo) returns (BeanMsg);
+  rpc appDelete (IdString) returns (BeanMsg);
   // group: developer
   rpc appQuery (AppListReq) returns (ApplistInfo);
   // group: developer
