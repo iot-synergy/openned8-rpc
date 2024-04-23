@@ -130,6 +130,7 @@ message ActiveCodeInfo {
 message ActiveCodeCreatReq {
   string UserId = 1;
   int32 Quantity = 2;
+  string AppId = 3;
 }
 
 message UserSdkUsageQueryReq {

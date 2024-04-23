@@ -26,10 +26,11 @@ func NewQueryUserSdkUsageLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *QueryUserSdkUsageLogic) QueryUserSdkUsage(in *openned8.UserSdkUsageQueryReq) (*openned8.SdkUsage, error) {
 	tx, err := l.svcCtx.DB.Tx(l.ctx)
+	client := tx.Client()
 	if err != nil {
 		return nil, err
 	}
-	data, err := QueryUserSdk(tx, in, l.ctx)
+	data, err := QueryUserSdk(client, in, l.ctx)
 	if err != nil {
 		err := tx.Rollback()
 		if err != nil {
@@ -50,13 +51,13 @@ func (l *QueryUserSdkUsageLogic) QueryUserSdkUsage(in *openned8.UserSdkUsageQuer
 	}, nil
 }
 
-func QueryUserSdk(tx *ent.Tx, in *openned8.UserSdkUsageQueryReq, ctx context.Context) (*ent.SdkUsage, error) {
-	count, err := tx.SdkUsage.Query().Where(sdkusage.UserIDEQ(in.UserId)).Count(ctx)
+func QueryUserSdk(client *ent.Client, in *openned8.UserSdkUsageQueryReq, ctx context.Context) (*ent.SdkUsage, error) {
+	count, err := client.SdkUsage.Query().Where(sdkusage.UserIDEQ(in.UserId)).Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	if count == 0 {
-		save, err := tx.SdkUsage.Create().
+		save, err := client.SdkUsage.Create().
 			SetUserID(in.UserId).
 			SetAll(0).
 			SetUsed(0).
@@ -73,7 +74,7 @@ func QueryUserSdk(tx *ent.Tx, in *openned8.UserSdkUsageQueryReq, ctx context.Con
 			Used:      save.Used,
 		}, nil
 	}
-	first, err := tx.SdkUsage.Query().Where(sdkusage.UserIDEQ(in.UserId)).First(ctx)
+	first, err := client.SdkUsage.Query().Where(sdkusage.UserIDEQ(in.UserId)).First(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -1,5 +1,5 @@
 
-Æ
+¼
 openned8.protoopenned8"
 Empty"
 BeanMsg
@@ -39,13 +39,17 @@
 AppName (	RAppName
 Summary (	RSummary 
 AppCategory (RAppCategory 
-UseIndustry (RUseIndustry"ª
+UseIndustry (RUseIndustry":
+AppInfoDeleteReq
+Id (	RId
+UserId (	RUserId"Â
 
 AppListReq.
 PageInfo (2.openned8.PageInfoRPageInfo
 AppName (	RAppName(
 AppCategoryName (	RAppCategoryName(
-UseIndustryName (	RUseIndustryName"J
+UseIndustryName (	RUseIndustryName
+UserId (	RUserId"J
 ApplistInfo
 Total (RTotal%
 Data (2.openned8.AppInfoRData">
@@ -99,24 +103,25 @@ ActiveFile
 
 ExpireDate (R
 ExpireDate
-Status (RStatus"H
+Status (RStatus"^
 ActiveCodeCreatReq
 UserId (	RUserId
-Quantity (RQuantity".
+Quantity (RQuantity
+AppId (	RAppId".
 UserSdkUsageQueryReq
 UserId (	RUserId"A
 UserSdkUsageUpdateReq
 UserId (	RUserId
-All (RAll2”
+All (RAll2 
 openned8:
 	appCreate.openned8.AppInfoCreateReq.openned8.AppInfo:
-	appUpdate.openned8.AppInfoUpdateReq.openned8.AppInfo2
-	appDelete.openned8.IdString.openned8.BeanMsg7
+	appUpdate.openned8.AppInfoUpdateReq.openned8.AppInfo:
+	appDelete.openned8.AppInfoDeleteReq.openned8.BeanMsg7
 appQuery.openned8.AppListReq.openned8.ApplistInfo<
 categoryQuery.openned8.Empty.openned8.CategorylistResp<
 industryQuery.openned8.Empty.openned8.IndustrylistRespL
-activeCodeQuery.openned8.ActiveCodeListReq.openned8.ActiveCodeListInfoE
-activeCodeCreat.openned8.ActiveCodeInfo.openned8.ActiveCodeRespG
+activeCodeQuery.openned8.ActiveCodeListReq.openned8.ActiveCodeListInfoI
+activeCodeCreat.openned8.ActiveCodeCreatReq.openned8.ActiveCodeRespG
 queryUserSdkUsage.openned8.UserSdkUsageQueryReq.openned8.SdkUsageI
 updateUserSdkUsage.openned8.UserSdkUsageUpdateReq.openned8.SdkUsageBZ
 ./openned8bproto3

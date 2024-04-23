@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent"
+	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 	"time"
 
@@ -40,9 +41,10 @@ func (l *ActiveCodeCreatLogic) ActiveCodeCreat(in *openned8.ActiveCodeCreatReq) 
 
 	code, msg, err, data := creatActiveCode(l.ctx, in, client)
 	if err != nil {
-		err := tx.Rollback()
-		if err != nil {
-			logx.Error("rollback fail:" + err.Error())
+		err1 := tx.Rollback()
+		if err1 != nil {
+			logx.Error("rollback fail:" + err1.Error())
+			return nil, err1
 		}
 		return nil, err
 	} else {
@@ -76,18 +78,34 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 		return 0, "", err, nil
 	}
 
+	//查询应用数据
+	fromString, err := uuid.FromString(in.AppId)
+	if err != nil {
+		return 0, "", err, nil
+	}
+	appinfo, err := client.AppInfo.Query().Where(appinfo.IDEQ(fromString)).First(ctx)
+	if err != nil {
+		return 0, "", err, nil
+	}
+
 	data := make([]*openned8.ActiveCodeInfo, 0)
 	//创建激活码
 	for i := 0; i < int(in.GetQuantity()); i++ {
 		save, err := client.ActiveCodeInfo.Create().
-			SetCreatedAt(time.Now()).
-			SetUpdatedAt(time.Now()).
 			SetActiveKey(uuid.UUID{}.String()).
 			SetUserID(in.UserId).
+			SetAppID(appinfo.ID.String()).
+			SetActiveIP("").
+			SetDeviceSn("").
+			SetDeviceMAC("").
+			SetDeviceIdentity("").
+			SetActiveDate(time.UnixMilli(0)).
+			SetActiveType(0).
+			SetActiveFile("").
+			SetActiveFile("").
 			SetVersion("v0.0.0").
 			SetStartDate(time.Now()).
 			SetExpireDate(time.Now().AddDate(0, 0, 3)).
-			SetActiveFile("").
 			SetStatus(1).
 			Save(ctx)
 		if err != nil {
