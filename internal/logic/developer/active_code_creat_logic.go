@@ -72,7 +72,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 	if first.All < first.Used+int64(in.Quantity) {
 		return -2, "可用sdk数量不足", nil, nil
 	}
-	first.Used += int64(in.Quantity)
+	first.Used = first.Used + int64(in.Quantity)
 	_, err = client.SdkUsage.UpdateOne(first).Save(ctx)
 	if err != nil {
 		return 0, "", err, nil
