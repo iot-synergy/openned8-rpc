@@ -93,9 +93,10 @@ message IndustryInfo {
 
 message ActiveCodeListReq {
   PageInfo PageInfo = 1;
-  string AppId = 2;
-  int64 Status = 3;
-  int64 ExpireDate = 4;
+  string UserId = 2;
+  string AppId = 3;
+  int64 Status = 4;
+  int64 ExpireDate = 5;
 }
 
 message ActiveCodeListInfo {

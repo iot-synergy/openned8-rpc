@@ -1,5 +1,5 @@
 
-¼
+Ô
 openned8.protoopenned8"
 Empty"
 BeanMsg
@@ -62,13 +62,14 @@ AppListReq.
 Data (2.openned8.IndustryInfoRData"2
 IndustryInfo
 Id (RId
-Name (	RName"‘
+Name (	RName"©
 ActiveCodeListReq.
-PageInfo (2.openned8.PageInfoRPageInfo
-AppId (	RAppId
-Status (RStatus
+PageInfo (2.openned8.PageInfoRPageInfo
+UserId (	RUserId
+AppId (	RAppId
+Status (RStatus
 
-ExpireDate (R
+ExpireDate (R
 ExpireDate"X
 ActiveCodeListInfo
 Total (RTotal,

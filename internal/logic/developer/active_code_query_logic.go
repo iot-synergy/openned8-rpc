@@ -26,11 +26,16 @@ func NewActiveCodeQueryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *A
 }
 
 func (l *ActiveCodeQueryLogic) ActiveCodeQuery(in *openned8.ActiveCodeListReq) (*openned8.ActiveCodeListInfo, error) {
-	where := l.svcCtx.DB.ActiveCodeInfo.Query().Where(
-		activecodeinfo.AppIDContains(in.AppId),
-		activecodeinfo.StatusEQ(uint8(in.Status)),
-		activecodeinfo.ExpireDateLTE(time.UnixMilli(in.ExpireDate)),
-	)
+	where := l.svcCtx.DB.ActiveCodeInfo.Query().Where(activecodeinfo.UserIDEQ(in.UserId))
+	if in.AppId != "" {
+		where.Where(activecodeinfo.AppIDEQ(in.AppId))
+	}
+	if in.Status != 0 {
+		where.Where(activecodeinfo.StatusEQ(uint8(in.Status)))
+	}
+	if in.ExpireDate != 0 {
+		where.Where(activecodeinfo.ExpireDateLTE(time.UnixMilli(in.ExpireDate)))
+	}
 	count, err := where.Count(l.ctx)
 	if err != nil {
 		return nil, err
