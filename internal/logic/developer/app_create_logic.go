@@ -42,6 +42,8 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 		SetUseIndustry(in.UseIndustry).
 		SetAppCategoryName(category.Name).
 		SetUseIndustryName(industry.Name).
+		SetAppKey("").
+		SetAppSecret("").
 		Save(l.ctx)
 	if err != nil {
 		return nil, err
