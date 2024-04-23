@@ -2,6 +2,7 @@ package developer
 
 import (
 	"context"
+	"errors"
 	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
@@ -28,6 +29,9 @@ func NewActiveCodeCreatLogic(ctx context.Context, svcCtx *svc.ServiceContext) *A
 }
 
 func (l *ActiveCodeCreatLogic) ActiveCodeCreat(in *openned8.ActiveCodeCreatReq) (*openned8.ActiveCodeResp, error) {
+	if in.Quantity <= 0 {
+		return nil, errors.New("生成激活码的数量必须大于零")
+	}
 	tx, err := l.svcCtx.DB.Tx(l.ctx)
 	if err != nil {
 		return nil, err
