@@ -90,9 +90,13 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 
 	data := make([]*openned8.ActiveCodeInfo, 0)
 	//创建激活码
+	activeKey, err := uuid.NewV1()
+	if err != nil {
+		return 0, "", err, nil
+	}
 	for i := 0; i < int(in.GetQuantity()); i++ {
 		save, err := client.ActiveCodeInfo.Create().
-			SetActiveKey(uuid.UUID{}.String()).
+			SetActiveKey(activeKey.String()).
 			SetUserID(in.UserId).
 			SetAppID(appinfo.ID.String()).
 			SetActiveIP("").

@@ -16,7 +16,7 @@ create table `active_code_info` (
     `device_sn` varchar(64),
     `device_mac` varchar(256),
     `device_identity` varchar(256),
-    `active_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `active_date` TIMESTAMP COMMENT '激活时间',
     `active_type` bigint(20),
     `active_file` varchar(256),
     `version` varchar(256),
