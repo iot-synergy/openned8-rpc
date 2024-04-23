@@ -20,6 +20,7 @@ type (
 	ActiveCodeResp        = openned8.ActiveCodeResp
 	AppInfo               = openned8.AppInfo
 	AppInfoCreateReq      = openned8.AppInfoCreateReq
+	AppInfoDeleteReq      = openned8.AppInfoDeleteReq
 	AppInfoUpdateReq      = openned8.AppInfoUpdateReq
 	AppListReq            = openned8.AppListReq
 	ApplistInfo           = openned8.ApplistInfo
@@ -38,7 +39,7 @@ type (
 	Openned8 interface {
 		AppCreate(ctx context.Context, in *AppInfoCreateReq, opts ...grpc.CallOption) (*AppInfo, error)
 		AppUpdate(ctx context.Context, in *AppInfoUpdateReq, opts ...grpc.CallOption) (*AppInfo, error)
-		AppDelete(ctx context.Context, in *IdString, opts ...grpc.CallOption) (*BeanMsg, error)
+		AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BeanMsg, error)
 		AppQuery(ctx context.Context, in *AppListReq, opts ...grpc.CallOption) (*ApplistInfo, error)
 		CategoryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CategorylistResp, error)
 		IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
@@ -69,7 +70,7 @@ func (m *defaultOpenned8) AppUpdate(ctx context.Context, in *AppInfoUpdateReq, o
 	return client.AppUpdate(ctx, in, opts...)
 }
 
-func (m *defaultOpenned8) AppDelete(ctx context.Context, in *IdString, opts ...grpc.CallOption) (*BeanMsg, error) {
+func (m *defaultOpenned8) AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BeanMsg, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.AppDelete(ctx, in, opts...)
 }

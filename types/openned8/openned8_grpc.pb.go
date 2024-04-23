@@ -40,7 +40,7 @@ type Openned8Client interface {
 	// group: developer
 	AppUpdate(ctx context.Context, in *AppInfoUpdateReq, opts ...grpc.CallOption) (*AppInfo, error)
 	// group: developer
-	AppDelete(ctx context.Context, in *IdString, opts ...grpc.CallOption) (*BeanMsg, error)
+	AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BeanMsg, error)
 	// group: developer
 	AppQuery(ctx context.Context, in *AppListReq, opts ...grpc.CallOption) (*ApplistInfo, error)
 	// group: developer
@@ -83,7 +83,7 @@ func (c *openned8Client) AppUpdate(ctx context.Context, in *AppInfoUpdateReq, op
 	return out, nil
 }
 
-func (c *openned8Client) AppDelete(ctx context.Context, in *IdString, opts ...grpc.CallOption) (*BeanMsg, error) {
+func (c *openned8Client) AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BeanMsg, error) {
 	out := new(BeanMsg)
 	err := c.cc.Invoke(ctx, Openned8_AppDelete_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -164,7 +164,7 @@ type Openned8Server interface {
 	// group: developer
 	AppUpdate(context.Context, *AppInfoUpdateReq) (*AppInfo, error)
 	// group: developer
-	AppDelete(context.Context, *IdString) (*BeanMsg, error)
+	AppDelete(context.Context, *AppInfoDeleteReq) (*BeanMsg, error)
 	// group: developer
 	AppQuery(context.Context, *AppListReq) (*ApplistInfo, error)
 	// group: developer
@@ -192,7 +192,7 @@ func (UnimplementedOpenned8Server) AppCreate(context.Context, *AppInfoCreateReq)
 func (UnimplementedOpenned8Server) AppUpdate(context.Context, *AppInfoUpdateReq) (*AppInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppUpdate not implemented")
 }
-func (UnimplementedOpenned8Server) AppDelete(context.Context, *IdString) (*BeanMsg, error) {
+func (UnimplementedOpenned8Server) AppDelete(context.Context, *AppInfoDeleteReq) (*BeanMsg, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppDelete not implemented")
 }
 func (UnimplementedOpenned8Server) AppQuery(context.Context, *AppListReq) (*ApplistInfo, error) {
@@ -266,7 +266,7 @@ func _Openned8_AppUpdate_Handler(srv interface{}, ctx context.Context, dec func(
 }
 
 func _Openned8_AppDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdString)
+	in := new(AppInfoDeleteReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -278,7 +278,7 @@ func _Openned8_AppDelete_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Openned8_AppDelete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(Openned8Server).AppDelete(ctx, req.(*IdString))
+		return srv.(Openned8Server).AppDelete(ctx, req.(*AppInfoDeleteReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

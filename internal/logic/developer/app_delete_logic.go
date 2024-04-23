@@ -3,6 +3,7 @@ package developer
 import (
 	"context"
 	"github.com/gofrs/uuid/v5"
+	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
 
@@ -23,12 +24,12 @@ func NewAppDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppDele
 	}
 }
 
-func (l *AppDeleteLogic) AppDelete(in *openned8.IdString) (*openned8.BeanMsg, error) {
+func (l *AppDeleteLogic) AppDelete(in *openned8.AppInfoDeleteReq) (*openned8.BeanMsg, error) {
 	fromString, err := uuid.FromString(in.Id)
 	if err != nil {
 		return nil, err
 	}
-	err = l.svcCtx.DB.AppInfo.DeleteOneID(fromString).Exec(l.ctx)
+	err = l.svcCtx.DB.AppInfo.DeleteOneID(fromString).Where(appinfo.UserIDEQ(in.UserId)).Exec(l.ctx)
 	if err != nil {
 		return nil, err
 	}

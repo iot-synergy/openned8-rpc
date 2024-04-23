@@ -28,6 +28,7 @@ func (l *AppQueryLogic) AppQuery(in *openned8.AppListReq) (*openned8.ApplistInfo
 		appinfo.AppNameContains(in.AppName),
 		appinfo.AppCategoryNameContains(in.AppCategoryName),
 		appinfo.UseIndustryNameContains(in.UseIndustryName),
+		appinfo.UserIDEQ(in.UserId),
 	)
 	count, err := where.Count(l.ctx)
 	if err != nil {

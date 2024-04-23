@@ -33,7 +33,7 @@ func (s *Openned8Server) AppUpdate(ctx context.Context, in *openned8.AppInfoUpda
 	return l.AppUpdate(in)
 }
 
-func (s *Openned8Server) AppDelete(ctx context.Context, in *openned8.IdString) (*openned8.BeanMsg, error) {
+func (s *Openned8Server) AppDelete(ctx context.Context, in *openned8.AppInfoDeleteReq) (*openned8.BeanMsg, error) {
 	l := developer.NewAppDeleteLogic(ctx, s.svcCtx)
 	return l.AppDelete(in)
 }

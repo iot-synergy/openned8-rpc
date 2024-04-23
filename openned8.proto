@@ -56,11 +56,17 @@ message AppInfoUpdateReq {
   int64 UseIndustry = 6;
 }
 
+message AppInfoDeleteReq {
+  string Id = 1;
+  string UserId = 2;
+}
+
 message AppListReq {
   PageInfo PageInfo = 1;
   string AppName = 2;
   string AppCategoryName = 3;
   string UseIndustryName = 4;
+  string UserId = 5;
 }
 message ApplistInfo {
   uint64 Total = 1;
@@ -141,7 +147,7 @@ service openned8 {
   // group: developer
   rpc appUpdate (AppInfoUpdateReq) returns (AppInfo);
   // group: developer
-  rpc appDelete (IdString) returns (BeanMsg);
+  rpc appDelete (AppInfoDeleteReq) returns (BeanMsg);
   // group: developer
   rpc appQuery (AppListReq) returns (ApplistInfo);
   // group: developer

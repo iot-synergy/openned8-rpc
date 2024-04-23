@@ -2,6 +2,7 @@ package developer
 
 import (
 	"context"
+	"errors"
 	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
@@ -41,8 +42,8 @@ func (l *AppUpdateLogic) AppUpdate(in *openned8.AppInfoUpdateReq) (*openned8.App
 		return nil, nil
 	}
 	update := l.svcCtx.DB.AppInfo.UpdateOneID(id).SetUpdatedAt(time.Now())
-	if in.UserId != "" && in.UserId != appinfo.UserID {
-		update.SetUserID(in.UserId)
+	if in.UserId != appinfo.UserID {
+		return nil, errors.New("不是当前用户的数据")
 	}
 	if in.AppName != "" && in.AppName != appinfo.AppName {
 		update.SetAppName(in.AppName)
