@@ -24,21 +24,18 @@ func NewCategoryQueryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cat
 }
 
 func (l *CategoryQueryLogic) CategoryQuery(in *openned8.Empty) (*openned8.CategorylistResp, error) {
-	// todo: add your logic here and delete this line
+	all, err := l.svcCtx.DB.CategoryInfo.Query().All(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*openned8.CategoryInfo, 0)
+	for _, info := range all {
+		result = append(result, &openned8.CategoryInfo{
+			Id:   int64(info.ID),
+			Name: info.Name,
+		})
+	}
 	return &openned8.CategorylistResp{
-		Data: []*openned8.CategoryInfo{
-			{
-				Id:   1,
-				Name: "人脸识别",
-			},
-			{
-				Id:   2,
-				Name: "行车记录",
-			},
-			{
-				Id:   3,
-				Name: "鸟类识别",
-			},
-		},
+		Data: result,
 	}, nil
 }

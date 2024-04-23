@@ -24,22 +24,18 @@ func NewIndustryQueryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ind
 }
 
 func (l *IndustryQueryLogic) IndustryQuery(in *openned8.Empty) (*openned8.IndustrylistResp, error) {
-	// todo: add your logic here and delete this line
-
+	all, err := l.svcCtx.DB.IndustryInfo.Query().All(l.ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*openned8.IndustryInfo, 0)
+	for _, info := range all {
+		result = append(result, &openned8.IndustryInfo{
+			Id:   int64(info.ID),
+			Name: info.Name,
+		})
+	}
 	return &openned8.IndustrylistResp{
-		Data: []*openned8.IndustryInfo{
-			{
-				Id:   1,
-				Name: "null",
-			},
-			{
-				Id:   2,
-				Name: "nil",
-			},
-			{
-				Id:   3,
-				Name: "empty",
-			},
-		},
+		Data: result,
 	}, nil
 }
