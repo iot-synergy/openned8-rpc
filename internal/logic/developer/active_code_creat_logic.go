@@ -99,7 +99,6 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 			SetDeviceSn("").
 			SetDeviceMAC("").
 			SetDeviceIdentity("").
-			SetActiveDate(time.UnixMilli(0)).
 			SetActiveType(0).
 			SetActiveFile("").
 			SetActiveFile("").
