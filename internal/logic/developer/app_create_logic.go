@@ -2,8 +2,10 @@ package developer
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
+	"regexp"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -34,6 +36,8 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 	if err != nil {
 		return nil, err
 	}
+	appKey, _ := uuid.NewRandom()
+	appSecret, _ := uuid.NewRandom()
 	save, err := l.svcCtx.DB.AppInfo.Create().
 		SetUserID(in.UserId).
 		SetAppName(in.AppName).
@@ -42,8 +46,8 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 		SetUseIndustry(in.UseIndustry).
 		SetAppCategoryName(category.Name).
 		SetUseIndustryName(industry.Name).
-		SetAppKey("").
-		SetAppSecret("").
+		SetAppKey(regexp.MustCompile("-").ReplaceAllLiteralString(appKey.String(), "")).
+		SetAppSecret(regexp.MustCompile("-").ReplaceAllLiteralString(appSecret.String(), "")).
 		Save(l.ctx)
 	if err != nil {
 		return nil, err
