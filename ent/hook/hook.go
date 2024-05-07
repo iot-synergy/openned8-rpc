@@ -33,6 +33,18 @@ func (f AppInfoFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppInfoMutation", m)
 }
 
+// The AppSdkFunc type is an adapter to allow the use of ordinary
+// function as AppSdk mutator.
+type AppSdkFunc func(context.Context, *ent.AppSdkMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AppSdkFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.AppSdkMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppSdkMutation", m)
+}
+
 // The CategoryInfoFunc type is an adapter to allow the use of ordinary
 // function as CategoryInfo mutator.
 type CategoryInfoFunc func(context.Context, *ent.CategoryInfoMutation) (ent.Value, error)
@@ -55,6 +67,18 @@ func (f IndustryInfoFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.IndustryInfoMutation", m)
+}
+
+// The SdkInfoFunc type is an adapter to allow the use of ordinary
+// function as SdkInfo mutator.
+type SdkInfoFunc func(context.Context, *ent.SdkInfoMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SdkInfoFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.SdkInfoMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SdkInfoMutation", m)
 }
 
 // The SdkUsageFunc type is an adapter to allow the use of ordinary

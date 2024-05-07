@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/iot-synergy/synergy-common/orm/ent/mixins"
 )
@@ -65,5 +66,11 @@ func (AppInfo) Indexes() []ent.Index {
 func (AppInfo) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: "app_info"},
+	}
+}
+
+func (AppInfo) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("app_sdk", AppSdk.Type),
 	}
 }

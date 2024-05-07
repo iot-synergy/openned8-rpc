@@ -12,11 +12,17 @@ type ActiveCodeInfo func(*sql.Selector)
 // AppInfo is the predicate function for appinfo builders.
 type AppInfo func(*sql.Selector)
 
+// AppSdk is the predicate function for appsdk builders.
+type AppSdk func(*sql.Selector)
+
 // CategoryInfo is the predicate function for categoryinfo builders.
 type CategoryInfo func(*sql.Selector)
 
 // IndustryInfo is the predicate function for industryinfo builders.
 type IndustryInfo func(*sql.Selector)
+
+// SdkInfo is the predicate function for sdkinfo builders.
+type SdkInfo func(*sql.Selector)
 
 // SdkUsage is the predicate function for sdkusage builders.
 type SdkUsage func(*sql.Selector)

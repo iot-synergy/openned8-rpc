@@ -11,7 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 )
 
@@ -250,9 +252,54 @@ func (aciu *ActiveCodeInfoUpdate) SetNillableExpireDate(t *time.Time) *ActiveCod
 	return aciu
 }
 
+// SetAppSkdID sets the "app_skd_id" field.
+func (aciu *ActiveCodeInfoUpdate) SetAppSkdID(u uuid.UUID) *ActiveCodeInfoUpdate {
+	aciu.mutation.SetAppSkdID(u)
+	return aciu
+}
+
+// SetNillableAppSkdID sets the "app_skd_id" field if the given value is not nil.
+func (aciu *ActiveCodeInfoUpdate) SetNillableAppSkdID(u *uuid.UUID) *ActiveCodeInfoUpdate {
+	if u != nil {
+		aciu.SetAppSkdID(*u)
+	}
+	return aciu
+}
+
+// ClearAppSkdID clears the value of the "app_skd_id" field.
+func (aciu *ActiveCodeInfoUpdate) ClearAppSkdID() *ActiveCodeInfoUpdate {
+	aciu.mutation.ClearAppSkdID()
+	return aciu
+}
+
+// SetAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID.
+func (aciu *ActiveCodeInfoUpdate) SetAppSdkID(id uuid.UUID) *ActiveCodeInfoUpdate {
+	aciu.mutation.SetAppSdkID(id)
+	return aciu
+}
+
+// SetNillableAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID if the given value is not nil.
+func (aciu *ActiveCodeInfoUpdate) SetNillableAppSdkID(id *uuid.UUID) *ActiveCodeInfoUpdate {
+	if id != nil {
+		aciu = aciu.SetAppSdkID(*id)
+	}
+	return aciu
+}
+
+// SetAppSdk sets the "app_sdk" edge to the AppSdk entity.
+func (aciu *ActiveCodeInfoUpdate) SetAppSdk(a *AppSdk) *ActiveCodeInfoUpdate {
+	return aciu.SetAppSdkID(a.ID)
+}
+
 // Mutation returns the ActiveCodeInfoMutation object of the builder.
 func (aciu *ActiveCodeInfoUpdate) Mutation() *ActiveCodeInfoMutation {
 	return aciu.mutation
+}
+
+// ClearAppSdk clears the "app_sdk" edge to the AppSdk entity.
+func (aciu *ActiveCodeInfoUpdate) ClearAppSdk() *ActiveCodeInfoUpdate {
+	aciu.mutation.ClearAppSdk()
+	return aciu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -353,6 +400,35 @@ func (aciu *ActiveCodeInfoUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if value, ok := aciu.mutation.ExpireDate(); ok {
 		_spec.SetField(activecodeinfo.FieldExpireDate, field.TypeTime, value)
+	}
+	if aciu.mutation.AppSdkCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   activecodeinfo.AppSdkTable,
+			Columns: []string{activecodeinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aciu.mutation.AppSdkIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   activecodeinfo.AppSdkTable,
+			Columns: []string{activecodeinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, aciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -596,9 +672,54 @@ func (aciuo *ActiveCodeInfoUpdateOne) SetNillableExpireDate(t *time.Time) *Activ
 	return aciuo
 }
 
+// SetAppSkdID sets the "app_skd_id" field.
+func (aciuo *ActiveCodeInfoUpdateOne) SetAppSkdID(u uuid.UUID) *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.SetAppSkdID(u)
+	return aciuo
+}
+
+// SetNillableAppSkdID sets the "app_skd_id" field if the given value is not nil.
+func (aciuo *ActiveCodeInfoUpdateOne) SetNillableAppSkdID(u *uuid.UUID) *ActiveCodeInfoUpdateOne {
+	if u != nil {
+		aciuo.SetAppSkdID(*u)
+	}
+	return aciuo
+}
+
+// ClearAppSkdID clears the value of the "app_skd_id" field.
+func (aciuo *ActiveCodeInfoUpdateOne) ClearAppSkdID() *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.ClearAppSkdID()
+	return aciuo
+}
+
+// SetAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID.
+func (aciuo *ActiveCodeInfoUpdateOne) SetAppSdkID(id uuid.UUID) *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.SetAppSdkID(id)
+	return aciuo
+}
+
+// SetNillableAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID if the given value is not nil.
+func (aciuo *ActiveCodeInfoUpdateOne) SetNillableAppSdkID(id *uuid.UUID) *ActiveCodeInfoUpdateOne {
+	if id != nil {
+		aciuo = aciuo.SetAppSdkID(*id)
+	}
+	return aciuo
+}
+
+// SetAppSdk sets the "app_sdk" edge to the AppSdk entity.
+func (aciuo *ActiveCodeInfoUpdateOne) SetAppSdk(a *AppSdk) *ActiveCodeInfoUpdateOne {
+	return aciuo.SetAppSdkID(a.ID)
+}
+
 // Mutation returns the ActiveCodeInfoMutation object of the builder.
 func (aciuo *ActiveCodeInfoUpdateOne) Mutation() *ActiveCodeInfoMutation {
 	return aciuo.mutation
+}
+
+// ClearAppSdk clears the "app_sdk" edge to the AppSdk entity.
+func (aciuo *ActiveCodeInfoUpdateOne) ClearAppSdk() *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.ClearAppSdk()
+	return aciuo
 }
 
 // Where appends a list predicates to the ActiveCodeInfoUpdate builder.
@@ -729,6 +850,35 @@ func (aciuo *ActiveCodeInfoUpdateOne) sqlSave(ctx context.Context) (_node *Activ
 	}
 	if value, ok := aciuo.mutation.ExpireDate(); ok {
 		_spec.SetField(activecodeinfo.FieldExpireDate, field.TypeTime, value)
+	}
+	if aciuo.mutation.AppSdkCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   activecodeinfo.AppSdkTable,
+			Columns: []string{activecodeinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aciuo.mutation.AppSdkIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   activecodeinfo.AppSdkTable,
+			Columns: []string{activecodeinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ActiveCodeInfo{config: aciuo.config}
 	_spec.Assign = _node.assignValues

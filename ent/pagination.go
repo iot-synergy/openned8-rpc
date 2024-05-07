@@ -8,8 +8,10 @@ import (
 
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 )
 
@@ -217,6 +219,85 @@ func (ai *AppInfoQuery) Page(
 	return ret, nil
 }
 
+type AppSdkPager struct {
+	Order  appsdk.OrderOption
+	Filter func(*AppSdkQuery) (*AppSdkQuery, error)
+}
+
+// AppSdkPaginateOption enables pagination customization.
+type AppSdkPaginateOption func(*AppSdkPager)
+
+// DefaultAppSdkOrder is the default ordering of AppSdk.
+var DefaultAppSdkOrder = Desc(appsdk.FieldID)
+
+func newAppSdkPager(opts []AppSdkPaginateOption) (*AppSdkPager, error) {
+	pager := &AppSdkPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultAppSdkOrder
+	}
+	return pager, nil
+}
+
+func (p *AppSdkPager) ApplyFilter(query *AppSdkQuery) (*AppSdkQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// AppSdkPageList is AppSdk PageList result.
+type AppSdkPageList struct {
+	List        []*AppSdk    `json:"list"`
+	PageDetails *PageDetails `json:"pageDetails"`
+}
+
+func (as *AppSdkQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...AppSdkPaginateOption,
+) (*AppSdkPageList, error) {
+
+	pager, err := newAppSdkPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if as, err = pager.ApplyFilter(as); err != nil {
+		return nil, err
+	}
+
+	ret := &AppSdkPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	count, err := as.Clone().Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		as = as.Order(pager.Order)
+	} else {
+		as = as.Order(DefaultAppSdkOrder)
+	}
+
+	as = as.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := as.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
 type CategoryInfoPager struct {
 	Order  categoryinfo.OrderOption
 	Filter func(*CategoryInfoQuery) (*CategoryInfoQuery, error)
@@ -367,6 +448,85 @@ func (ii *IndustryInfoQuery) Page(
 
 	ii = ii.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
 	list, err := ii.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
+type SdkInfoPager struct {
+	Order  sdkinfo.OrderOption
+	Filter func(*SdkInfoQuery) (*SdkInfoQuery, error)
+}
+
+// SdkInfoPaginateOption enables pagination customization.
+type SdkInfoPaginateOption func(*SdkInfoPager)
+
+// DefaultSdkInfoOrder is the default ordering of SdkInfo.
+var DefaultSdkInfoOrder = Desc(sdkinfo.FieldID)
+
+func newSdkInfoPager(opts []SdkInfoPaginateOption) (*SdkInfoPager, error) {
+	pager := &SdkInfoPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultSdkInfoOrder
+	}
+	return pager, nil
+}
+
+func (p *SdkInfoPager) ApplyFilter(query *SdkInfoQuery) (*SdkInfoQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// SdkInfoPageList is SdkInfo PageList result.
+type SdkInfoPageList struct {
+	List        []*SdkInfo   `json:"list"`
+	PageDetails *PageDetails `json:"pageDetails"`
+}
+
+func (si *SdkInfoQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...SdkInfoPaginateOption,
+) (*SdkInfoPageList, error) {
+
+	pager, err := newSdkInfoPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if si, err = pager.ApplyFilter(si); err != nil {
+		return nil, err
+	}
+
+	ret := &SdkInfoPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	count, err := si.Clone().Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		si = si.Order(pager.Order)
+	} else {
+		si = si.Order(DefaultSdkInfoOrder)
+	}
+
+	si = si.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := si.All(ctx)
 	if err != nil {
 		return nil, err
 	}

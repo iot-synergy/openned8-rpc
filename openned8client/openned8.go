@@ -32,6 +32,11 @@ type (
 	IndustryInfo          = openned8.IndustryInfo
 	IndustrylistResp      = openned8.IndustrylistResp
 	PageInfo              = openned8.PageInfo
+	SdkInfo               = openned8.SdkInfo
+	SdkInfoCreateReq      = openned8.SdkInfoCreateReq
+	SdkListQueryReq       = openned8.SdkListQueryReq
+	SdkListResp           = openned8.SdkListResp
+	SdkQueryByAppReq      = openned8.SdkQueryByAppReq
 	SdkUsage              = openned8.SdkUsage
 	UserSdkUsageQueryReq  = openned8.UserSdkUsageQueryReq
 	UserSdkUsageUpdateReq = openned8.UserSdkUsageUpdateReq
@@ -45,8 +50,11 @@ type (
 		IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
 		ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
 		ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error)
+		SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error)
+		SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*SdkListResp, error)
 		QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error)
+		CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error)
 	}
 
 	defaultOpenned8 struct {
@@ -100,6 +108,16 @@ func (m *defaultOpenned8) ActiveCodeCreat(ctx context.Context, in *ActiveCodeCre
 	return client.ActiveCodeCreat(ctx, in, opts...)
 }
 
+func (m *defaultOpenned8) SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.SdkListQuery(ctx, in, opts...)
+}
+
+func (m *defaultOpenned8) SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*SdkListResp, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.SdkQueryByApp(ctx, in, opts...)
+}
+
 func (m *defaultOpenned8) QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.QueryUserSdkUsage(ctx, in, opts...)
@@ -108,4 +126,9 @@ func (m *defaultOpenned8) QueryUserSdkUsage(ctx context.Context, in *UserSdkUsag
 func (m *defaultOpenned8) UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.UpdateUserSdkUsage(ctx, in, opts...)
+}
+
+func (m *defaultOpenned8) CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.CreateSdk(ctx, in, opts...)
 }

@@ -14,9 +14,11 @@ import (
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 )
 
@@ -31,8 +33,10 @@ const (
 	// Node types.
 	TypeActiveCodeInfo = "ActiveCodeInfo"
 	TypeAppInfo        = "AppInfo"
+	TypeAppSdk         = "AppSdk"
 	TypeCategoryInfo   = "CategoryInfo"
 	TypeIndustryInfo   = "IndustryInfo"
+	TypeSdkInfo        = "SdkInfo"
 	TypeSdkUsage       = "SdkUsage"
 )
 
@@ -61,6 +65,8 @@ type ActiveCodeInfoMutation struct {
 	start_date      *time.Time
 	expire_date     *time.Time
 	clearedFields   map[string]struct{}
+	app_sdk         *uuid.UUID
+	clearedapp_sdk  bool
 	done            bool
 	oldValue        func(context.Context) (*ActiveCodeInfo, error)
 	predicates      []predicate.ActiveCodeInfo
@@ -800,6 +806,95 @@ func (m *ActiveCodeInfoMutation) ResetExpireDate() {
 	m.expire_date = nil
 }
 
+// SetAppSkdID sets the "app_skd_id" field.
+func (m *ActiveCodeInfoMutation) SetAppSkdID(u uuid.UUID) {
+	m.app_sdk = &u
+}
+
+// AppSkdID returns the value of the "app_skd_id" field in the mutation.
+func (m *ActiveCodeInfoMutation) AppSkdID() (r uuid.UUID, exists bool) {
+	v := m.app_sdk
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppSkdID returns the old "app_skd_id" field's value of the ActiveCodeInfo entity.
+// If the ActiveCodeInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActiveCodeInfoMutation) OldAppSkdID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAppSkdID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAppSkdID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppSkdID: %w", err)
+	}
+	return oldValue.AppSkdID, nil
+}
+
+// ClearAppSkdID clears the value of the "app_skd_id" field.
+func (m *ActiveCodeInfoMutation) ClearAppSkdID() {
+	m.app_sdk = nil
+	m.clearedFields[activecodeinfo.FieldAppSkdID] = struct{}{}
+}
+
+// AppSkdIDCleared returns if the "app_skd_id" field was cleared in this mutation.
+func (m *ActiveCodeInfoMutation) AppSkdIDCleared() bool {
+	_, ok := m.clearedFields[activecodeinfo.FieldAppSkdID]
+	return ok
+}
+
+// ResetAppSkdID resets all changes to the "app_skd_id" field.
+func (m *ActiveCodeInfoMutation) ResetAppSkdID() {
+	m.app_sdk = nil
+	delete(m.clearedFields, activecodeinfo.FieldAppSkdID)
+}
+
+// SetAppSdkID sets the "app_sdk" edge to the AppSdk entity by id.
+func (m *ActiveCodeInfoMutation) SetAppSdkID(id uuid.UUID) {
+	m.app_sdk = &id
+}
+
+// ClearAppSdk clears the "app_sdk" edge to the AppSdk entity.
+func (m *ActiveCodeInfoMutation) ClearAppSdk() {
+	m.clearedapp_sdk = true
+	m.clearedFields[activecodeinfo.FieldAppSkdID] = struct{}{}
+}
+
+// AppSdkCleared reports if the "app_sdk" edge to the AppSdk entity was cleared.
+func (m *ActiveCodeInfoMutation) AppSdkCleared() bool {
+	return m.AppSkdIDCleared() || m.clearedapp_sdk
+}
+
+// AppSdkID returns the "app_sdk" edge ID in the mutation.
+func (m *ActiveCodeInfoMutation) AppSdkID() (id uuid.UUID, exists bool) {
+	if m.app_sdk != nil {
+		return *m.app_sdk, true
+	}
+	return
+}
+
+// AppSdkIDs returns the "app_sdk" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AppSdkID instead. It exists only for internal usage by the builders.
+func (m *ActiveCodeInfoMutation) AppSdkIDs() (ids []uuid.UUID) {
+	if id := m.app_sdk; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAppSdk resets all changes to the "app_sdk" edge.
+func (m *ActiveCodeInfoMutation) ResetAppSdk() {
+	m.app_sdk = nil
+	m.clearedapp_sdk = false
+}
+
 // Where appends a list predicates to the ActiveCodeInfoMutation builder.
 func (m *ActiveCodeInfoMutation) Where(ps ...predicate.ActiveCodeInfo) {
 	m.predicates = append(m.predicates, ps...)
@@ -834,7 +929,7 @@ func (m *ActiveCodeInfoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActiveCodeInfoMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, activecodeinfo.FieldCreatedAt)
 	}
@@ -883,6 +978,9 @@ func (m *ActiveCodeInfoMutation) Fields() []string {
 	if m.expire_date != nil {
 		fields = append(fields, activecodeinfo.FieldExpireDate)
 	}
+	if m.app_sdk != nil {
+		fields = append(fields, activecodeinfo.FieldAppSkdID)
+	}
 	return fields
 }
 
@@ -923,6 +1021,8 @@ func (m *ActiveCodeInfoMutation) Field(name string) (ent.Value, bool) {
 		return m.StartDate()
 	case activecodeinfo.FieldExpireDate:
 		return m.ExpireDate()
+	case activecodeinfo.FieldAppSkdID:
+		return m.AppSkdID()
 	}
 	return nil, false
 }
@@ -964,6 +1064,8 @@ func (m *ActiveCodeInfoMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldStartDate(ctx)
 	case activecodeinfo.FieldExpireDate:
 		return m.OldExpireDate(ctx)
+	case activecodeinfo.FieldAppSkdID:
+		return m.OldAppSkdID(ctx)
 	}
 	return nil, fmt.Errorf("unknown ActiveCodeInfo field %s", name)
 }
@@ -1085,6 +1187,13 @@ func (m *ActiveCodeInfoMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExpireDate(v)
 		return nil
+	case activecodeinfo.FieldAppSkdID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppSkdID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ActiveCodeInfo field %s", name)
 }
@@ -1145,6 +1254,9 @@ func (m *ActiveCodeInfoMutation) ClearedFields() []string {
 	if m.FieldCleared(activecodeinfo.FieldStatus) {
 		fields = append(fields, activecodeinfo.FieldStatus)
 	}
+	if m.FieldCleared(activecodeinfo.FieldAppSkdID) {
+		fields = append(fields, activecodeinfo.FieldAppSkdID)
+	}
 	return fields
 }
 
@@ -1161,6 +1273,9 @@ func (m *ActiveCodeInfoMutation) ClearField(name string) error {
 	switch name {
 	case activecodeinfo.FieldStatus:
 		m.ClearStatus()
+		return nil
+	case activecodeinfo.FieldAppSkdID:
+		m.ClearAppSkdID()
 		return nil
 	}
 	return fmt.Errorf("unknown ActiveCodeInfo nullable field %s", name)
@@ -1218,25 +1333,37 @@ func (m *ActiveCodeInfoMutation) ResetField(name string) error {
 	case activecodeinfo.FieldExpireDate:
 		m.ResetExpireDate()
 		return nil
+	case activecodeinfo.FieldAppSkdID:
+		m.ResetAppSkdID()
+		return nil
 	}
 	return fmt.Errorf("unknown ActiveCodeInfo field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ActiveCodeInfoMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.app_sdk != nil {
+		edges = append(edges, activecodeinfo.EdgeAppSdk)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ActiveCodeInfoMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case activecodeinfo.EdgeAppSdk:
+		if id := m.app_sdk; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ActiveCodeInfoMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -1248,25 +1375,42 @@ func (m *ActiveCodeInfoMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ActiveCodeInfoMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedapp_sdk {
+		edges = append(edges, activecodeinfo.EdgeAppSdk)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ActiveCodeInfoMutation) EdgeCleared(name string) bool {
+	switch name {
+	case activecodeinfo.EdgeAppSdk:
+		return m.clearedapp_sdk
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ActiveCodeInfoMutation) ClearEdge(name string) error {
+	switch name {
+	case activecodeinfo.EdgeAppSdk:
+		m.ClearAppSdk()
+		return nil
+	}
 	return fmt.Errorf("unknown ActiveCodeInfo unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ActiveCodeInfoMutation) ResetEdge(name string) error {
+	switch name {
+	case activecodeinfo.EdgeAppSdk:
+		m.ResetAppSdk()
+		return nil
+	}
 	return fmt.Errorf("unknown ActiveCodeInfo edge %s", name)
 }
 
@@ -1290,6 +1434,9 @@ type AppInfoMutation struct {
 	app_key           *string
 	app_secret        *string
 	clearedFields     map[string]struct{}
+	app_sdk           map[uuid.UUID]struct{}
+	removedapp_sdk    map[uuid.UUID]struct{}
+	clearedapp_sdk    bool
 	done              bool
 	oldValue          func(context.Context) (*AppInfo, error)
 	predicates        []predicate.AppInfo
@@ -1835,6 +1982,60 @@ func (m *AppInfoMutation) ResetAppSecret() {
 	m.app_secret = nil
 }
 
+// AddAppSdkIDs adds the "app_sdk" edge to the AppSdk entity by ids.
+func (m *AppInfoMutation) AddAppSdkIDs(ids ...uuid.UUID) {
+	if m.app_sdk == nil {
+		m.app_sdk = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.app_sdk[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAppSdk clears the "app_sdk" edge to the AppSdk entity.
+func (m *AppInfoMutation) ClearAppSdk() {
+	m.clearedapp_sdk = true
+}
+
+// AppSdkCleared reports if the "app_sdk" edge to the AppSdk entity was cleared.
+func (m *AppInfoMutation) AppSdkCleared() bool {
+	return m.clearedapp_sdk
+}
+
+// RemoveAppSdkIDs removes the "app_sdk" edge to the AppSdk entity by IDs.
+func (m *AppInfoMutation) RemoveAppSdkIDs(ids ...uuid.UUID) {
+	if m.removedapp_sdk == nil {
+		m.removedapp_sdk = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.app_sdk, ids[i])
+		m.removedapp_sdk[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAppSdk returns the removed IDs of the "app_sdk" edge to the AppSdk entity.
+func (m *AppInfoMutation) RemovedAppSdkIDs() (ids []uuid.UUID) {
+	for id := range m.removedapp_sdk {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AppSdkIDs returns the "app_sdk" edge IDs in the mutation.
+func (m *AppInfoMutation) AppSdkIDs() (ids []uuid.UUID) {
+	for id := range m.app_sdk {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAppSdk resets all changes to the "app_sdk" edge.
+func (m *AppInfoMutation) ResetAppSdk() {
+	m.app_sdk = nil
+	m.clearedapp_sdk = false
+	m.removedapp_sdk = nil
+}
+
 // Where appends a list predicates to the AppInfoMutation builder.
 func (m *AppInfoMutation) Where(ps ...predicate.AppInfo) {
 	m.predicates = append(m.predicates, ps...)
@@ -2165,50 +2366,886 @@ func (m *AppInfoMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AppInfoMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.app_sdk != nil {
+		edges = append(edges, appinfo.EdgeAppSdk)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *AppInfoMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case appinfo.EdgeAppSdk:
+		ids := make([]ent.Value, 0, len(m.app_sdk))
+		for id := range m.app_sdk {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AppInfoMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removedapp_sdk != nil {
+		edges = append(edges, appinfo.EdgeAppSdk)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *AppInfoMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case appinfo.EdgeAppSdk:
+		ids := make([]ent.Value, 0, len(m.removedapp_sdk))
+		for id := range m.removedapp_sdk {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AppInfoMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedapp_sdk {
+		edges = append(edges, appinfo.EdgeAppSdk)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *AppInfoMutation) EdgeCleared(name string) bool {
+	switch name {
+	case appinfo.EdgeAppSdk:
+		return m.clearedapp_sdk
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *AppInfoMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown AppInfo unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *AppInfoMutation) ResetEdge(name string) error {
+	switch name {
+	case appinfo.EdgeAppSdk:
+		m.ResetAppSdk()
+		return nil
+	}
 	return fmt.Errorf("unknown AppInfo edge %s", name)
+}
+
+// AppSdkMutation represents an operation that mutates the AppSdk nodes in the graph.
+type AppSdkMutation struct {
+	config
+	op                 Op
+	typ                string
+	id                 *uuid.UUID
+	created_at         *time.Time
+	updated_at         *time.Time
+	sdk_key            *string
+	clearedFields      map[string]struct{}
+	active_code        map[uuid.UUID]struct{}
+	removedactive_code map[uuid.UUID]struct{}
+	clearedactive_code bool
+	app_info           *uuid.UUID
+	clearedapp_info    bool
+	sdk_info           *uuid.UUID
+	clearedsdk_info    bool
+	done               bool
+	oldValue           func(context.Context) (*AppSdk, error)
+	predicates         []predicate.AppSdk
+}
+
+var _ ent.Mutation = (*AppSdkMutation)(nil)
+
+// appsdkOption allows management of the mutation configuration using functional options.
+type appsdkOption func(*AppSdkMutation)
+
+// newAppSdkMutation creates new mutation for the AppSdk entity.
+func newAppSdkMutation(c config, op Op, opts ...appsdkOption) *AppSdkMutation {
+	m := &AppSdkMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAppSdk,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAppSdkID sets the ID field of the mutation.
+func withAppSdkID(id uuid.UUID) appsdkOption {
+	return func(m *AppSdkMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AppSdk
+		)
+		m.oldValue = func(ctx context.Context) (*AppSdk, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AppSdk.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAppSdk sets the old AppSdk of the mutation.
+func withAppSdk(node *AppSdk) appsdkOption {
+	return func(m *AppSdkMutation) {
+		m.oldValue = func(context.Context) (*AppSdk, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AppSdkMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AppSdkMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of AppSdk entities.
+func (m *AppSdkMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AppSdkMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AppSdkMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AppSdk.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AppSdkMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AppSdkMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AppSdk entity.
+// If the AppSdk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSdkMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AppSdkMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AppSdkMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AppSdkMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AppSdk entity.
+// If the AppSdk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSdkMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AppSdkMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetApp sets the "app" field.
+func (m *AppSdkMutation) SetApp(u uuid.UUID) {
+	m.app_info = &u
+}
+
+// App returns the value of the "app" field in the mutation.
+func (m *AppSdkMutation) App() (r uuid.UUID, exists bool) {
+	v := m.app_info
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApp returns the old "app" field's value of the AppSdk entity.
+// If the AppSdk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSdkMutation) OldApp(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApp: %w", err)
+	}
+	return oldValue.App, nil
+}
+
+// ClearApp clears the value of the "app" field.
+func (m *AppSdkMutation) ClearApp() {
+	m.app_info = nil
+	m.clearedFields[appsdk.FieldApp] = struct{}{}
+}
+
+// AppCleared returns if the "app" field was cleared in this mutation.
+func (m *AppSdkMutation) AppCleared() bool {
+	_, ok := m.clearedFields[appsdk.FieldApp]
+	return ok
+}
+
+// ResetApp resets all changes to the "app" field.
+func (m *AppSdkMutation) ResetApp() {
+	m.app_info = nil
+	delete(m.clearedFields, appsdk.FieldApp)
+}
+
+// SetSdk sets the "sdk" field.
+func (m *AppSdkMutation) SetSdk(u uuid.UUID) {
+	m.sdk_info = &u
+}
+
+// Sdk returns the value of the "sdk" field in the mutation.
+func (m *AppSdkMutation) Sdk() (r uuid.UUID, exists bool) {
+	v := m.sdk_info
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSdk returns the old "sdk" field's value of the AppSdk entity.
+// If the AppSdk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSdkMutation) OldSdk(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSdk is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSdk requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSdk: %w", err)
+	}
+	return oldValue.Sdk, nil
+}
+
+// ClearSdk clears the value of the "sdk" field.
+func (m *AppSdkMutation) ClearSdk() {
+	m.sdk_info = nil
+	m.clearedFields[appsdk.FieldSdk] = struct{}{}
+}
+
+// SdkCleared returns if the "sdk" field was cleared in this mutation.
+func (m *AppSdkMutation) SdkCleared() bool {
+	_, ok := m.clearedFields[appsdk.FieldSdk]
+	return ok
+}
+
+// ResetSdk resets all changes to the "sdk" field.
+func (m *AppSdkMutation) ResetSdk() {
+	m.sdk_info = nil
+	delete(m.clearedFields, appsdk.FieldSdk)
+}
+
+// SetSdkKey sets the "sdk_key" field.
+func (m *AppSdkMutation) SetSdkKey(s string) {
+	m.sdk_key = &s
+}
+
+// SdkKey returns the value of the "sdk_key" field in the mutation.
+func (m *AppSdkMutation) SdkKey() (r string, exists bool) {
+	v := m.sdk_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSdkKey returns the old "sdk_key" field's value of the AppSdk entity.
+// If the AppSdk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AppSdkMutation) OldSdkKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSdkKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSdkKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSdkKey: %w", err)
+	}
+	return oldValue.SdkKey, nil
+}
+
+// ResetSdkKey resets all changes to the "sdk_key" field.
+func (m *AppSdkMutation) ResetSdkKey() {
+	m.sdk_key = nil
+}
+
+// AddActiveCodeIDs adds the "active_code" edge to the ActiveCodeInfo entity by ids.
+func (m *AppSdkMutation) AddActiveCodeIDs(ids ...uuid.UUID) {
+	if m.active_code == nil {
+		m.active_code = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.active_code[ids[i]] = struct{}{}
+	}
+}
+
+// ClearActiveCode clears the "active_code" edge to the ActiveCodeInfo entity.
+func (m *AppSdkMutation) ClearActiveCode() {
+	m.clearedactive_code = true
+}
+
+// ActiveCodeCleared reports if the "active_code" edge to the ActiveCodeInfo entity was cleared.
+func (m *AppSdkMutation) ActiveCodeCleared() bool {
+	return m.clearedactive_code
+}
+
+// RemoveActiveCodeIDs removes the "active_code" edge to the ActiveCodeInfo entity by IDs.
+func (m *AppSdkMutation) RemoveActiveCodeIDs(ids ...uuid.UUID) {
+	if m.removedactive_code == nil {
+		m.removedactive_code = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.active_code, ids[i])
+		m.removedactive_code[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedActiveCode returns the removed IDs of the "active_code" edge to the ActiveCodeInfo entity.
+func (m *AppSdkMutation) RemovedActiveCodeIDs() (ids []uuid.UUID) {
+	for id := range m.removedactive_code {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ActiveCodeIDs returns the "active_code" edge IDs in the mutation.
+func (m *AppSdkMutation) ActiveCodeIDs() (ids []uuid.UUID) {
+	for id := range m.active_code {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetActiveCode resets all changes to the "active_code" edge.
+func (m *AppSdkMutation) ResetActiveCode() {
+	m.active_code = nil
+	m.clearedactive_code = false
+	m.removedactive_code = nil
+}
+
+// SetAppInfoID sets the "app_info" edge to the AppInfo entity by id.
+func (m *AppSdkMutation) SetAppInfoID(id uuid.UUID) {
+	m.app_info = &id
+}
+
+// ClearAppInfo clears the "app_info" edge to the AppInfo entity.
+func (m *AppSdkMutation) ClearAppInfo() {
+	m.clearedapp_info = true
+	m.clearedFields[appsdk.FieldApp] = struct{}{}
+}
+
+// AppInfoCleared reports if the "app_info" edge to the AppInfo entity was cleared.
+func (m *AppSdkMutation) AppInfoCleared() bool {
+	return m.AppCleared() || m.clearedapp_info
+}
+
+// AppInfoID returns the "app_info" edge ID in the mutation.
+func (m *AppSdkMutation) AppInfoID() (id uuid.UUID, exists bool) {
+	if m.app_info != nil {
+		return *m.app_info, true
+	}
+	return
+}
+
+// AppInfoIDs returns the "app_info" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AppInfoID instead. It exists only for internal usage by the builders.
+func (m *AppSdkMutation) AppInfoIDs() (ids []uuid.UUID) {
+	if id := m.app_info; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAppInfo resets all changes to the "app_info" edge.
+func (m *AppSdkMutation) ResetAppInfo() {
+	m.app_info = nil
+	m.clearedapp_info = false
+}
+
+// SetSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by id.
+func (m *AppSdkMutation) SetSdkInfoID(id uuid.UUID) {
+	m.sdk_info = &id
+}
+
+// ClearSdkInfo clears the "sdk_info" edge to the SdkInfo entity.
+func (m *AppSdkMutation) ClearSdkInfo() {
+	m.clearedsdk_info = true
+	m.clearedFields[appsdk.FieldSdk] = struct{}{}
+}
+
+// SdkInfoCleared reports if the "sdk_info" edge to the SdkInfo entity was cleared.
+func (m *AppSdkMutation) SdkInfoCleared() bool {
+	return m.SdkCleared() || m.clearedsdk_info
+}
+
+// SdkInfoID returns the "sdk_info" edge ID in the mutation.
+func (m *AppSdkMutation) SdkInfoID() (id uuid.UUID, exists bool) {
+	if m.sdk_info != nil {
+		return *m.sdk_info, true
+	}
+	return
+}
+
+// SdkInfoIDs returns the "sdk_info" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SdkInfoID instead. It exists only for internal usage by the builders.
+func (m *AppSdkMutation) SdkInfoIDs() (ids []uuid.UUID) {
+	if id := m.sdk_info; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSdkInfo resets all changes to the "sdk_info" edge.
+func (m *AppSdkMutation) ResetSdkInfo() {
+	m.sdk_info = nil
+	m.clearedsdk_info = false
+}
+
+// Where appends a list predicates to the AppSdkMutation builder.
+func (m *AppSdkMutation) Where(ps ...predicate.AppSdk) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AppSdkMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AppSdkMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AppSdk, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AppSdkMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AppSdkMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (AppSdk).
+func (m *AppSdkMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AppSdkMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.created_at != nil {
+		fields = append(fields, appsdk.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, appsdk.FieldUpdatedAt)
+	}
+	if m.app_info != nil {
+		fields = append(fields, appsdk.FieldApp)
+	}
+	if m.sdk_info != nil {
+		fields = append(fields, appsdk.FieldSdk)
+	}
+	if m.sdk_key != nil {
+		fields = append(fields, appsdk.FieldSdkKey)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AppSdkMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case appsdk.FieldCreatedAt:
+		return m.CreatedAt()
+	case appsdk.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case appsdk.FieldApp:
+		return m.App()
+	case appsdk.FieldSdk:
+		return m.Sdk()
+	case appsdk.FieldSdkKey:
+		return m.SdkKey()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AppSdkMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case appsdk.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case appsdk.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case appsdk.FieldApp:
+		return m.OldApp(ctx)
+	case appsdk.FieldSdk:
+		return m.OldSdk(ctx)
+	case appsdk.FieldSdkKey:
+		return m.OldSdkKey(ctx)
+	}
+	return nil, fmt.Errorf("unknown AppSdk field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AppSdkMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case appsdk.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case appsdk.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case appsdk.FieldApp:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApp(v)
+		return nil
+	case appsdk.FieldSdk:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSdk(v)
+		return nil
+	case appsdk.FieldSdkKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSdkKey(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AppSdk field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AppSdkMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AppSdkMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AppSdkMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown AppSdk numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AppSdkMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(appsdk.FieldApp) {
+		fields = append(fields, appsdk.FieldApp)
+	}
+	if m.FieldCleared(appsdk.FieldSdk) {
+		fields = append(fields, appsdk.FieldSdk)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AppSdkMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AppSdkMutation) ClearField(name string) error {
+	switch name {
+	case appsdk.FieldApp:
+		m.ClearApp()
+		return nil
+	case appsdk.FieldSdk:
+		m.ClearSdk()
+		return nil
+	}
+	return fmt.Errorf("unknown AppSdk nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AppSdkMutation) ResetField(name string) error {
+	switch name {
+	case appsdk.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case appsdk.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case appsdk.FieldApp:
+		m.ResetApp()
+		return nil
+	case appsdk.FieldSdk:
+		m.ResetSdk()
+		return nil
+	case appsdk.FieldSdkKey:
+		m.ResetSdkKey()
+		return nil
+	}
+	return fmt.Errorf("unknown AppSdk field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AppSdkMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.active_code != nil {
+		edges = append(edges, appsdk.EdgeActiveCode)
+	}
+	if m.app_info != nil {
+		edges = append(edges, appsdk.EdgeAppInfo)
+	}
+	if m.sdk_info != nil {
+		edges = append(edges, appsdk.EdgeSdkInfo)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AppSdkMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case appsdk.EdgeActiveCode:
+		ids := make([]ent.Value, 0, len(m.active_code))
+		for id := range m.active_code {
+			ids = append(ids, id)
+		}
+		return ids
+	case appsdk.EdgeAppInfo:
+		if id := m.app_info; id != nil {
+			return []ent.Value{*id}
+		}
+	case appsdk.EdgeSdkInfo:
+		if id := m.sdk_info; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AppSdkMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.removedactive_code != nil {
+		edges = append(edges, appsdk.EdgeActiveCode)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AppSdkMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case appsdk.EdgeActiveCode:
+		ids := make([]ent.Value, 0, len(m.removedactive_code))
+		for id := range m.removedactive_code {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AppSdkMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedactive_code {
+		edges = append(edges, appsdk.EdgeActiveCode)
+	}
+	if m.clearedapp_info {
+		edges = append(edges, appsdk.EdgeAppInfo)
+	}
+	if m.clearedsdk_info {
+		edges = append(edges, appsdk.EdgeSdkInfo)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AppSdkMutation) EdgeCleared(name string) bool {
+	switch name {
+	case appsdk.EdgeActiveCode:
+		return m.clearedactive_code
+	case appsdk.EdgeAppInfo:
+		return m.clearedapp_info
+	case appsdk.EdgeSdkInfo:
+		return m.clearedsdk_info
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AppSdkMutation) ClearEdge(name string) error {
+	switch name {
+	case appsdk.EdgeAppInfo:
+		m.ClearAppInfo()
+		return nil
+	case appsdk.EdgeSdkInfo:
+		m.ClearSdkInfo()
+		return nil
+	}
+	return fmt.Errorf("unknown AppSdk unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AppSdkMutation) ResetEdge(name string) error {
+	switch name {
+	case appsdk.EdgeActiveCode:
+		m.ResetActiveCode()
+		return nil
+	case appsdk.EdgeAppInfo:
+		m.ResetAppInfo()
+		return nil
+	case appsdk.EdgeSdkInfo:
+		m.ResetSdkInfo()
+		return nil
+	}
+	return fmt.Errorf("unknown AppSdk edge %s", name)
 }
 
 // CategoryInfoMutation represents an operation that mutates the CategoryInfo nodes in the graph.
@@ -3089,6 +4126,847 @@ func (m *IndustryInfoMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *IndustryInfoMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown IndustryInfo edge %s", name)
+}
+
+// SdkInfoMutation represents an operation that mutates the SdkInfo nodes in the graph.
+type SdkInfoMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *uuid.UUID
+	created_at     *time.Time
+	updated_at     *time.Time
+	status         *uint8
+	addstatus      *int8
+	name           *string
+	avatar         *string
+	desc           *int64
+	adddesc        *int64
+	download_url   *string
+	clearedFields  map[string]struct{}
+	app_sdk        map[uuid.UUID]struct{}
+	removedapp_sdk map[uuid.UUID]struct{}
+	clearedapp_sdk bool
+	done           bool
+	oldValue       func(context.Context) (*SdkInfo, error)
+	predicates     []predicate.SdkInfo
+}
+
+var _ ent.Mutation = (*SdkInfoMutation)(nil)
+
+// sdkinfoOption allows management of the mutation configuration using functional options.
+type sdkinfoOption func(*SdkInfoMutation)
+
+// newSdkInfoMutation creates new mutation for the SdkInfo entity.
+func newSdkInfoMutation(c config, op Op, opts ...sdkinfoOption) *SdkInfoMutation {
+	m := &SdkInfoMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSdkInfo,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSdkInfoID sets the ID field of the mutation.
+func withSdkInfoID(id uuid.UUID) sdkinfoOption {
+	return func(m *SdkInfoMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *SdkInfo
+		)
+		m.oldValue = func(ctx context.Context) (*SdkInfo, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().SdkInfo.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSdkInfo sets the old SdkInfo of the mutation.
+func withSdkInfo(node *SdkInfo) sdkinfoOption {
+	return func(m *SdkInfoMutation) {
+		m.oldValue = func(context.Context) (*SdkInfo, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SdkInfoMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SdkInfoMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of SdkInfo entities.
+func (m *SdkInfoMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SdkInfoMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SdkInfoMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().SdkInfo.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *SdkInfoMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *SdkInfoMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *SdkInfoMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *SdkInfoMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *SdkInfoMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *SdkInfoMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *SdkInfoMutation) SetStatus(u uint8) {
+	m.status = &u
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *SdkInfoMutation) Status() (r uint8, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldStatus(ctx context.Context) (v uint8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds u to the "status" field.
+func (m *SdkInfoMutation) AddStatus(u int8) {
+	if m.addstatus != nil {
+		*m.addstatus += u
+	} else {
+		m.addstatus = &u
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *SdkInfoMutation) AddedStatus() (r int8, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *SdkInfoMutation) ClearStatus() {
+	m.status = nil
+	m.addstatus = nil
+	m.clearedFields[sdkinfo.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *SdkInfoMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[sdkinfo.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *SdkInfoMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+	delete(m.clearedFields, sdkinfo.FieldStatus)
+}
+
+// SetName sets the "name" field.
+func (m *SdkInfoMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *SdkInfoMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *SdkInfoMutation) ResetName() {
+	m.name = nil
+}
+
+// SetAvatar sets the "avatar" field.
+func (m *SdkInfoMutation) SetAvatar(s string) {
+	m.avatar = &s
+}
+
+// Avatar returns the value of the "avatar" field in the mutation.
+func (m *SdkInfoMutation) Avatar() (r string, exists bool) {
+	v := m.avatar
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAvatar returns the old "avatar" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldAvatar(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAvatar is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAvatar requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAvatar: %w", err)
+	}
+	return oldValue.Avatar, nil
+}
+
+// ResetAvatar resets all changes to the "avatar" field.
+func (m *SdkInfoMutation) ResetAvatar() {
+	m.avatar = nil
+}
+
+// SetDesc sets the "desc" field.
+func (m *SdkInfoMutation) SetDesc(i int64) {
+	m.desc = &i
+	m.adddesc = nil
+}
+
+// Desc returns the value of the "desc" field in the mutation.
+func (m *SdkInfoMutation) Desc() (r int64, exists bool) {
+	v := m.desc
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDesc returns the old "desc" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldDesc(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDesc is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDesc requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDesc: %w", err)
+	}
+	return oldValue.Desc, nil
+}
+
+// AddDesc adds i to the "desc" field.
+func (m *SdkInfoMutation) AddDesc(i int64) {
+	if m.adddesc != nil {
+		*m.adddesc += i
+	} else {
+		m.adddesc = &i
+	}
+}
+
+// AddedDesc returns the value that was added to the "desc" field in this mutation.
+func (m *SdkInfoMutation) AddedDesc() (r int64, exists bool) {
+	v := m.adddesc
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDesc resets all changes to the "desc" field.
+func (m *SdkInfoMutation) ResetDesc() {
+	m.desc = nil
+	m.adddesc = nil
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (m *SdkInfoMutation) SetDownloadURL(s string) {
+	m.download_url = &s
+}
+
+// DownloadURL returns the value of the "download_url" field in the mutation.
+func (m *SdkInfoMutation) DownloadURL() (r string, exists bool) {
+	v := m.download_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDownloadURL returns the old "download_url" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldDownloadURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDownloadURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDownloadURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDownloadURL: %w", err)
+	}
+	return oldValue.DownloadURL, nil
+}
+
+// ResetDownloadURL resets all changes to the "download_url" field.
+func (m *SdkInfoMutation) ResetDownloadURL() {
+	m.download_url = nil
+}
+
+// AddAppSdkIDs adds the "app_sdk" edge to the AppSdk entity by ids.
+func (m *SdkInfoMutation) AddAppSdkIDs(ids ...uuid.UUID) {
+	if m.app_sdk == nil {
+		m.app_sdk = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.app_sdk[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAppSdk clears the "app_sdk" edge to the AppSdk entity.
+func (m *SdkInfoMutation) ClearAppSdk() {
+	m.clearedapp_sdk = true
+}
+
+// AppSdkCleared reports if the "app_sdk" edge to the AppSdk entity was cleared.
+func (m *SdkInfoMutation) AppSdkCleared() bool {
+	return m.clearedapp_sdk
+}
+
+// RemoveAppSdkIDs removes the "app_sdk" edge to the AppSdk entity by IDs.
+func (m *SdkInfoMutation) RemoveAppSdkIDs(ids ...uuid.UUID) {
+	if m.removedapp_sdk == nil {
+		m.removedapp_sdk = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.app_sdk, ids[i])
+		m.removedapp_sdk[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAppSdk returns the removed IDs of the "app_sdk" edge to the AppSdk entity.
+func (m *SdkInfoMutation) RemovedAppSdkIDs() (ids []uuid.UUID) {
+	for id := range m.removedapp_sdk {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AppSdkIDs returns the "app_sdk" edge IDs in the mutation.
+func (m *SdkInfoMutation) AppSdkIDs() (ids []uuid.UUID) {
+	for id := range m.app_sdk {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAppSdk resets all changes to the "app_sdk" edge.
+func (m *SdkInfoMutation) ResetAppSdk() {
+	m.app_sdk = nil
+	m.clearedapp_sdk = false
+	m.removedapp_sdk = nil
+}
+
+// Where appends a list predicates to the SdkInfoMutation builder.
+func (m *SdkInfoMutation) Where(ps ...predicate.SdkInfo) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the SdkInfoMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SdkInfoMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.SdkInfo, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *SdkInfoMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SdkInfoMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (SdkInfo).
+func (m *SdkInfoMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SdkInfoMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, sdkinfo.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, sdkinfo.FieldUpdatedAt)
+	}
+	if m.status != nil {
+		fields = append(fields, sdkinfo.FieldStatus)
+	}
+	if m.name != nil {
+		fields = append(fields, sdkinfo.FieldName)
+	}
+	if m.avatar != nil {
+		fields = append(fields, sdkinfo.FieldAvatar)
+	}
+	if m.desc != nil {
+		fields = append(fields, sdkinfo.FieldDesc)
+	}
+	if m.download_url != nil {
+		fields = append(fields, sdkinfo.FieldDownloadURL)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SdkInfoMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case sdkinfo.FieldCreatedAt:
+		return m.CreatedAt()
+	case sdkinfo.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case sdkinfo.FieldStatus:
+		return m.Status()
+	case sdkinfo.FieldName:
+		return m.Name()
+	case sdkinfo.FieldAvatar:
+		return m.Avatar()
+	case sdkinfo.FieldDesc:
+		return m.Desc()
+	case sdkinfo.FieldDownloadURL:
+		return m.DownloadURL()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SdkInfoMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case sdkinfo.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case sdkinfo.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case sdkinfo.FieldStatus:
+		return m.OldStatus(ctx)
+	case sdkinfo.FieldName:
+		return m.OldName(ctx)
+	case sdkinfo.FieldAvatar:
+		return m.OldAvatar(ctx)
+	case sdkinfo.FieldDesc:
+		return m.OldDesc(ctx)
+	case sdkinfo.FieldDownloadURL:
+		return m.OldDownloadURL(ctx)
+	}
+	return nil, fmt.Errorf("unknown SdkInfo field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SdkInfoMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case sdkinfo.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case sdkinfo.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case sdkinfo.FieldStatus:
+		v, ok := value.(uint8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case sdkinfo.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case sdkinfo.FieldAvatar:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAvatar(v)
+		return nil
+	case sdkinfo.FieldDesc:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDesc(v)
+		return nil
+	case sdkinfo.FieldDownloadURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDownloadURL(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SdkInfo field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SdkInfoMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, sdkinfo.FieldStatus)
+	}
+	if m.adddesc != nil {
+		fields = append(fields, sdkinfo.FieldDesc)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SdkInfoMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case sdkinfo.FieldStatus:
+		return m.AddedStatus()
+	case sdkinfo.FieldDesc:
+		return m.AddedDesc()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SdkInfoMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case sdkinfo.FieldStatus:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	case sdkinfo.FieldDesc:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDesc(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SdkInfo numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SdkInfoMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(sdkinfo.FieldStatus) {
+		fields = append(fields, sdkinfo.FieldStatus)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SdkInfoMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SdkInfoMutation) ClearField(name string) error {
+	switch name {
+	case sdkinfo.FieldStatus:
+		m.ClearStatus()
+		return nil
+	}
+	return fmt.Errorf("unknown SdkInfo nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SdkInfoMutation) ResetField(name string) error {
+	switch name {
+	case sdkinfo.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case sdkinfo.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case sdkinfo.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case sdkinfo.FieldName:
+		m.ResetName()
+		return nil
+	case sdkinfo.FieldAvatar:
+		m.ResetAvatar()
+		return nil
+	case sdkinfo.FieldDesc:
+		m.ResetDesc()
+		return nil
+	case sdkinfo.FieldDownloadURL:
+		m.ResetDownloadURL()
+		return nil
+	}
+	return fmt.Errorf("unknown SdkInfo field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SdkInfoMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.app_sdk != nil {
+		edges = append(edges, sdkinfo.EdgeAppSdk)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SdkInfoMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case sdkinfo.EdgeAppSdk:
+		ids := make([]ent.Value, 0, len(m.app_sdk))
+		for id := range m.app_sdk {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SdkInfoMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedapp_sdk != nil {
+		edges = append(edges, sdkinfo.EdgeAppSdk)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SdkInfoMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case sdkinfo.EdgeAppSdk:
+		ids := make([]ent.Value, 0, len(m.removedapp_sdk))
+		for id := range m.removedapp_sdk {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SdkInfoMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedapp_sdk {
+		edges = append(edges, sdkinfo.EdgeAppSdk)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SdkInfoMutation) EdgeCleared(name string) bool {
+	switch name {
+	case sdkinfo.EdgeAppSdk:
+		return m.clearedapp_sdk
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SdkInfoMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown SdkInfo unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SdkInfoMutation) ResetEdge(name string) error {
+	switch name {
+	case sdkinfo.EdgeAppSdk:
+		m.ResetAppSdk()
+		return nil
+	}
+	return fmt.Errorf("unknown SdkInfo edge %s", name)
 }
 
 // SdkUsageMutation represents an operation that mutates the SdkUsage nodes in the graph.

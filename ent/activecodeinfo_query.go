@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 )
 
@@ -22,6 +23,7 @@ type ActiveCodeInfoQuery struct {
 	order      []activecodeinfo.OrderOption
 	inters     []Interceptor
 	predicates []predicate.ActiveCodeInfo
+	withAppSdk *AppSdkQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,6 +58,28 @@ func (aciq *ActiveCodeInfoQuery) Unique(unique bool) *ActiveCodeInfoQuery {
 func (aciq *ActiveCodeInfoQuery) Order(o ...activecodeinfo.OrderOption) *ActiveCodeInfoQuery {
 	aciq.order = append(aciq.order, o...)
 	return aciq
+}
+
+// QueryAppSdk chains the current query on the "app_sdk" edge.
+func (aciq *ActiveCodeInfoQuery) QueryAppSdk() *AppSdkQuery {
+	query := (&AppSdkClient{config: aciq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aciq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aciq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(activecodeinfo.Table, activecodeinfo.FieldID, selector),
+			sqlgraph.To(appsdk.Table, appsdk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, activecodeinfo.AppSdkTable, activecodeinfo.AppSdkColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aciq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first ActiveCodeInfo entity from the query.
@@ -250,10 +274,22 @@ func (aciq *ActiveCodeInfoQuery) Clone() *ActiveCodeInfoQuery {
 		order:      append([]activecodeinfo.OrderOption{}, aciq.order...),
 		inters:     append([]Interceptor{}, aciq.inters...),
 		predicates: append([]predicate.ActiveCodeInfo{}, aciq.predicates...),
+		withAppSdk: aciq.withAppSdk.Clone(),
 		// clone intermediate query.
 		sql:  aciq.sql.Clone(),
 		path: aciq.path,
 	}
+}
+
+// WithAppSdk tells the query-builder to eager-load the nodes that are connected to
+// the "app_sdk" edge. The optional arguments are used to configure the query builder of the edge.
+func (aciq *ActiveCodeInfoQuery) WithAppSdk(opts ...func(*AppSdkQuery)) *ActiveCodeInfoQuery {
+	query := (&AppSdkClient{config: aciq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aciq.withAppSdk = query
+	return aciq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -332,8 +368,11 @@ func (aciq *ActiveCodeInfoQuery) prepareQuery(ctx context.Context) error {
 
 func (aciq *ActiveCodeInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ActiveCodeInfo, error) {
 	var (
-		nodes = []*ActiveCodeInfo{}
-		_spec = aciq.querySpec()
+		nodes       = []*ActiveCodeInfo{}
+		_spec       = aciq.querySpec()
+		loadedTypes = [1]bool{
+			aciq.withAppSdk != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ActiveCodeInfo).scanValues(nil, columns)
@@ -341,6 +380,7 @@ func (aciq *ActiveCodeInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ActiveCodeInfo{config: aciq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -352,7 +392,43 @@ func (aciq *ActiveCodeInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := aciq.withAppSdk; query != nil {
+		if err := aciq.loadAppSdk(ctx, query, nodes, nil,
+			func(n *ActiveCodeInfo, e *AppSdk) { n.Edges.AppSdk = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (aciq *ActiveCodeInfoQuery) loadAppSdk(ctx context.Context, query *AppSdkQuery, nodes []*ActiveCodeInfo, init func(*ActiveCodeInfo), assign func(*ActiveCodeInfo, *AppSdk)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*ActiveCodeInfo)
+	for i := range nodes {
+		fk := nodes[i].AppSkdID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(appsdk.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "app_skd_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (aciq *ActiveCodeInfoQuery) sqlCount(ctx context.Context) (int, error) {
@@ -379,6 +455,9 @@ func (aciq *ActiveCodeInfoQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != activecodeinfo.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if aciq.withAppSdk != nil {
+			_spec.Node.AddColumnOnce(activecodeinfo.FieldAppSkdID)
 		}
 	}
 	if ps := aciq.predicates; len(ps) > 0 {

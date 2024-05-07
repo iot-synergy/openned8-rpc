@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 )
 
 // ActiveCodeInfoCreate is the builder for creating a ActiveCodeInfo entity.
@@ -165,6 +166,20 @@ func (acic *ActiveCodeInfoCreate) SetExpireDate(t time.Time) *ActiveCodeInfoCrea
 	return acic
 }
 
+// SetAppSkdID sets the "app_skd_id" field.
+func (acic *ActiveCodeInfoCreate) SetAppSkdID(u uuid.UUID) *ActiveCodeInfoCreate {
+	acic.mutation.SetAppSkdID(u)
+	return acic
+}
+
+// SetNillableAppSkdID sets the "app_skd_id" field if the given value is not nil.
+func (acic *ActiveCodeInfoCreate) SetNillableAppSkdID(u *uuid.UUID) *ActiveCodeInfoCreate {
+	if u != nil {
+		acic.SetAppSkdID(*u)
+	}
+	return acic
+}
+
 // SetID sets the "id" field.
 func (acic *ActiveCodeInfoCreate) SetID(u uuid.UUID) *ActiveCodeInfoCreate {
 	acic.mutation.SetID(u)
@@ -177,6 +192,25 @@ func (acic *ActiveCodeInfoCreate) SetNillableID(u *uuid.UUID) *ActiveCodeInfoCre
 		acic.SetID(*u)
 	}
 	return acic
+}
+
+// SetAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID.
+func (acic *ActiveCodeInfoCreate) SetAppSdkID(id uuid.UUID) *ActiveCodeInfoCreate {
+	acic.mutation.SetAppSdkID(id)
+	return acic
+}
+
+// SetNillableAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID if the given value is not nil.
+func (acic *ActiveCodeInfoCreate) SetNillableAppSdkID(id *uuid.UUID) *ActiveCodeInfoCreate {
+	if id != nil {
+		acic = acic.SetAppSdkID(*id)
+	}
+	return acic
+}
+
+// SetAppSdk sets the "app_sdk" edge to the AppSdk entity.
+func (acic *ActiveCodeInfoCreate) SetAppSdk(a *AppSdk) *ActiveCodeInfoCreate {
+	return acic.SetAppSdkID(a.ID)
 }
 
 // Mutation returns the ActiveCodeInfoMutation object of the builder.
@@ -389,6 +423,23 @@ func (acic *ActiveCodeInfoCreate) createSpec() (*ActiveCodeInfo, *sqlgraph.Creat
 	if value, ok := acic.mutation.ExpireDate(); ok {
 		_spec.SetField(activecodeinfo.FieldExpireDate, field.TypeTime, value)
 		_node.ExpireDate = value
+	}
+	if nodes := acic.mutation.AppSdkIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   activecodeinfo.AppSdkTable,
+			Columns: []string{activecodeinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AppSkdID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

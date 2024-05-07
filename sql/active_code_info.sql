@@ -5,11 +5,13 @@ MySQL - 8.0.26
 */
 /*!40101 SET NAMES utf8 */;
 
+drop table `active_code_info`;
+
 create table `active_code_info` (
     `id` CHAR (36) NOT NULL PRIMARY KEY,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `active_key` varchar (256),
+    `active_key` char (16),
     `user_id` varchar (64),
     `app_id` varchar(64),
     `active_ip` varchar(64),
@@ -22,5 +24,7 @@ create table `active_code_info` (
     `version` varchar(256),
     `start_date` TIMESTAMP,
     `expire_date` TIMESTAMP,
-    `status` bigint(20)
+    `status` bigint(20),
+    `app_sdk_id` varchar (36),
+    unique index address(`active_key` ASC)
 );

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 )
@@ -133,6 +134,11 @@ func StartDate(v time.Time) predicate.ActiveCodeInfo {
 // ExpireDate applies equality check predicate on the "expire_date" field. It's identical to ExpireDateEQ.
 func ExpireDate(v time.Time) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldExpireDate, v))
+}
+
+// AppSkdID applies equality check predicate on the "app_skd_id" field. It's identical to AppSkdIDEQ.
+func AppSkdID(v uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppSkdID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1008,6 +1014,59 @@ func ExpireDateLT(v time.Time) predicate.ActiveCodeInfo {
 // ExpireDateLTE applies the LTE predicate on the "expire_date" field.
 func ExpireDateLTE(v time.Time) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldLTE(FieldExpireDate, v))
+}
+
+// AppSkdIDEQ applies the EQ predicate on the "app_skd_id" field.
+func AppSkdIDEQ(v uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppSkdID, v))
+}
+
+// AppSkdIDNEQ applies the NEQ predicate on the "app_skd_id" field.
+func AppSkdIDNEQ(v uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNEQ(FieldAppSkdID, v))
+}
+
+// AppSkdIDIn applies the In predicate on the "app_skd_id" field.
+func AppSkdIDIn(vs ...uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldIn(FieldAppSkdID, vs...))
+}
+
+// AppSkdIDNotIn applies the NotIn predicate on the "app_skd_id" field.
+func AppSkdIDNotIn(vs ...uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNotIn(FieldAppSkdID, vs...))
+}
+
+// AppSkdIDIsNil applies the IsNil predicate on the "app_skd_id" field.
+func AppSkdIDIsNil() predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldIsNull(FieldAppSkdID))
+}
+
+// AppSkdIDNotNil applies the NotNil predicate on the "app_skd_id" field.
+func AppSkdIDNotNil() predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNotNull(FieldAppSkdID))
+}
+
+// HasAppSdk applies the HasEdge predicate on the "app_sdk" edge.
+func HasAppSdk() predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, AppSdkTable, AppSdkColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAppSdkWith applies the HasEdge predicate on the "app_sdk" edge with a given conditions (other predicates).
+func HasAppSdkWith(preds ...predicate.AppSdk) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(func(s *sql.Selector) {
+		step := newAppSdkStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

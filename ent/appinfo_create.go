@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 )
 
 // AppInfoCreate is the builder for creating a AppInfo entity.
@@ -115,6 +116,21 @@ func (aic *AppInfoCreate) SetNillableID(u *uuid.UUID) *AppInfoCreate {
 		aic.SetID(*u)
 	}
 	return aic
+}
+
+// AddAppSdkIDs adds the "app_sdk" edge to the AppSdk entity by IDs.
+func (aic *AppInfoCreate) AddAppSdkIDs(ids ...uuid.UUID) *AppInfoCreate {
+	aic.mutation.AddAppSdkIDs(ids...)
+	return aic
+}
+
+// AddAppSdk adds the "app_sdk" edges to the AppSdk entity.
+func (aic *AppInfoCreate) AddAppSdk(a ...*AppSdk) *AppInfoCreate {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return aic.AddAppSdkIDs(ids...)
 }
 
 // Mutation returns the AppInfoMutation object of the builder.
@@ -279,6 +295,22 @@ func (aic *AppInfoCreate) createSpec() (*AppInfo, *sqlgraph.CreateSpec) {
 	if value, ok := aic.mutation.AppSecret(); ok {
 		_spec.SetField(appinfo.FieldAppSecret, field.TypeString, value)
 		_node.AppSecret = value
+	}
+	if nodes := aic.mutation.AppSdkIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   appinfo.AppSdkTable,
+			Columns: []string{appinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

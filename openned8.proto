@@ -126,12 +126,14 @@ message ActiveCodeInfo {
   int64 StartDate = 15;
   int64 ExpireDate = 16;
   int64 Status = 17;
+  string AppSdkId = 18;
 }
 
 message ActiveCodeCreatReq {
   string UserId = 1;
   int32 Quantity = 2;
   string AppId = 3;
+  string SdkId = 4;
 }
 
 message UserSdkUsageQueryReq {
@@ -141,6 +143,38 @@ message UserSdkUsageQueryReq {
 message UserSdkUsageUpdateReq {
   string UserId = 1;
   int64 All = 2;
+}
+
+message SdkInfoCreateReq {
+  string name = 1;
+  string avatar = 2;
+  int64 desc = 3;
+  string download_url = 4;
+}
+
+message SdkInfo {
+  string id = 1;
+  string name = 2;
+  string avatar = 3;
+  int64 desc = 4;
+  string download_url = 5;
+}
+
+message SdkListQueryReq{
+  uint64 Page = 1;
+  uint64 PageSize = 2;
+}
+
+message SdkListResp {
+  int64 count = 1;
+  repeated SdkInfo data = 2;
+}
+
+message SdkQueryByAppReq {
+  uint64 Page = 1;
+  uint64 PageSize = 2;
+  string AppId = 3;
+  string UserId = 4;
 }
 
 service openned8 {
@@ -160,9 +194,14 @@ service openned8 {
   rpc activeCodeQuery (ActiveCodeListReq) returns (ActiveCodeListInfo);
   // group: developer
   rpc activeCodeCreat (ActiveCodeCreatReq) returns (ActiveCodeResp);
+  // group: developer
+  rpc sdkListQuery(SdkListQueryReq) returns (SdkListResp);
+  // group: developer
+  rpc sdkQueryByApp(SdkQueryByAppReq) returns (SdkListResp);
   // group: admin
   rpc queryUserSdkUsage(UserSdkUsageQueryReq) returns (SdkUsage);
   // group: admin
   rpc updateUserSdkUsage(UserSdkUsageUpdateReq) returns (SdkUsage);
-
+  // group: admin
+  rpc createSdk (SdkInfoCreateReq) returns (SdkInfo);
 }

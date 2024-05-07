@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	uuid "github.com/gofrs/uuid/v5"
 )
 
@@ -36,8 +37,17 @@ const (
 	FieldAppKey = "app_key"
 	// FieldAppSecret holds the string denoting the app_secret field in the database.
 	FieldAppSecret = "app_secret"
+	// EdgeAppSdk holds the string denoting the app_sdk edge name in mutations.
+	EdgeAppSdk = "app_sdk"
 	// Table holds the table name of the appinfo in the database.
 	Table = "app_info"
+	// AppSdkTable is the table that holds the app_sdk relation/edge.
+	AppSdkTable = "app_sdk"
+	// AppSdkInverseTable is the table name for the AppSdk entity.
+	// It exists in this package in order to avoid circular dependency with the "appsdk" package.
+	AppSdkInverseTable = "app_sdk"
+	// AppSdkColumn is the table column denoting the app_sdk relation/edge.
+	AppSdkColumn = "app"
 )
 
 // Columns holds all SQL columns for appinfo fields.
@@ -138,4 +148,25 @@ func ByAppKey(opts ...sql.OrderTermOption) OrderOption {
 // ByAppSecret orders the results by the app_secret field.
 func ByAppSecret(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAppSecret, opts...).ToFunc()
+}
+
+// ByAppSdkCount orders the results by app_sdk count.
+func ByAppSdkCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAppSdkStep(), opts...)
+	}
+}
+
+// ByAppSdk orders the results by app_sdk terms.
+func ByAppSdk(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAppSdkStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newAppSdkStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AppSdkInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AppSdkTable, AppSdkColumn),
+	)
 }

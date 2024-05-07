@@ -18,10 +18,14 @@ type Tx struct {
 	ActiveCodeInfo *ActiveCodeInfoClient
 	// AppInfo is the client for interacting with the AppInfo builders.
 	AppInfo *AppInfoClient
+	// AppSdk is the client for interacting with the AppSdk builders.
+	AppSdk *AppSdkClient
 	// CategoryInfo is the client for interacting with the CategoryInfo builders.
 	CategoryInfo *CategoryInfoClient
 	// IndustryInfo is the client for interacting with the IndustryInfo builders.
 	IndustryInfo *IndustryInfoClient
+	// SdkInfo is the client for interacting with the SdkInfo builders.
+	SdkInfo *SdkInfoClient
 	// SdkUsage is the client for interacting with the SdkUsage builders.
 	SdkUsage *SdkUsageClient
 
@@ -157,8 +161,10 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.ActiveCodeInfo = NewActiveCodeInfoClient(tx.config)
 	tx.AppInfo = NewAppInfoClient(tx.config)
+	tx.AppSdk = NewAppSdkClient(tx.config)
 	tx.CategoryInfo = NewCategoryInfoClient(tx.config)
 	tx.IndustryInfo = NewIndustryInfoClient(tx.config)
+	tx.SdkInfo = NewSdkInfoClient(tx.config)
 	tx.SdkUsage = NewSdkUsageClient(tx.config)
 }
 

@@ -14,8 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 )
 
@@ -79,8 +81,10 @@ func checkColumn(table, column string) error {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			activecodeinfo.Table: activecodeinfo.ValidColumn,
 			appinfo.Table:        appinfo.ValidColumn,
+			appsdk.Table:         appsdk.ValidColumn,
 			categoryinfo.Table:   categoryinfo.ValidColumn,
 			industryinfo.Table:   industryinfo.ValidColumn,
+			sdkinfo.Table:        sdkinfo.ValidColumn,
 			sdkusage.Table:       sdkusage.ValidColumn,
 		})
 	})

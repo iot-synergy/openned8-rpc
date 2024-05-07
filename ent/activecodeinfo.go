@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 )
 
 // ActiveCodeInfo is the model entity for the ActiveCodeInfo schema.
@@ -50,8 +51,33 @@ type ActiveCodeInfo struct {
 	// 开始时间
 	StartDate time.Time `json:"start_date,omitempty"`
 	// 结束时间
-	ExpireDate   time.Time `json:"expire_date,omitempty"`
+	ExpireDate time.Time `json:"expire_date,omitempty"`
+	// 关联app_key
+	AppSkdID uuid.UUID `json:"app_skd_id,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ActiveCodeInfoQuery when eager-loading is set.
+	Edges        ActiveCodeInfoEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ActiveCodeInfoEdges holds the relations/edges for other nodes in the graph.
+type ActiveCodeInfoEdges struct {
+	// AppSdk holds the value of the app_sdk edge.
+	AppSdk *AppSdk `json:"app_sdk,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// AppSdkOrErr returns the AppSdk value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ActiveCodeInfoEdges) AppSdkOrErr() (*AppSdk, error) {
+	if e.AppSdk != nil {
+		return e.AppSdk, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: appsdk.Label}
+	}
+	return nil, &NotLoadedError{edge: "app_sdk"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -65,7 +91,7 @@ func (*ActiveCodeInfo) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case activecodeinfo.FieldCreatedAt, activecodeinfo.FieldUpdatedAt, activecodeinfo.FieldActiveDate, activecodeinfo.FieldStartDate, activecodeinfo.FieldExpireDate:
 			values[i] = new(sql.NullTime)
-		case activecodeinfo.FieldID:
+		case activecodeinfo.FieldID, activecodeinfo.FieldAppSkdID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -184,6 +210,12 @@ func (aci *ActiveCodeInfo) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				aci.ExpireDate = value.Time
 			}
+		case activecodeinfo.FieldAppSkdID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field app_skd_id", values[i])
+			} else if value != nil {
+				aci.AppSkdID = *value
+			}
 		default:
 			aci.selectValues.Set(columns[i], values[i])
 		}
@@ -195,6 +227,11 @@ func (aci *ActiveCodeInfo) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (aci *ActiveCodeInfo) Value(name string) (ent.Value, error) {
 	return aci.selectValues.Get(name)
+}
+
+// QueryAppSdk queries the "app_sdk" edge of the ActiveCodeInfo entity.
+func (aci *ActiveCodeInfo) QueryAppSdk() *AppSdkQuery {
+	return NewActiveCodeInfoClient(aci.config).QueryAppSdk(aci)
 }
 
 // Update returns a builder for updating this ActiveCodeInfo.
@@ -267,6 +304,9 @@ func (aci *ActiveCodeInfo) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("expire_date=")
 	builder.WriteString(aci.ExpireDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("app_skd_id=")
+	builder.WriteString(fmt.Sprintf("%v", aci.AppSkdID))
 	builder.WriteByte(')')
 	return builder.String()
 }

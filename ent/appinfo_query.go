@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -12,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 )
 
@@ -22,6 +24,7 @@ type AppInfoQuery struct {
 	order      []appinfo.OrderOption
 	inters     []Interceptor
 	predicates []predicate.AppInfo
+	withAppSdk *AppSdkQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,6 +59,28 @@ func (aiq *AppInfoQuery) Unique(unique bool) *AppInfoQuery {
 func (aiq *AppInfoQuery) Order(o ...appinfo.OrderOption) *AppInfoQuery {
 	aiq.order = append(aiq.order, o...)
 	return aiq
+}
+
+// QueryAppSdk chains the current query on the "app_sdk" edge.
+func (aiq *AppInfoQuery) QueryAppSdk() *AppSdkQuery {
+	query := (&AppSdkClient{config: aiq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aiq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aiq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(appinfo.Table, appinfo.FieldID, selector),
+			sqlgraph.To(appsdk.Table, appsdk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, appinfo.AppSdkTable, appinfo.AppSdkColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aiq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first AppInfo entity from the query.
@@ -250,10 +275,22 @@ func (aiq *AppInfoQuery) Clone() *AppInfoQuery {
 		order:      append([]appinfo.OrderOption{}, aiq.order...),
 		inters:     append([]Interceptor{}, aiq.inters...),
 		predicates: append([]predicate.AppInfo{}, aiq.predicates...),
+		withAppSdk: aiq.withAppSdk.Clone(),
 		// clone intermediate query.
 		sql:  aiq.sql.Clone(),
 		path: aiq.path,
 	}
+}
+
+// WithAppSdk tells the query-builder to eager-load the nodes that are connected to
+// the "app_sdk" edge. The optional arguments are used to configure the query builder of the edge.
+func (aiq *AppInfoQuery) WithAppSdk(opts ...func(*AppSdkQuery)) *AppInfoQuery {
+	query := (&AppSdkClient{config: aiq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aiq.withAppSdk = query
+	return aiq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -332,8 +369,11 @@ func (aiq *AppInfoQuery) prepareQuery(ctx context.Context) error {
 
 func (aiq *AppInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AppInfo, error) {
 	var (
-		nodes = []*AppInfo{}
-		_spec = aiq.querySpec()
+		nodes       = []*AppInfo{}
+		_spec       = aiq.querySpec()
+		loadedTypes = [1]bool{
+			aiq.withAppSdk != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*AppInfo).scanValues(nil, columns)
@@ -341,6 +381,7 @@ func (aiq *AppInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*App
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &AppInfo{config: aiq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -352,7 +393,45 @@ func (aiq *AppInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*App
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := aiq.withAppSdk; query != nil {
+		if err := aiq.loadAppSdk(ctx, query, nodes,
+			func(n *AppInfo) { n.Edges.AppSdk = []*AppSdk{} },
+			func(n *AppInfo, e *AppSdk) { n.Edges.AppSdk = append(n.Edges.AppSdk, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (aiq *AppInfoQuery) loadAppSdk(ctx context.Context, query *AppSdkQuery, nodes []*AppInfo, init func(*AppInfo), assign func(*AppInfo, *AppSdk)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*AppInfo)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(appsdk.FieldApp)
+	}
+	query.Where(predicate.AppSdk(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(appinfo.AppSdkColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.App
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "app" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (aiq *AppInfoQuery) sqlCount(ctx context.Context) (int, error) {

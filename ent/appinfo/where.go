@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 )
@@ -723,6 +724,29 @@ func AppSecretEqualFold(v string) predicate.AppInfo {
 // AppSecretContainsFold applies the ContainsFold predicate on the "app_secret" field.
 func AppSecretContainsFold(v string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldContainsFold(FieldAppSecret, v))
+}
+
+// HasAppSdk applies the HasEdge predicate on the "app_sdk" edge.
+func HasAppSdk() predicate.AppInfo {
+	return predicate.AppInfo(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AppSdkTable, AppSdkColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAppSdkWith applies the HasEdge predicate on the "app_sdk" edge with a given conditions (other predicates).
+func HasAppSdkWith(preds ...predicate.AppSdk) predicate.AppInfo {
+	return predicate.AppInfo(func(s *sql.Selector) {
+		step := newAppSdkStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

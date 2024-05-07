@@ -27,8 +27,11 @@ const (
 	Openned8_IndustryQuery_FullMethodName      = "/openned8.openned8/industryQuery"
 	Openned8_ActiveCodeQuery_FullMethodName    = "/openned8.openned8/activeCodeQuery"
 	Openned8_ActiveCodeCreat_FullMethodName    = "/openned8.openned8/activeCodeCreat"
+	Openned8_SdkListQuery_FullMethodName       = "/openned8.openned8/sdkListQuery"
+	Openned8_SdkQueryByApp_FullMethodName      = "/openned8.openned8/sdkQueryByApp"
 	Openned8_QueryUserSdkUsage_FullMethodName  = "/openned8.openned8/queryUserSdkUsage"
 	Openned8_UpdateUserSdkUsage_FullMethodName = "/openned8.openned8/updateUserSdkUsage"
+	Openned8_CreateSdk_FullMethodName          = "/openned8.openned8/createSdk"
 )
 
 // Openned8Client is the client API for Openned8 service.
@@ -51,10 +54,16 @@ type Openned8Client interface {
 	ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
 	// group: developer
 	ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error)
+	// group: developer
+	SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error)
+	// group: developer
+	SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*SdkListResp, error)
 	// group: admin
 	QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 	// group: admin
 	UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error)
+	// group: admin
+	CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error)
 }
 
 type openned8Client struct {
@@ -137,6 +146,24 @@ func (c *openned8Client) ActiveCodeCreat(ctx context.Context, in *ActiveCodeCrea
 	return out, nil
 }
 
+func (c *openned8Client) SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error) {
+	out := new(SdkListResp)
+	err := c.cc.Invoke(ctx, Openned8_SdkListQuery_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openned8Client) SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*SdkListResp, error) {
+	out := new(SdkListResp)
+	err := c.cc.Invoke(ctx, Openned8_SdkQueryByApp_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *openned8Client) QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error) {
 	out := new(SdkUsage)
 	err := c.cc.Invoke(ctx, Openned8_QueryUserSdkUsage_FullMethodName, in, out, opts...)
@@ -149,6 +176,15 @@ func (c *openned8Client) QueryUserSdkUsage(ctx context.Context, in *UserSdkUsage
 func (c *openned8Client) UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error) {
 	out := new(SdkUsage)
 	err := c.cc.Invoke(ctx, Openned8_UpdateUserSdkUsage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openned8Client) CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error) {
+	out := new(SdkInfo)
+	err := c.cc.Invoke(ctx, Openned8_CreateSdk_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -175,10 +211,16 @@ type Openned8Server interface {
 	ActiveCodeQuery(context.Context, *ActiveCodeListReq) (*ActiveCodeListInfo, error)
 	// group: developer
 	ActiveCodeCreat(context.Context, *ActiveCodeCreatReq) (*ActiveCodeResp, error)
+	// group: developer
+	SdkListQuery(context.Context, *SdkListQueryReq) (*SdkListResp, error)
+	// group: developer
+	SdkQueryByApp(context.Context, *SdkQueryByAppReq) (*SdkListResp, error)
 	// group: admin
 	QueryUserSdkUsage(context.Context, *UserSdkUsageQueryReq) (*SdkUsage, error)
 	// group: admin
 	UpdateUserSdkUsage(context.Context, *UserSdkUsageUpdateReq) (*SdkUsage, error)
+	// group: admin
+	CreateSdk(context.Context, *SdkInfoCreateReq) (*SdkInfo, error)
 	mustEmbedUnimplementedOpenned8Server()
 }
 
@@ -210,11 +252,20 @@ func (UnimplementedOpenned8Server) ActiveCodeQuery(context.Context, *ActiveCodeL
 func (UnimplementedOpenned8Server) ActiveCodeCreat(context.Context, *ActiveCodeCreatReq) (*ActiveCodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActiveCodeCreat not implemented")
 }
+func (UnimplementedOpenned8Server) SdkListQuery(context.Context, *SdkListQueryReq) (*SdkListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SdkListQuery not implemented")
+}
+func (UnimplementedOpenned8Server) SdkQueryByApp(context.Context, *SdkQueryByAppReq) (*SdkListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SdkQueryByApp not implemented")
+}
 func (UnimplementedOpenned8Server) QueryUserSdkUsage(context.Context, *UserSdkUsageQueryReq) (*SdkUsage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryUserSdkUsage not implemented")
 }
 func (UnimplementedOpenned8Server) UpdateUserSdkUsage(context.Context, *UserSdkUsageUpdateReq) (*SdkUsage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserSdkUsage not implemented")
+}
+func (UnimplementedOpenned8Server) CreateSdk(context.Context, *SdkInfoCreateReq) (*SdkInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSdk not implemented")
 }
 func (UnimplementedOpenned8Server) mustEmbedUnimplementedOpenned8Server() {}
 
@@ -373,6 +424,42 @@ func _Openned8_ActiveCodeCreat_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openned8_SdkListQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SdkListQueryReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Openned8Server).SdkListQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Openned8_SdkListQuery_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Openned8Server).SdkListQuery(ctx, req.(*SdkListQueryReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openned8_SdkQueryByApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SdkQueryByAppReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Openned8Server).SdkQueryByApp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Openned8_SdkQueryByApp_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Openned8Server).SdkQueryByApp(ctx, req.(*SdkQueryByAppReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Openned8_QueryUserSdkUsage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserSdkUsageQueryReq)
 	if err := dec(in); err != nil {
@@ -405,6 +492,24 @@ func _Openned8_UpdateUserSdkUsage_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(Openned8Server).UpdateUserSdkUsage(ctx, req.(*UserSdkUsageUpdateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openned8_CreateSdk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SdkInfoCreateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Openned8Server).CreateSdk(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Openned8_CreateSdk_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Openned8Server).CreateSdk(ctx, req.(*SdkInfoCreateReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -449,12 +554,24 @@ var Openned8_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Openned8_ActiveCodeCreat_Handler,
 		},
 		{
+			MethodName: "sdkListQuery",
+			Handler:    _Openned8_SdkListQuery_Handler,
+		},
+		{
+			MethodName: "sdkQueryByApp",
+			Handler:    _Openned8_SdkQueryByApp_Handler,
+		},
+		{
 			MethodName: "queryUserSdkUsage",
 			Handler:    _Openned8_QueryUserSdkUsage_Handler,
 		},
 		{
 			MethodName: "updateUserSdkUsage",
 			Handler:    _Openned8_UpdateUserSdkUsage_Handler,
+		},
+		{
+			MethodName: "createSdk",
+			Handler:    _Openned8_CreateSdk_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

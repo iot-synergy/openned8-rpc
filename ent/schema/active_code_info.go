@@ -1,6 +1,9 @@
 package schema
 
 import (
+	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/index"
+	"github.com/gofrs/uuid/v5"
 	"time"
 
 	"entgo.io/ent"
@@ -18,7 +21,8 @@ type ActiveCodeInfo struct {
 func (ActiveCodeInfo) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("active_key").
-			SchemaType(map[string]string{dialect.MySQL: "varchar(256)"}).
+			SchemaType(map[string]string{dialect.MySQL: "char(16)"}).
+			Unique().
 			Comment("激活码").
 			Annotations(entsql.WithComments(true)),
 		field.String("user_id").
@@ -68,6 +72,10 @@ func (ActiveCodeInfo) Fields() []ent.Field {
 		field.Time("expire_date").
 			Comment("结束时间").
 			Annotations(entsql.WithComments(true)),
+		field.UUID("app_skd_id", uuid.UUID{}).
+			Optional().
+			Comment("关联app_key").
+			Annotations(entsql.WithComments(true)),
 	}
 }
 
@@ -79,11 +87,19 @@ func (ActiveCodeInfo) Mixin() []ent.Mixin {
 }
 
 func (ActiveCodeInfo) Indexes() []ent.Index {
-	return []ent.Index{}
+	return []ent.Index{
+		index.Fields("active_key").Unique(),
+	}
 }
 
 func (ActiveCodeInfo) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: "active_code_info"},
+	}
+}
+
+func (ActiveCodeInfo) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("app_sdk", AppSdk.Type).Ref("active_code").Field("app_skd_id").Unique(),
 	}
 }

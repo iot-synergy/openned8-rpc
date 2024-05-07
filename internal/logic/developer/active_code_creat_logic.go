@@ -6,7 +6,9 @@ import (
 	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
+	"github.com/iot-synergy/openned8-rpc/internal/common"
 	"time"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -78,26 +80,51 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 	}
 
 	//查询应用数据
-	fromString, err := uuid.FromString(in.AppId)
+	appId, err := uuid.FromString(in.AppId)
 	if err != nil {
 		return 0, "", err, nil
 	}
-	appinfo, err := client.AppInfo.Query().Where(appinfo.IDEQ(fromString)).First(ctx)
+	appInfo, err := client.AppInfo.Query().Where(appinfo.IDEQ(appId)).First(ctx)
 	if err != nil {
 		return 0, "", err, nil
+	}
+	if appInfo == nil {
+		return 0, "", errors.New("appInfo no data"), nil
+	}
+
+	//判断app_sdk是否由数据没有添加数据
+	sdkId, err := uuid.FromString(in.SdkId)
+	if err != nil {
+		return 0, "", err, nil
+	}
+	where := client.AppSdk.Query().Where(appsdk.App(appId), appsdk.Sdk(sdkId))
+	appSdkCount, err := where.Count(ctx)
+	if err != nil {
+		return 0, "", err, nil
+	}
+	var appSdk *ent.AppSdk
+	if appSdkCount == 0 {
+		appSdk, err = client.AppSdk.Create().SetApp(appId).SetSdk(sdkId).SetSdkKey(common.RandomString(32)).Save(ctx)
+		if err != nil {
+			return 0, "", err, nil
+		}
+	} else {
+		appSdk, err = where.First(ctx)
+		if err != nil {
+			return 0, "", err, nil
+		}
 	}
 
 	data := make([]*openned8.ActiveCodeInfo, 0)
 	//创建激活码
-	activeKey, err := uuid.NewV1()
 	if err != nil {
 		return 0, "", err, nil
 	}
 	for i := 0; i < int(in.GetQuantity()); i++ {
 		save, err := client.ActiveCodeInfo.Create().
-			SetActiveKey(activeKey.String()).
+			SetActiveKey(common.RandomString(16)).
 			SetUserID(in.UserId).
-			SetAppID(appinfo.ID.String()).
+			SetAppID(appInfo.ID.String()).
 			SetActiveIP("").
 			SetDeviceSn("").
 			SetDeviceMAC("").
@@ -109,6 +136,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 			SetStartDate(time.Now()).
 			SetExpireDate(time.Now().AddDate(0, 0, 3)).
 			SetStatus(1).
+			SetAppSdkID(appSdk.ID).
 			Save(ctx)
 		if err != nil {
 			return 0, "", err, nil
@@ -131,6 +159,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 			StartDate:      save.StartDate.UnixMilli(),
 			ExpireDate:     save.ExpireDate.UnixMilli(),
 			Status:         int64(save.Status),
+			AppSdkId:       save.AppSkdID.String(),
 		})
 	}
 	return 0, "成功", nil, data

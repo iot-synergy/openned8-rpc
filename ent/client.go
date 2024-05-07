@@ -15,10 +15,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 
 	stdsql "database/sql"
@@ -33,10 +36,14 @@ type Client struct {
 	ActiveCodeInfo *ActiveCodeInfoClient
 	// AppInfo is the client for interacting with the AppInfo builders.
 	AppInfo *AppInfoClient
+	// AppSdk is the client for interacting with the AppSdk builders.
+	AppSdk *AppSdkClient
 	// CategoryInfo is the client for interacting with the CategoryInfo builders.
 	CategoryInfo *CategoryInfoClient
 	// IndustryInfo is the client for interacting with the IndustryInfo builders.
 	IndustryInfo *IndustryInfoClient
+	// SdkInfo is the client for interacting with the SdkInfo builders.
+	SdkInfo *SdkInfoClient
 	// SdkUsage is the client for interacting with the SdkUsage builders.
 	SdkUsage *SdkUsageClient
 }
@@ -52,8 +59,10 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.ActiveCodeInfo = NewActiveCodeInfoClient(c.config)
 	c.AppInfo = NewAppInfoClient(c.config)
+	c.AppSdk = NewAppSdkClient(c.config)
 	c.CategoryInfo = NewCategoryInfoClient(c.config)
 	c.IndustryInfo = NewIndustryInfoClient(c.config)
+	c.SdkInfo = NewSdkInfoClient(c.config)
 	c.SdkUsage = NewSdkUsageClient(c.config)
 }
 
@@ -149,8 +158,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		config:         cfg,
 		ActiveCodeInfo: NewActiveCodeInfoClient(cfg),
 		AppInfo:        NewAppInfoClient(cfg),
+		AppSdk:         NewAppSdkClient(cfg),
 		CategoryInfo:   NewCategoryInfoClient(cfg),
 		IndustryInfo:   NewIndustryInfoClient(cfg),
+		SdkInfo:        NewSdkInfoClient(cfg),
 		SdkUsage:       NewSdkUsageClient(cfg),
 	}, nil
 }
@@ -173,8 +184,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		config:         cfg,
 		ActiveCodeInfo: NewActiveCodeInfoClient(cfg),
 		AppInfo:        NewAppInfoClient(cfg),
+		AppSdk:         NewAppSdkClient(cfg),
 		CategoryInfo:   NewCategoryInfoClient(cfg),
 		IndustryInfo:   NewIndustryInfoClient(cfg),
+		SdkInfo:        NewSdkInfoClient(cfg),
 		SdkUsage:       NewSdkUsageClient(cfg),
 	}, nil
 }
@@ -204,21 +217,23 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.ActiveCodeInfo.Use(hooks...)
-	c.AppInfo.Use(hooks...)
-	c.CategoryInfo.Use(hooks...)
-	c.IndustryInfo.Use(hooks...)
-	c.SdkUsage.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.ActiveCodeInfo, c.AppInfo, c.AppSdk, c.CategoryInfo, c.IndustryInfo,
+		c.SdkInfo, c.SdkUsage,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.ActiveCodeInfo.Intercept(interceptors...)
-	c.AppInfo.Intercept(interceptors...)
-	c.CategoryInfo.Intercept(interceptors...)
-	c.IndustryInfo.Intercept(interceptors...)
-	c.SdkUsage.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.ActiveCodeInfo, c.AppInfo, c.AppSdk, c.CategoryInfo, c.IndustryInfo,
+		c.SdkInfo, c.SdkUsage,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -228,10 +243,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ActiveCodeInfo.mutate(ctx, m)
 	case *AppInfoMutation:
 		return c.AppInfo.mutate(ctx, m)
+	case *AppSdkMutation:
+		return c.AppSdk.mutate(ctx, m)
 	case *CategoryInfoMutation:
 		return c.CategoryInfo.mutate(ctx, m)
 	case *IndustryInfoMutation:
 		return c.IndustryInfo.mutate(ctx, m)
+	case *SdkInfoMutation:
+		return c.SdkInfo.mutate(ctx, m)
 	case *SdkUsageMutation:
 		return c.SdkUsage.mutate(ctx, m)
 	default:
@@ -345,6 +364,22 @@ func (c *ActiveCodeInfoClient) GetX(ctx context.Context, id uuid.UUID) *ActiveCo
 		panic(err)
 	}
 	return obj
+}
+
+// QueryAppSdk queries the app_sdk edge of a ActiveCodeInfo.
+func (c *ActiveCodeInfoClient) QueryAppSdk(aci *ActiveCodeInfo) *AppSdkQuery {
+	query := (&AppSdkClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := aci.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(activecodeinfo.Table, activecodeinfo.FieldID, id),
+			sqlgraph.To(appsdk.Table, appsdk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, activecodeinfo.AppSdkTable, activecodeinfo.AppSdkColumn),
+		)
+		fromV = sqlgraph.Neighbors(aci.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -480,6 +515,22 @@ func (c *AppInfoClient) GetX(ctx context.Context, id uuid.UUID) *AppInfo {
 	return obj
 }
 
+// QueryAppSdk queries the app_sdk edge of a AppInfo.
+func (c *AppInfoClient) QueryAppSdk(ai *AppInfo) *AppSdkQuery {
+	query := (&AppSdkClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ai.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(appinfo.Table, appinfo.FieldID, id),
+			sqlgraph.To(appsdk.Table, appsdk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, appinfo.AppSdkTable, appinfo.AppSdkColumn),
+		)
+		fromV = sqlgraph.Neighbors(ai.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *AppInfoClient) Hooks() []Hook {
 	return c.hooks.AppInfo
@@ -502,6 +553,187 @@ func (c *AppInfoClient) mutate(ctx context.Context, m *AppInfoMutation) (Value, 
 		return (&AppInfoDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown AppInfo mutation op: %q", m.Op())
+	}
+}
+
+// AppSdkClient is a client for the AppSdk schema.
+type AppSdkClient struct {
+	config
+}
+
+// NewAppSdkClient returns a client for the AppSdk from the given config.
+func NewAppSdkClient(c config) *AppSdkClient {
+	return &AppSdkClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `appsdk.Hooks(f(g(h())))`.
+func (c *AppSdkClient) Use(hooks ...Hook) {
+	c.hooks.AppSdk = append(c.hooks.AppSdk, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `appsdk.Intercept(f(g(h())))`.
+func (c *AppSdkClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AppSdk = append(c.inters.AppSdk, interceptors...)
+}
+
+// Create returns a builder for creating a AppSdk entity.
+func (c *AppSdkClient) Create() *AppSdkCreate {
+	mutation := newAppSdkMutation(c.config, OpCreate)
+	return &AppSdkCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AppSdk entities.
+func (c *AppSdkClient) CreateBulk(builders ...*AppSdkCreate) *AppSdkCreateBulk {
+	return &AppSdkCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AppSdkClient) MapCreateBulk(slice any, setFunc func(*AppSdkCreate, int)) *AppSdkCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AppSdkCreateBulk{err: fmt.Errorf("calling to AppSdkClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AppSdkCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AppSdkCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AppSdk.
+func (c *AppSdkClient) Update() *AppSdkUpdate {
+	mutation := newAppSdkMutation(c.config, OpUpdate)
+	return &AppSdkUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AppSdkClient) UpdateOne(as *AppSdk) *AppSdkUpdateOne {
+	mutation := newAppSdkMutation(c.config, OpUpdateOne, withAppSdk(as))
+	return &AppSdkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AppSdkClient) UpdateOneID(id uuid.UUID) *AppSdkUpdateOne {
+	mutation := newAppSdkMutation(c.config, OpUpdateOne, withAppSdkID(id))
+	return &AppSdkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AppSdk.
+func (c *AppSdkClient) Delete() *AppSdkDelete {
+	mutation := newAppSdkMutation(c.config, OpDelete)
+	return &AppSdkDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AppSdkClient) DeleteOne(as *AppSdk) *AppSdkDeleteOne {
+	return c.DeleteOneID(as.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AppSdkClient) DeleteOneID(id uuid.UUID) *AppSdkDeleteOne {
+	builder := c.Delete().Where(appsdk.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AppSdkDeleteOne{builder}
+}
+
+// Query returns a query builder for AppSdk.
+func (c *AppSdkClient) Query() *AppSdkQuery {
+	return &AppSdkQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAppSdk},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AppSdk entity by its id.
+func (c *AppSdkClient) Get(ctx context.Context, id uuid.UUID) (*AppSdk, error) {
+	return c.Query().Where(appsdk.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AppSdkClient) GetX(ctx context.Context, id uuid.UUID) *AppSdk {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryActiveCode queries the active_code edge of a AppSdk.
+func (c *AppSdkClient) QueryActiveCode(as *AppSdk) *ActiveCodeInfoQuery {
+	query := (&ActiveCodeInfoClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := as.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(appsdk.Table, appsdk.FieldID, id),
+			sqlgraph.To(activecodeinfo.Table, activecodeinfo.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, appsdk.ActiveCodeTable, appsdk.ActiveCodeColumn),
+		)
+		fromV = sqlgraph.Neighbors(as.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAppInfo queries the app_info edge of a AppSdk.
+func (c *AppSdkClient) QueryAppInfo(as *AppSdk) *AppInfoQuery {
+	query := (&AppInfoClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := as.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(appsdk.Table, appsdk.FieldID, id),
+			sqlgraph.To(appinfo.Table, appinfo.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, appsdk.AppInfoTable, appsdk.AppInfoColumn),
+		)
+		fromV = sqlgraph.Neighbors(as.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySdkInfo queries the sdk_info edge of a AppSdk.
+func (c *AppSdkClient) QuerySdkInfo(as *AppSdk) *SdkInfoQuery {
+	query := (&SdkInfoClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := as.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(appsdk.Table, appsdk.FieldID, id),
+			sqlgraph.To(sdkinfo.Table, sdkinfo.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, appsdk.SdkInfoTable, appsdk.SdkInfoColumn),
+		)
+		fromV = sqlgraph.Neighbors(as.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AppSdkClient) Hooks() []Hook {
+	return c.hooks.AppSdk
+}
+
+// Interceptors returns the client interceptors.
+func (c *AppSdkClient) Interceptors() []Interceptor {
+	return c.inters.AppSdk
+}
+
+func (c *AppSdkClient) mutate(ctx context.Context, m *AppSdkMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AppSdkCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AppSdkUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AppSdkUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AppSdkDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown AppSdk mutation op: %q", m.Op())
 	}
 }
 
@@ -771,6 +1003,155 @@ func (c *IndustryInfoClient) mutate(ctx context.Context, m *IndustryInfoMutation
 	}
 }
 
+// SdkInfoClient is a client for the SdkInfo schema.
+type SdkInfoClient struct {
+	config
+}
+
+// NewSdkInfoClient returns a client for the SdkInfo from the given config.
+func NewSdkInfoClient(c config) *SdkInfoClient {
+	return &SdkInfoClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sdkinfo.Hooks(f(g(h())))`.
+func (c *SdkInfoClient) Use(hooks ...Hook) {
+	c.hooks.SdkInfo = append(c.hooks.SdkInfo, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sdkinfo.Intercept(f(g(h())))`.
+func (c *SdkInfoClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SdkInfo = append(c.inters.SdkInfo, interceptors...)
+}
+
+// Create returns a builder for creating a SdkInfo entity.
+func (c *SdkInfoClient) Create() *SdkInfoCreate {
+	mutation := newSdkInfoMutation(c.config, OpCreate)
+	return &SdkInfoCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SdkInfo entities.
+func (c *SdkInfoClient) CreateBulk(builders ...*SdkInfoCreate) *SdkInfoCreateBulk {
+	return &SdkInfoCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SdkInfoClient) MapCreateBulk(slice any, setFunc func(*SdkInfoCreate, int)) *SdkInfoCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SdkInfoCreateBulk{err: fmt.Errorf("calling to SdkInfoClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SdkInfoCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SdkInfoCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SdkInfo.
+func (c *SdkInfoClient) Update() *SdkInfoUpdate {
+	mutation := newSdkInfoMutation(c.config, OpUpdate)
+	return &SdkInfoUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SdkInfoClient) UpdateOne(si *SdkInfo) *SdkInfoUpdateOne {
+	mutation := newSdkInfoMutation(c.config, OpUpdateOne, withSdkInfo(si))
+	return &SdkInfoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SdkInfoClient) UpdateOneID(id uuid.UUID) *SdkInfoUpdateOne {
+	mutation := newSdkInfoMutation(c.config, OpUpdateOne, withSdkInfoID(id))
+	return &SdkInfoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SdkInfo.
+func (c *SdkInfoClient) Delete() *SdkInfoDelete {
+	mutation := newSdkInfoMutation(c.config, OpDelete)
+	return &SdkInfoDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SdkInfoClient) DeleteOne(si *SdkInfo) *SdkInfoDeleteOne {
+	return c.DeleteOneID(si.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SdkInfoClient) DeleteOneID(id uuid.UUID) *SdkInfoDeleteOne {
+	builder := c.Delete().Where(sdkinfo.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SdkInfoDeleteOne{builder}
+}
+
+// Query returns a query builder for SdkInfo.
+func (c *SdkInfoClient) Query() *SdkInfoQuery {
+	return &SdkInfoQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSdkInfo},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SdkInfo entity by its id.
+func (c *SdkInfoClient) Get(ctx context.Context, id uuid.UUID) (*SdkInfo, error) {
+	return c.Query().Where(sdkinfo.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SdkInfoClient) GetX(ctx context.Context, id uuid.UUID) *SdkInfo {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryAppSdk queries the app_sdk edge of a SdkInfo.
+func (c *SdkInfoClient) QueryAppSdk(si *SdkInfo) *AppSdkQuery {
+	query := (&AppSdkClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := si.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sdkinfo.Table, sdkinfo.FieldID, id),
+			sqlgraph.To(appsdk.Table, appsdk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, sdkinfo.AppSdkTable, sdkinfo.AppSdkColumn),
+		)
+		fromV = sqlgraph.Neighbors(si.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SdkInfoClient) Hooks() []Hook {
+	return c.hooks.SdkInfo
+}
+
+// Interceptors returns the client interceptors.
+func (c *SdkInfoClient) Interceptors() []Interceptor {
+	return c.inters.SdkInfo
+}
+
+func (c *SdkInfoClient) mutate(ctx context.Context, m *SdkInfoMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SdkInfoCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SdkInfoUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SdkInfoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SdkInfoDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown SdkInfo mutation op: %q", m.Op())
+	}
+}
+
 // SdkUsageClient is a client for the SdkUsage schema.
 type SdkUsageClient struct {
 	config
@@ -907,10 +1288,12 @@ func (c *SdkUsageClient) mutate(ctx context.Context, m *SdkUsageMutation) (Value
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		ActiveCodeInfo, AppInfo, CategoryInfo, IndustryInfo, SdkUsage []ent.Hook
+		ActiveCodeInfo, AppInfo, AppSdk, CategoryInfo, IndustryInfo, SdkInfo,
+		SdkUsage []ent.Hook
 	}
 	inters struct {
-		ActiveCodeInfo, AppInfo, CategoryInfo, IndustryInfo, SdkUsage []ent.Interceptor
+		ActiveCodeInfo, AppInfo, AppSdk, CategoryInfo, IndustryInfo, SdkInfo,
+		SdkUsage []ent.Interceptor
 	}
 )
 

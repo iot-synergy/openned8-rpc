@@ -2,7 +2,11 @@
 
 package ent
 
-import "time"
+import (
+	"time"
+
+	uuid "github.com/gofrs/uuid/v5"
+)
 
 // set field if value's pointer is not nil.
 func (aci *ActiveCodeInfoUpdate) SetNotNilUpdatedAt(value *time.Time) *ActiveCodeInfoUpdate {
@@ -365,6 +369,30 @@ func (aci *ActiveCodeInfoCreate) SetNotNilExpireDate(value *time.Time) *ActiveCo
 }
 
 // set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoUpdate) SetNotNilAppSkdID(value *uuid.UUID) *ActiveCodeInfoUpdate {
+	if value != nil {
+		return aci.SetAppSkdID(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoUpdateOne) SetNotNilAppSkdID(value *uuid.UUID) *ActiveCodeInfoUpdateOne {
+	if value != nil {
+		return aci.SetAppSkdID(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoCreate) SetNotNilAppSkdID(value *uuid.UUID) *ActiveCodeInfoCreate {
+	if value != nil {
+		return aci.SetAppSkdID(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
 func (ai *AppInfoUpdate) SetNotNilUpdatedAt(value *time.Time) *AppInfoUpdate {
 	if value != nil {
 		return ai.SetUpdatedAt(*value)
@@ -605,6 +633,102 @@ func (ai *AppInfoCreate) SetNotNilAppSecret(value *string) *AppInfoCreate {
 }
 
 // set field if value's pointer is not nil.
+func (as *AppSdkUpdate) SetNotNilUpdatedAt(value *time.Time) *AppSdkUpdate {
+	if value != nil {
+		return as.SetUpdatedAt(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkUpdateOne) SetNotNilUpdatedAt(value *time.Time) *AppSdkUpdateOne {
+	if value != nil {
+		return as.SetUpdatedAt(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkCreate) SetNotNilUpdatedAt(value *time.Time) *AppSdkCreate {
+	if value != nil {
+		return as.SetUpdatedAt(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkUpdate) SetNotNilApp(value *uuid.UUID) *AppSdkUpdate {
+	if value != nil {
+		return as.SetApp(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkUpdateOne) SetNotNilApp(value *uuid.UUID) *AppSdkUpdateOne {
+	if value != nil {
+		return as.SetApp(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkCreate) SetNotNilApp(value *uuid.UUID) *AppSdkCreate {
+	if value != nil {
+		return as.SetApp(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkUpdate) SetNotNilSdk(value *uuid.UUID) *AppSdkUpdate {
+	if value != nil {
+		return as.SetSdk(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkUpdateOne) SetNotNilSdk(value *uuid.UUID) *AppSdkUpdateOne {
+	if value != nil {
+		return as.SetSdk(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkCreate) SetNotNilSdk(value *uuid.UUID) *AppSdkCreate {
+	if value != nil {
+		return as.SetSdk(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkUpdate) SetNotNilSdkKey(value *string) *AppSdkUpdate {
+	if value != nil {
+		return as.SetSdkKey(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkUpdateOne) SetNotNilSdkKey(value *string) *AppSdkUpdateOne {
+	if value != nil {
+		return as.SetSdkKey(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
+func (as *AppSdkCreate) SetNotNilSdkKey(value *string) *AppSdkCreate {
+	if value != nil {
+		return as.SetSdkKey(*value)
+	}
+	return as
+}
+
+// set field if value's pointer is not nil.
 func (ci *CategoryInfoUpdate) SetNotNilUpdatedAt(value *time.Time) *CategoryInfoUpdate {
 	if value != nil {
 		return ci.SetUpdatedAt(*value)
@@ -698,6 +822,150 @@ func (ii *IndustryInfoCreate) SetNotNilName(value *string) *IndustryInfoCreate {
 		return ii.SetName(*value)
 	}
 	return ii
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilUpdatedAt(value *time.Time) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetUpdatedAt(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilUpdatedAt(value *time.Time) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetUpdatedAt(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilUpdatedAt(value *time.Time) *SdkInfoCreate {
+	if value != nil {
+		return si.SetUpdatedAt(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilStatus(value *uint8) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetStatus(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilStatus(value *uint8) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetStatus(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilStatus(value *uint8) *SdkInfoCreate {
+	if value != nil {
+		return si.SetStatus(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilName(value *string) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetName(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilName(value *string) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetName(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilName(value *string) *SdkInfoCreate {
+	if value != nil {
+		return si.SetName(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilAvatar(value *string) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetAvatar(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilAvatar(value *string) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetAvatar(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilAvatar(value *string) *SdkInfoCreate {
+	if value != nil {
+		return si.SetAvatar(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilDesc(value *int64) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetDesc(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilDesc(value *int64) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetDesc(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilDesc(value *int64) *SdkInfoCreate {
+	if value != nil {
+		return si.SetDesc(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilDownloadURL(value *string) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetDownloadURL(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilDownloadURL(value *string) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetDownloadURL(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilDownloadURL(value *string) *SdkInfoCreate {
+	if value != nil {
+		return si.SetDownloadURL(*value)
+	}
+	return si
 }
 
 // set field if value's pointer is not nil.

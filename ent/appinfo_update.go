@@ -11,7 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 )
 
@@ -174,9 +176,45 @@ func (aiu *AppInfoUpdate) SetNillableAppSecret(s *string) *AppInfoUpdate {
 	return aiu
 }
 
+// AddAppSdkIDs adds the "app_sdk" edge to the AppSdk entity by IDs.
+func (aiu *AppInfoUpdate) AddAppSdkIDs(ids ...uuid.UUID) *AppInfoUpdate {
+	aiu.mutation.AddAppSdkIDs(ids...)
+	return aiu
+}
+
+// AddAppSdk adds the "app_sdk" edges to the AppSdk entity.
+func (aiu *AppInfoUpdate) AddAppSdk(a ...*AppSdk) *AppInfoUpdate {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return aiu.AddAppSdkIDs(ids...)
+}
+
 // Mutation returns the AppInfoMutation object of the builder.
 func (aiu *AppInfoUpdate) Mutation() *AppInfoMutation {
 	return aiu.mutation
+}
+
+// ClearAppSdk clears all "app_sdk" edges to the AppSdk entity.
+func (aiu *AppInfoUpdate) ClearAppSdk() *AppInfoUpdate {
+	aiu.mutation.ClearAppSdk()
+	return aiu
+}
+
+// RemoveAppSdkIDs removes the "app_sdk" edge to AppSdk entities by IDs.
+func (aiu *AppInfoUpdate) RemoveAppSdkIDs(ids ...uuid.UUID) *AppInfoUpdate {
+	aiu.mutation.RemoveAppSdkIDs(ids...)
+	return aiu
+}
+
+// RemoveAppSdk removes "app_sdk" edges to AppSdk entities.
+func (aiu *AppInfoUpdate) RemoveAppSdk(a ...*AppSdk) *AppInfoUpdate {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return aiu.RemoveAppSdkIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -259,6 +297,51 @@ func (aiu *AppInfoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := aiu.mutation.AppSecret(); ok {
 		_spec.SetField(appinfo.FieldAppSecret, field.TypeString, value)
+	}
+	if aiu.mutation.AppSdkCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   appinfo.AppSdkTable,
+			Columns: []string{appinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aiu.mutation.RemovedAppSdkIDs(); len(nodes) > 0 && !aiu.mutation.AppSdkCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   appinfo.AppSdkTable,
+			Columns: []string{appinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aiu.mutation.AppSdkIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   appinfo.AppSdkTable,
+			Columns: []string{appinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, aiu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -426,9 +509,45 @@ func (aiuo *AppInfoUpdateOne) SetNillableAppSecret(s *string) *AppInfoUpdateOne 
 	return aiuo
 }
 
+// AddAppSdkIDs adds the "app_sdk" edge to the AppSdk entity by IDs.
+func (aiuo *AppInfoUpdateOne) AddAppSdkIDs(ids ...uuid.UUID) *AppInfoUpdateOne {
+	aiuo.mutation.AddAppSdkIDs(ids...)
+	return aiuo
+}
+
+// AddAppSdk adds the "app_sdk" edges to the AppSdk entity.
+func (aiuo *AppInfoUpdateOne) AddAppSdk(a ...*AppSdk) *AppInfoUpdateOne {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return aiuo.AddAppSdkIDs(ids...)
+}
+
 // Mutation returns the AppInfoMutation object of the builder.
 func (aiuo *AppInfoUpdateOne) Mutation() *AppInfoMutation {
 	return aiuo.mutation
+}
+
+// ClearAppSdk clears all "app_sdk" edges to the AppSdk entity.
+func (aiuo *AppInfoUpdateOne) ClearAppSdk() *AppInfoUpdateOne {
+	aiuo.mutation.ClearAppSdk()
+	return aiuo
+}
+
+// RemoveAppSdkIDs removes the "app_sdk" edge to AppSdk entities by IDs.
+func (aiuo *AppInfoUpdateOne) RemoveAppSdkIDs(ids ...uuid.UUID) *AppInfoUpdateOne {
+	aiuo.mutation.RemoveAppSdkIDs(ids...)
+	return aiuo
+}
+
+// RemoveAppSdk removes "app_sdk" edges to AppSdk entities.
+func (aiuo *AppInfoUpdateOne) RemoveAppSdk(a ...*AppSdk) *AppInfoUpdateOne {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return aiuo.RemoveAppSdkIDs(ids...)
 }
 
 // Where appends a list predicates to the AppInfoUpdate builder.
@@ -541,6 +660,51 @@ func (aiuo *AppInfoUpdateOne) sqlSave(ctx context.Context) (_node *AppInfo, err 
 	}
 	if value, ok := aiuo.mutation.AppSecret(); ok {
 		_spec.SetField(appinfo.FieldAppSecret, field.TypeString, value)
+	}
+	if aiuo.mutation.AppSdkCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   appinfo.AppSdkTable,
+			Columns: []string{appinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aiuo.mutation.RemovedAppSdkIDs(); len(nodes) > 0 && !aiuo.mutation.AppSdkCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   appinfo.AppSdkTable,
+			Columns: []string{appinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aiuo.mutation.AppSdkIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   appinfo.AppSdkTable,
+			Columns: []string{appinfo.AppSdkColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(appsdk.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &AppInfo{config: aiuo.config}
 	_spec.Assign = _node.assignValues

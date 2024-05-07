@@ -8,9 +8,11 @@ import (
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/schema"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 )
 
@@ -74,6 +76,29 @@ func init() {
 	appinfoDescID := appinfoMixinFields0[0].Descriptor()
 	// appinfo.DefaultID holds the default value on creation for the id field.
 	appinfo.DefaultID = appinfoDescID.Default.(func() uuid.UUID)
+	appsdkMixin := schema.AppSdk{}.Mixin()
+	appsdkMixinFields0 := appsdkMixin[0].Fields()
+	_ = appsdkMixinFields0
+	appsdkFields := schema.AppSdk{}.Fields()
+	_ = appsdkFields
+	// appsdkDescCreatedAt is the schema descriptor for created_at field.
+	appsdkDescCreatedAt := appsdkMixinFields0[1].Descriptor()
+	// appsdk.DefaultCreatedAt holds the default value on creation for the created_at field.
+	appsdk.DefaultCreatedAt = appsdkDescCreatedAt.Default.(func() time.Time)
+	// appsdkDescUpdatedAt is the schema descriptor for updated_at field.
+	appsdkDescUpdatedAt := appsdkMixinFields0[2].Descriptor()
+	// appsdk.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	appsdk.DefaultUpdatedAt = appsdkDescUpdatedAt.Default.(func() time.Time)
+	// appsdk.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	appsdk.UpdateDefaultUpdatedAt = appsdkDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// appsdkDescSdkKey is the schema descriptor for sdk_key field.
+	appsdkDescSdkKey := appsdkFields[2].Descriptor()
+	// appsdk.SdkKeyValidator is a validator for the "sdk_key" field. It is called by the builders before save.
+	appsdk.SdkKeyValidator = appsdkDescSdkKey.Validators[0].(func(string) error)
+	// appsdkDescID is the schema descriptor for id field.
+	appsdkDescID := appsdkMixinFields0[0].Descriptor()
+	// appsdk.DefaultID holds the default value on creation for the id field.
+	appsdk.DefaultID = appsdkDescID.Default.(func() uuid.UUID)
 	categoryinfoMixin := schema.CategoryInfo{}.Mixin()
 	categoryinfoMixinFields0 := categoryinfoMixin[0].Fields()
 	_ = categoryinfoMixinFields0
@@ -104,6 +129,31 @@ func init() {
 	industryinfo.DefaultUpdatedAt = industryinfoDescUpdatedAt.Default.(func() time.Time)
 	// industryinfo.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	industryinfo.UpdateDefaultUpdatedAt = industryinfoDescUpdatedAt.UpdateDefault.(func() time.Time)
+	sdkinfoMixin := schema.SdkInfo{}.Mixin()
+	sdkinfoMixinFields0 := sdkinfoMixin[0].Fields()
+	_ = sdkinfoMixinFields0
+	sdkinfoMixinFields1 := sdkinfoMixin[1].Fields()
+	_ = sdkinfoMixinFields1
+	sdkinfoFields := schema.SdkInfo{}.Fields()
+	_ = sdkinfoFields
+	// sdkinfoDescCreatedAt is the schema descriptor for created_at field.
+	sdkinfoDescCreatedAt := sdkinfoMixinFields0[1].Descriptor()
+	// sdkinfo.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sdkinfo.DefaultCreatedAt = sdkinfoDescCreatedAt.Default.(func() time.Time)
+	// sdkinfoDescUpdatedAt is the schema descriptor for updated_at field.
+	sdkinfoDescUpdatedAt := sdkinfoMixinFields0[2].Descriptor()
+	// sdkinfo.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sdkinfo.DefaultUpdatedAt = sdkinfoDescUpdatedAt.Default.(func() time.Time)
+	// sdkinfo.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sdkinfo.UpdateDefaultUpdatedAt = sdkinfoDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// sdkinfoDescStatus is the schema descriptor for status field.
+	sdkinfoDescStatus := sdkinfoMixinFields1[0].Descriptor()
+	// sdkinfo.DefaultStatus holds the default value on creation for the status field.
+	sdkinfo.DefaultStatus = sdkinfoDescStatus.Default.(uint8)
+	// sdkinfoDescID is the schema descriptor for id field.
+	sdkinfoDescID := sdkinfoMixinFields0[0].Descriptor()
+	// sdkinfo.DefaultID holds the default value on creation for the id field.
+	sdkinfo.DefaultID = sdkinfoDescID.Default.(func() uuid.UUID)
 	sdkusageMixin := schema.SdkUsage{}.Mixin()
 	sdkusageMixinFields0 := sdkusageMixin[0].Fields()
 	_ = sdkusageMixinFields0

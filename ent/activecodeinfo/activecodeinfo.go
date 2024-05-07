@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	uuid "github.com/gofrs/uuid/v5"
 )
 
@@ -46,8 +47,19 @@ const (
 	FieldStartDate = "start_date"
 	// FieldExpireDate holds the string denoting the expire_date field in the database.
 	FieldExpireDate = "expire_date"
+	// FieldAppSkdID holds the string denoting the app_skd_id field in the database.
+	FieldAppSkdID = "app_skd_id"
+	// EdgeAppSdk holds the string denoting the app_sdk edge name in mutations.
+	EdgeAppSdk = "app_sdk"
 	// Table holds the table name of the activecodeinfo in the database.
 	Table = "active_code_info"
+	// AppSdkTable is the table that holds the app_sdk relation/edge.
+	AppSdkTable = "active_code_info"
+	// AppSdkInverseTable is the table name for the AppSdk entity.
+	// It exists in this package in order to avoid circular dependency with the "appsdk" package.
+	AppSdkInverseTable = "app_sdk"
+	// AppSdkColumn is the table column denoting the app_sdk relation/edge.
+	AppSdkColumn = "app_skd_id"
 )
 
 // Columns holds all SQL columns for activecodeinfo fields.
@@ -69,6 +81,7 @@ var Columns = []string{
 	FieldVersion,
 	FieldStartDate,
 	FieldExpireDate,
+	FieldAppSkdID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -186,4 +199,23 @@ func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
 // ByExpireDate orders the results by the expire_date field.
 func ByExpireDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpireDate, opts...).ToFunc()
+}
+
+// ByAppSkdID orders the results by the app_skd_id field.
+func ByAppSkdID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAppSkdID, opts...).ToFunc()
+}
+
+// ByAppSdkField orders the results by app_sdk field.
+func ByAppSdkField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAppSdkStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newAppSdkStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AppSdkInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, AppSdkTable, AppSdkColumn),
+	)
 }

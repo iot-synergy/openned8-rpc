@@ -1,5 +1,5 @@
 
-Ô
+¾
 openned8.protoopenned8"
 Empty"
 BeanMsg
@@ -77,7 +77,7 @@ ExpireDate"X
 ActiveCodeResp
 code (Rcode
 msg (	Rmsg,
-data (2.openned8.ActiveCodeInfoRdata"ö
+data (2.openned8.ActiveCodeInfoRdata"’
 ActiveCodeInfo
 Id (	RId
 	CreatedAt (R	CreatedAt
@@ -104,16 +104,40 @@ ActiveFile
 
 ExpireDate (R
 ExpireDate
-Status (RStatus"^
+Status (RStatus
+AppSdkId (	RAppSdkId"t
 ActiveCodeCreatReq
 UserId (	RUserId
 Quantity (RQuantity
-AppId (	RAppId".
+AppId (	RAppId
+SdkId (	RSdkId".
 UserSdkUsageQueryReq
 UserId (	RUserId"A
 UserSdkUsageUpdateReq
 UserId (	RUserId
-All (RAll2 
+All (RAll"u
+SdkInfoCreateReq
+name (	Rname
+avatar (	Ravatar
+desc (Rdesc!
+download_url (	RdownloadUrl"|
+SdkInfo
+id (	Rid
+name (	Rname
+avatar (	Ravatar
+desc (Rdesc!
+download_url (	RdownloadUrl"A
+SdkListQueryReq
+Page (RPage
+PageSize (RPageSize"J
+SdkListResp
+count (Rcount%
+data (2.openned8.SdkInfoRdata"p
+SdkQueryByAppReq
+Page (RPage
+PageSize (RPageSize
+AppId (	RAppId
+UserId (	RUserId2â
 openned8:
 	appCreate.openned8.AppInfoCreateReq.openned8.AppInfo:
 	appUpdate.openned8.AppInfoUpdateReq.openned8.AppInfo:
@@ -122,7 +146,10 @@ ExpireDate
 categoryQuery.openned8.Empty.openned8.CategorylistResp<
 industryQuery.openned8.Empty.openned8.IndustrylistRespL
 activeCodeQuery.openned8.ActiveCodeListReq.openned8.ActiveCodeListInfoI
-activeCodeCreat.openned8.ActiveCodeCreatReq.openned8.ActiveCodeRespG
+activeCodeCreat.openned8.ActiveCodeCreatReq.openned8.ActiveCodeResp@
+sdkListQuery.openned8.SdkListQueryReq.openned8.SdkListRespB
+sdkQueryByApp.openned8.SdkQueryByAppReq.openned8.SdkListRespG
 queryUserSdkUsage.openned8.UserSdkUsageQueryReq.openned8.SdkUsageI
-updateUserSdkUsage.openned8.UserSdkUsageUpdateReq.openned8.SdkUsageBZ
+updateUserSdkUsage.openned8.UserSdkUsageUpdateReq.openned8.SdkUsage:
+	createSdk.openned8.SdkInfoCreateReq.openned8.SdkInfoBZ
 ./openned8bproto3

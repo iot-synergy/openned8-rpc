@@ -63,6 +63,16 @@ func (s *Openned8Server) ActiveCodeCreat(ctx context.Context, in *openned8.Activ
 	return l.ActiveCodeCreat(in)
 }
 
+func (s *Openned8Server) SdkListQuery(ctx context.Context, in *openned8.SdkListQueryReq) (*openned8.SdkListResp, error) {
+	l := developer.NewSdkListQueryLogic(ctx, s.svcCtx)
+	return l.SdkListQuery(in)
+}
+
+func (s *Openned8Server) SdkQueryByApp(ctx context.Context, in *openned8.SdkQueryByAppReq) (*openned8.SdkListResp, error) {
+	l := developer.NewSdkQueryByAppLogic(ctx, s.svcCtx)
+	return l.SdkQueryByApp(in)
+}
+
 func (s *Openned8Server) QueryUserSdkUsage(ctx context.Context, in *openned8.UserSdkUsageQueryReq) (*openned8.SdkUsage, error) {
 	l := admin.NewQueryUserSdkUsageLogic(ctx, s.svcCtx)
 	return l.QueryUserSdkUsage(in)
@@ -71,4 +81,9 @@ func (s *Openned8Server) QueryUserSdkUsage(ctx context.Context, in *openned8.Use
 func (s *Openned8Server) UpdateUserSdkUsage(ctx context.Context, in *openned8.UserSdkUsageUpdateReq) (*openned8.SdkUsage, error) {
 	l := admin.NewUpdateUserSdkUsageLogic(ctx, s.svcCtx)
 	return l.UpdateUserSdkUsage(in)
+}
+
+func (s *Openned8Server) CreateSdk(ctx context.Context, in *openned8.SdkInfoCreateReq) (*openned8.SdkInfo, error) {
+	l := admin.NewCreateSdkLogic(ctx, s.svcCtx)
+	return l.CreateSdk(in)
 }

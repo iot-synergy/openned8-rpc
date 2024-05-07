@@ -37,7 +37,6 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 		return nil, err
 	}
 	appKey, _ := uuid.NewRandom()
-	appSecret, _ := uuid.NewRandom()
 	save, err := l.svcCtx.DB.AppInfo.Create().
 		SetUserID(in.UserId).
 		SetAppName(in.AppName).
@@ -47,7 +46,6 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 		SetAppCategoryName(category.Name).
 		SetUseIndustryName(industry.Name).
 		SetAppKey(regexp.MustCompile("-").ReplaceAllLiteralString(appKey.String(), "")).
-		SetAppSecret(regexp.MustCompile("-").ReplaceAllLiteralString(appSecret.String(), "")).
 		Save(l.ctx)
 	if err != nil {
 		return nil, err

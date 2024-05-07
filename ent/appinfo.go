@@ -40,8 +40,29 @@ type AppInfo struct {
 	// 钥匙
 	AppKey string `json:"app_key,omitempty"`
 	// 秘密
-	AppSecret    string `json:"app_secret,omitempty"`
+	AppSecret string `json:"app_secret,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the AppInfoQuery when eager-loading is set.
+	Edges        AppInfoEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// AppInfoEdges holds the relations/edges for other nodes in the graph.
+type AppInfoEdges struct {
+	// AppSdk holds the value of the app_sdk edge.
+	AppSdk []*AppSdk `json:"app_sdk,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// AppSdkOrErr returns the AppSdk value or an error if the edge
+// was not loaded in eager-loading.
+func (e AppInfoEdges) AppSdkOrErr() ([]*AppSdk, error) {
+	if e.loadedTypes[0] {
+		return e.AppSdk, nil
+	}
+	return nil, &NotLoadedError{edge: "app_sdk"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -155,6 +176,11 @@ func (ai *AppInfo) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (ai *AppInfo) Value(name string) (ent.Value, error) {
 	return ai.selectValues.Get(name)
+}
+
+// QueryAppSdk queries the "app_sdk" edge of the AppInfo entity.
+func (ai *AppInfo) QueryAppSdk() *AppSdkQuery {
+	return NewAppInfoClient(ai.config).QueryAppSdk(ai)
 }
 
 // Update returns a builder for updating this AppInfo.
