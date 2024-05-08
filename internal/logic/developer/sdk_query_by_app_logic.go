@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
 
@@ -35,7 +36,7 @@ func (l *SdkQueryByAppLogic) SdkQueryByApp(in *openned8.SdkQueryByAppReq) (*open
 	if err != nil {
 		return nil, err
 	}
-	data, err := where.Offset(int((in.Page - 1) * in.PageSize)).Limit(int(in.PageSize)).All(l.ctx)
+	data, err := where.Order(sdkinfo.ByDesc()).Offset(int((in.Page - 1) * in.PageSize)).Limit(int(in.PageSize)).All(l.ctx)
 	if err != nil {
 		return nil, err
 	}

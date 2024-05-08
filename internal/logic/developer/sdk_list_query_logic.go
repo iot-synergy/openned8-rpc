@@ -2,6 +2,7 @@ package developer
 
 import (
 	"context"
+	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -29,7 +30,7 @@ func (l *SdkListQueryLogic) SdkListQuery(in *openned8.SdkListQueryReq) (*openned
 	if err != nil {
 		return nil, err
 	}
-	data, err := where.Offset(int((in.Page - 1) * in.PageSize)).Limit(int(in.PageSize)).All(l.ctx)
+	data, err := where.Order(sdkinfo.ByDesc()).Offset(int((in.Page - 1) * in.PageSize)).Limit(int(in.PageSize)).All(l.ctx)
 	if err != nil {
 		return nil, err
 	}
