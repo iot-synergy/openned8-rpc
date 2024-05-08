@@ -177,6 +177,21 @@ message SdkQueryByAppReq {
   string UserId = 4;
 }
 
+message DownloadCodeByAppIdReq {
+  string AppId = 1;
+  string UserId = 2;
+}
+
+message DownloadCodeByAppIdResp {
+  repeated DownloadCode data = 1;
+}
+
+message DownloadCode {
+  string AppKey = 1;
+  string SdkKey = 2;
+  string Code = 3;
+}
+
 service openned8 {
   // group: developer
   rpc appCreate (AppInfoCreateReq) returns (AppInfo);
@@ -194,6 +209,8 @@ service openned8 {
   rpc activeCodeQuery (ActiveCodeListReq) returns (ActiveCodeListInfo);
   // group: developer
   rpc activeCodeCreat (ActiveCodeCreatReq) returns (ActiveCodeResp);
+  // group: developer
+  rpc downloadCodeByAppId(DownloadCodeByAppIdReq) returns (DownloadCodeByAppIdResp);
   // group: developer
   rpc sdkListQuery(SdkListQueryReq) returns (SdkListResp);
   // group: developer

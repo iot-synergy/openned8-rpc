@@ -19,19 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Openned8_AppCreate_FullMethodName          = "/openned8.openned8/appCreate"
-	Openned8_AppUpdate_FullMethodName          = "/openned8.openned8/appUpdate"
-	Openned8_AppDelete_FullMethodName          = "/openned8.openned8/appDelete"
-	Openned8_AppQuery_FullMethodName           = "/openned8.openned8/appQuery"
-	Openned8_CategoryQuery_FullMethodName      = "/openned8.openned8/categoryQuery"
-	Openned8_IndustryQuery_FullMethodName      = "/openned8.openned8/industryQuery"
-	Openned8_ActiveCodeQuery_FullMethodName    = "/openned8.openned8/activeCodeQuery"
-	Openned8_ActiveCodeCreat_FullMethodName    = "/openned8.openned8/activeCodeCreat"
-	Openned8_SdkListQuery_FullMethodName       = "/openned8.openned8/sdkListQuery"
-	Openned8_SdkQueryByApp_FullMethodName      = "/openned8.openned8/sdkQueryByApp"
-	Openned8_QueryUserSdkUsage_FullMethodName  = "/openned8.openned8/queryUserSdkUsage"
-	Openned8_UpdateUserSdkUsage_FullMethodName = "/openned8.openned8/updateUserSdkUsage"
-	Openned8_CreateSdk_FullMethodName          = "/openned8.openned8/createSdk"
+	Openned8_AppCreate_FullMethodName           = "/openned8.openned8/appCreate"
+	Openned8_AppUpdate_FullMethodName           = "/openned8.openned8/appUpdate"
+	Openned8_AppDelete_FullMethodName           = "/openned8.openned8/appDelete"
+	Openned8_AppQuery_FullMethodName            = "/openned8.openned8/appQuery"
+	Openned8_CategoryQuery_FullMethodName       = "/openned8.openned8/categoryQuery"
+	Openned8_IndustryQuery_FullMethodName       = "/openned8.openned8/industryQuery"
+	Openned8_ActiveCodeQuery_FullMethodName     = "/openned8.openned8/activeCodeQuery"
+	Openned8_ActiveCodeCreat_FullMethodName     = "/openned8.openned8/activeCodeCreat"
+	Openned8_DownloadCodeByAppId_FullMethodName = "/openned8.openned8/downloadCodeByAppId"
+	Openned8_SdkListQuery_FullMethodName        = "/openned8.openned8/sdkListQuery"
+	Openned8_SdkQueryByApp_FullMethodName       = "/openned8.openned8/sdkQueryByApp"
+	Openned8_QueryUserSdkUsage_FullMethodName   = "/openned8.openned8/queryUserSdkUsage"
+	Openned8_UpdateUserSdkUsage_FullMethodName  = "/openned8.openned8/updateUserSdkUsage"
+	Openned8_CreateSdk_FullMethodName           = "/openned8.openned8/createSdk"
 )
 
 // Openned8Client is the client API for Openned8 service.
@@ -54,6 +55,8 @@ type Openned8Client interface {
 	ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
 	// group: developer
 	ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error)
+	// group: developer
+	DownloadCodeByAppId(ctx context.Context, in *DownloadCodeByAppIdReq, opts ...grpc.CallOption) (*DownloadCodeByAppIdResp, error)
 	// group: developer
 	SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error)
 	// group: developer
@@ -146,6 +149,15 @@ func (c *openned8Client) ActiveCodeCreat(ctx context.Context, in *ActiveCodeCrea
 	return out, nil
 }
 
+func (c *openned8Client) DownloadCodeByAppId(ctx context.Context, in *DownloadCodeByAppIdReq, opts ...grpc.CallOption) (*DownloadCodeByAppIdResp, error) {
+	out := new(DownloadCodeByAppIdResp)
+	err := c.cc.Invoke(ctx, Openned8_DownloadCodeByAppId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *openned8Client) SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error) {
 	out := new(SdkListResp)
 	err := c.cc.Invoke(ctx, Openned8_SdkListQuery_FullMethodName, in, out, opts...)
@@ -212,6 +224,8 @@ type Openned8Server interface {
 	// group: developer
 	ActiveCodeCreat(context.Context, *ActiveCodeCreatReq) (*ActiveCodeResp, error)
 	// group: developer
+	DownloadCodeByAppId(context.Context, *DownloadCodeByAppIdReq) (*DownloadCodeByAppIdResp, error)
+	// group: developer
 	SdkListQuery(context.Context, *SdkListQueryReq) (*SdkListResp, error)
 	// group: developer
 	SdkQueryByApp(context.Context, *SdkQueryByAppReq) (*SdkListResp, error)
@@ -251,6 +265,9 @@ func (UnimplementedOpenned8Server) ActiveCodeQuery(context.Context, *ActiveCodeL
 }
 func (UnimplementedOpenned8Server) ActiveCodeCreat(context.Context, *ActiveCodeCreatReq) (*ActiveCodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActiveCodeCreat not implemented")
+}
+func (UnimplementedOpenned8Server) DownloadCodeByAppId(context.Context, *DownloadCodeByAppIdReq) (*DownloadCodeByAppIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DownloadCodeByAppId not implemented")
 }
 func (UnimplementedOpenned8Server) SdkListQuery(context.Context, *SdkListQueryReq) (*SdkListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SdkListQuery not implemented")
@@ -424,6 +441,24 @@ func _Openned8_ActiveCodeCreat_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openned8_DownloadCodeByAppId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadCodeByAppIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Openned8Server).DownloadCodeByAppId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Openned8_DownloadCodeByAppId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Openned8Server).DownloadCodeByAppId(ctx, req.(*DownloadCodeByAppIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Openned8_SdkListQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SdkListQueryReq)
 	if err := dec(in); err != nil {
@@ -552,6 +587,10 @@ var Openned8_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "activeCodeCreat",
 			Handler:    _Openned8_ActiveCodeCreat_Handler,
+		},
+		{
+			MethodName: "downloadCodeByAppId",
+			Handler:    _Openned8_DownloadCodeByAppId_Handler,
 		},
 		{
 			MethodName: "sdkListQuery",

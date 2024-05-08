@@ -63,6 +63,11 @@ func (s *Openned8Server) ActiveCodeCreat(ctx context.Context, in *openned8.Activ
 	return l.ActiveCodeCreat(in)
 }
 
+func (s *Openned8Server) DownloadCodeByAppId(ctx context.Context, in *openned8.DownloadCodeByAppIdReq) (*openned8.DownloadCodeByAppIdResp, error) {
+	l := developer.NewDownloadCodeByAppIdLogic(ctx, s.svcCtx)
+	return l.DownloadCodeByAppId(in)
+}
+
 func (s *Openned8Server) SdkListQuery(ctx context.Context, in *openned8.SdkListQueryReq) (*openned8.SdkListResp, error) {
 	l := developer.NewSdkListQueryLogic(ctx, s.svcCtx)
 	return l.SdkListQuery(in)

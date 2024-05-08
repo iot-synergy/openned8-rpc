@@ -13,33 +13,36 @@ import (
 )
 
 type (
-	ActiveCodeCreatReq    = openned8.ActiveCodeCreatReq
-	ActiveCodeInfo        = openned8.ActiveCodeInfo
-	ActiveCodeListInfo    = openned8.ActiveCodeListInfo
-	ActiveCodeListReq     = openned8.ActiveCodeListReq
-	ActiveCodeResp        = openned8.ActiveCodeResp
-	AppInfo               = openned8.AppInfo
-	AppInfoCreateReq      = openned8.AppInfoCreateReq
-	AppInfoDeleteReq      = openned8.AppInfoDeleteReq
-	AppInfoUpdateReq      = openned8.AppInfoUpdateReq
-	AppListReq            = openned8.AppListReq
-	ApplistInfo           = openned8.ApplistInfo
-	BeanMsg               = openned8.BeanMsg
-	CategoryInfo          = openned8.CategoryInfo
-	CategorylistResp      = openned8.CategorylistResp
-	Empty                 = openned8.Empty
-	IdString              = openned8.IdString
-	IndustryInfo          = openned8.IndustryInfo
-	IndustrylistResp      = openned8.IndustrylistResp
-	PageInfo              = openned8.PageInfo
-	SdkInfo               = openned8.SdkInfo
-	SdkInfoCreateReq      = openned8.SdkInfoCreateReq
-	SdkListQueryReq       = openned8.SdkListQueryReq
-	SdkListResp           = openned8.SdkListResp
-	SdkQueryByAppReq      = openned8.SdkQueryByAppReq
-	SdkUsage              = openned8.SdkUsage
-	UserSdkUsageQueryReq  = openned8.UserSdkUsageQueryReq
-	UserSdkUsageUpdateReq = openned8.UserSdkUsageUpdateReq
+	ActiveCodeCreatReq      = openned8.ActiveCodeCreatReq
+	ActiveCodeInfo          = openned8.ActiveCodeInfo
+	ActiveCodeListInfo      = openned8.ActiveCodeListInfo
+	ActiveCodeListReq       = openned8.ActiveCodeListReq
+	ActiveCodeResp          = openned8.ActiveCodeResp
+	AppInfo                 = openned8.AppInfo
+	AppInfoCreateReq        = openned8.AppInfoCreateReq
+	AppInfoDeleteReq        = openned8.AppInfoDeleteReq
+	AppInfoUpdateReq        = openned8.AppInfoUpdateReq
+	AppListReq              = openned8.AppListReq
+	ApplistInfo             = openned8.ApplistInfo
+	BeanMsg                 = openned8.BeanMsg
+	CategoryInfo            = openned8.CategoryInfo
+	CategorylistResp        = openned8.CategorylistResp
+	DownloadCode            = openned8.DownloadCode
+	DownloadCodeByAppIdReq  = openned8.DownloadCodeByAppIdReq
+	DownloadCodeByAppIdResp = openned8.DownloadCodeByAppIdResp
+	Empty                   = openned8.Empty
+	IdString                = openned8.IdString
+	IndustryInfo            = openned8.IndustryInfo
+	IndustrylistResp        = openned8.IndustrylistResp
+	PageInfo                = openned8.PageInfo
+	SdkInfo                 = openned8.SdkInfo
+	SdkInfoCreateReq        = openned8.SdkInfoCreateReq
+	SdkListQueryReq         = openned8.SdkListQueryReq
+	SdkListResp             = openned8.SdkListResp
+	SdkQueryByAppReq        = openned8.SdkQueryByAppReq
+	SdkUsage                = openned8.SdkUsage
+	UserSdkUsageQueryReq    = openned8.UserSdkUsageQueryReq
+	UserSdkUsageUpdateReq   = openned8.UserSdkUsageUpdateReq
 
 	Openned8 interface {
 		AppCreate(ctx context.Context, in *AppInfoCreateReq, opts ...grpc.CallOption) (*AppInfo, error)
@@ -50,6 +53,7 @@ type (
 		IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
 		ActiveCodeQuery(ctx context.Context, in *ActiveCodeListReq, opts ...grpc.CallOption) (*ActiveCodeListInfo, error)
 		ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error)
+		DownloadCodeByAppId(ctx context.Context, in *DownloadCodeByAppIdReq, opts ...grpc.CallOption) (*DownloadCodeByAppIdResp, error)
 		SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error)
 		SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*SdkListResp, error)
 		QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
@@ -106,6 +110,11 @@ func (m *defaultOpenned8) ActiveCodeQuery(ctx context.Context, in *ActiveCodeLis
 func (m *defaultOpenned8) ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.ActiveCodeCreat(ctx, in, opts...)
+}
+
+func (m *defaultOpenned8) DownloadCodeByAppId(ctx context.Context, in *DownloadCodeByAppIdReq, opts ...grpc.CallOption) (*DownloadCodeByAppIdResp, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.DownloadCodeByAppId(ctx, in, opts...)
 }
 
 func (m *defaultOpenned8) SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error) {
