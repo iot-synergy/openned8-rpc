@@ -40,7 +40,7 @@ func (l *DownloadCodeByAppIdLogic) DownloadCodeByAppId(in *openned8.DownloadCode
 	sql := "SELECT t1.app_key,t2.sdk_key,t3.active_key FROM `app_info` t1 " +
 		"INNER JOIN `app_sdk` t2 ON t1.id = t2.app " +
 		"INNER JOIN `active_code_info` t3 ON t2.id = t3.app_sdk_id " +
-		"WHERE t1.id = " + appId.String() + " AND t1.user_id = " + in.UserId
+		"WHERE t1.id = '" + appId.String() + "' AND t1.user_id = '" + in.UserId + "'"
 	data, err := l.svcCtx.DB.QueryContext(l.ctx, sql)
 	if err != nil {
 		return nil, err
