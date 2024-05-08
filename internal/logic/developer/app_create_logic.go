@@ -46,6 +46,7 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 		SetAppCategoryName(category.Name).
 		SetUseIndustryName(industry.Name).
 		SetAppKey(regexp.MustCompile("-").ReplaceAllLiteralString(appKey.String(), "")).
+		SetAppSecret("").
 		Save(l.ctx)
 	if err != nil {
 		return nil, err

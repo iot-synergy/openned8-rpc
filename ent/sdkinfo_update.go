@@ -36,33 +36,6 @@ func (siu *SdkInfoUpdate) SetUpdatedAt(t time.Time) *SdkInfoUpdate {
 	return siu
 }
 
-// SetStatus sets the "status" field.
-func (siu *SdkInfoUpdate) SetStatus(u uint8) *SdkInfoUpdate {
-	siu.mutation.ResetStatus()
-	siu.mutation.SetStatus(u)
-	return siu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (siu *SdkInfoUpdate) SetNillableStatus(u *uint8) *SdkInfoUpdate {
-	if u != nil {
-		siu.SetStatus(*u)
-	}
-	return siu
-}
-
-// AddStatus adds u to the "status" field.
-func (siu *SdkInfoUpdate) AddStatus(u int8) *SdkInfoUpdate {
-	siu.mutation.AddStatus(u)
-	return siu
-}
-
-// ClearStatus clears the value of the "status" field.
-func (siu *SdkInfoUpdate) ClearStatus() *SdkInfoUpdate {
-	siu.mutation.ClearStatus()
-	return siu
-}
-
 // SetName sets the "name" field.
 func (siu *SdkInfoUpdate) SetName(s string) *SdkInfoUpdate {
 	siu.mutation.SetName(s)
@@ -215,15 +188,6 @@ func (siu *SdkInfoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := siu.mutation.UpdatedAt(); ok {
 		_spec.SetField(sdkinfo.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := siu.mutation.Status(); ok {
-		_spec.SetField(sdkinfo.FieldStatus, field.TypeUint8, value)
-	}
-	if value, ok := siu.mutation.AddedStatus(); ok {
-		_spec.AddField(sdkinfo.FieldStatus, field.TypeUint8, value)
-	}
-	if siu.mutation.StatusCleared() {
-		_spec.ClearField(sdkinfo.FieldStatus, field.TypeUint8)
-	}
 	if value, ok := siu.mutation.Name(); ok {
 		_spec.SetField(sdkinfo.FieldName, field.TypeString, value)
 	}
@@ -307,33 +271,6 @@ type SdkInfoUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (siuo *SdkInfoUpdateOne) SetUpdatedAt(t time.Time) *SdkInfoUpdateOne {
 	siuo.mutation.SetUpdatedAt(t)
-	return siuo
-}
-
-// SetStatus sets the "status" field.
-func (siuo *SdkInfoUpdateOne) SetStatus(u uint8) *SdkInfoUpdateOne {
-	siuo.mutation.ResetStatus()
-	siuo.mutation.SetStatus(u)
-	return siuo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (siuo *SdkInfoUpdateOne) SetNillableStatus(u *uint8) *SdkInfoUpdateOne {
-	if u != nil {
-		siuo.SetStatus(*u)
-	}
-	return siuo
-}
-
-// AddStatus adds u to the "status" field.
-func (siuo *SdkInfoUpdateOne) AddStatus(u int8) *SdkInfoUpdateOne {
-	siuo.mutation.AddStatus(u)
-	return siuo
-}
-
-// ClearStatus clears the value of the "status" field.
-func (siuo *SdkInfoUpdateOne) ClearStatus() *SdkInfoUpdateOne {
-	siuo.mutation.ClearStatus()
 	return siuo
 }
 
@@ -518,15 +455,6 @@ func (siuo *SdkInfoUpdateOne) sqlSave(ctx context.Context) (_node *SdkInfo, err 
 	}
 	if value, ok := siuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(sdkinfo.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := siuo.mutation.Status(); ok {
-		_spec.SetField(sdkinfo.FieldStatus, field.TypeUint8, value)
-	}
-	if value, ok := siuo.mutation.AddedStatus(); ok {
-		_spec.AddField(sdkinfo.FieldStatus, field.TypeUint8, value)
-	}
-	if siuo.mutation.StatusCleared() {
-		_spec.ClearField(sdkinfo.FieldStatus, field.TypeUint8)
 	}
 	if value, ok := siuo.mutation.Name(); ok {
 		_spec.SetField(sdkinfo.FieldName, field.TypeString, value)

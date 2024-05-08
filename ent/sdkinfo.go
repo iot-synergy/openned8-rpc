@@ -23,8 +23,6 @@ type SdkInfo struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Update Time | 修改日期
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// Status 1: normal 2: ban | 状态 1 正常 2 禁用
-	Status uint8 `json:"status,omitempty"`
 	// 名字
 	Name string `json:"name,omitempty"`
 	// 头像
@@ -62,7 +60,7 @@ func (*SdkInfo) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case sdkinfo.FieldStatus, sdkinfo.FieldDesc:
+		case sdkinfo.FieldDesc:
 			values[i] = new(sql.NullInt64)
 		case sdkinfo.FieldName, sdkinfo.FieldAvatar, sdkinfo.FieldDownloadURL:
 			values[i] = new(sql.NullString)
@@ -102,12 +100,6 @@ func (si *SdkInfo) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				si.UpdatedAt = value.Time
-			}
-		case sdkinfo.FieldStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				si.Status = uint8(value.Int64)
 			}
 		case sdkinfo.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -179,9 +171,6 @@ func (si *SdkInfo) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(si.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", si.Status))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(si.Name)

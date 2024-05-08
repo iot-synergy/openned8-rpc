@@ -136,9 +136,9 @@ func ExpireDate(v time.Time) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldExpireDate, v))
 }
 
-// AppSkdID applies equality check predicate on the "app_skd_id" field. It's identical to AppSkdIDEQ.
-func AppSkdID(v uuid.UUID) predicate.ActiveCodeInfo {
-	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppSkdID, v))
+// AppSdkID applies equality check predicate on the "app_sdk_id" field. It's identical to AppSdkIDEQ.
+func AppSdkID(v uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppSdkID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1016,34 +1016,34 @@ func ExpireDateLTE(v time.Time) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldLTE(FieldExpireDate, v))
 }
 
-// AppSkdIDEQ applies the EQ predicate on the "app_skd_id" field.
-func AppSkdIDEQ(v uuid.UUID) predicate.ActiveCodeInfo {
-	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppSkdID, v))
+// AppSdkIDEQ applies the EQ predicate on the "app_sdk_id" field.
+func AppSdkIDEQ(v uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppSdkID, v))
 }
 
-// AppSkdIDNEQ applies the NEQ predicate on the "app_skd_id" field.
-func AppSkdIDNEQ(v uuid.UUID) predicate.ActiveCodeInfo {
-	return predicate.ActiveCodeInfo(sql.FieldNEQ(FieldAppSkdID, v))
+// AppSdkIDNEQ applies the NEQ predicate on the "app_sdk_id" field.
+func AppSdkIDNEQ(v uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNEQ(FieldAppSdkID, v))
 }
 
-// AppSkdIDIn applies the In predicate on the "app_skd_id" field.
-func AppSkdIDIn(vs ...uuid.UUID) predicate.ActiveCodeInfo {
-	return predicate.ActiveCodeInfo(sql.FieldIn(FieldAppSkdID, vs...))
+// AppSdkIDIn applies the In predicate on the "app_sdk_id" field.
+func AppSdkIDIn(vs ...uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldIn(FieldAppSdkID, vs...))
 }
 
-// AppSkdIDNotIn applies the NotIn predicate on the "app_skd_id" field.
-func AppSkdIDNotIn(vs ...uuid.UUID) predicate.ActiveCodeInfo {
-	return predicate.ActiveCodeInfo(sql.FieldNotIn(FieldAppSkdID, vs...))
+// AppSdkIDNotIn applies the NotIn predicate on the "app_sdk_id" field.
+func AppSdkIDNotIn(vs ...uuid.UUID) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNotIn(FieldAppSdkID, vs...))
 }
 
-// AppSkdIDIsNil applies the IsNil predicate on the "app_skd_id" field.
-func AppSkdIDIsNil() predicate.ActiveCodeInfo {
-	return predicate.ActiveCodeInfo(sql.FieldIsNull(FieldAppSkdID))
+// AppSdkIDIsNil applies the IsNil predicate on the "app_sdk_id" field.
+func AppSdkIDIsNil() predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldIsNull(FieldAppSdkID))
 }
 
-// AppSkdIDNotNil applies the NotNil predicate on the "app_skd_id" field.
-func AppSkdIDNotNil() predicate.ActiveCodeInfo {
-	return predicate.ActiveCodeInfo(sql.FieldNotNull(FieldAppSkdID))
+// AppSdkIDNotNil applies the NotNil predicate on the "app_sdk_id" field.
+func AppSdkIDNotNil() predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNotNull(FieldAppSdkID))
 }
 
 // HasAppSdk applies the HasEdge predicate on the "app_sdk" edge.

@@ -159,7 +159,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 			StartDate:      save.StartDate.UnixMilli(),
 			ExpireDate:     save.ExpireDate.UnixMilli(),
 			Status:         int64(save.Status),
-			AppSdkId:       save.AppSkdID.String(),
+			AppSdkId:       save.AppSdkID.String(),
 		})
 	}
 	return 0, "成功", nil, data

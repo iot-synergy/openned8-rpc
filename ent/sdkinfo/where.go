@@ -66,11 +66,6 @@ func UpdatedAt(v time.Time) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldEQ(FieldStatus, v))
-}
-
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldEQ(FieldName, v))
@@ -169,56 +164,6 @@ func UpdatedAtLT(v time.Time) predicate.SdkInfo {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldLTE(FieldUpdatedAt, v))
-}
-
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldEQ(FieldStatus, v))
-}
-
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldNEQ(FieldStatus, v))
-}
-
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldIn(FieldStatus, vs...))
-}
-
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v uint8) predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.SdkInfo {
-	return predicate.SdkInfo(sql.FieldNotNull(FieldStatus))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

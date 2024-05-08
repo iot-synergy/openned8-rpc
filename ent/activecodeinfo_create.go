@@ -166,16 +166,16 @@ func (acic *ActiveCodeInfoCreate) SetExpireDate(t time.Time) *ActiveCodeInfoCrea
 	return acic
 }
 
-// SetAppSkdID sets the "app_skd_id" field.
-func (acic *ActiveCodeInfoCreate) SetAppSkdID(u uuid.UUID) *ActiveCodeInfoCreate {
-	acic.mutation.SetAppSkdID(u)
+// SetAppSdkID sets the "app_sdk_id" field.
+func (acic *ActiveCodeInfoCreate) SetAppSdkID(u uuid.UUID) *ActiveCodeInfoCreate {
+	acic.mutation.SetAppSdkID(u)
 	return acic
 }
 
-// SetNillableAppSkdID sets the "app_skd_id" field if the given value is not nil.
-func (acic *ActiveCodeInfoCreate) SetNillableAppSkdID(u *uuid.UUID) *ActiveCodeInfoCreate {
+// SetNillableAppSdkID sets the "app_sdk_id" field if the given value is not nil.
+func (acic *ActiveCodeInfoCreate) SetNillableAppSdkID(u *uuid.UUID) *ActiveCodeInfoCreate {
 	if u != nil {
-		acic.SetAppSkdID(*u)
+		acic.SetAppSdkID(*u)
 	}
 	return acic
 }
@@ -190,20 +190,6 @@ func (acic *ActiveCodeInfoCreate) SetID(u uuid.UUID) *ActiveCodeInfoCreate {
 func (acic *ActiveCodeInfoCreate) SetNillableID(u *uuid.UUID) *ActiveCodeInfoCreate {
 	if u != nil {
 		acic.SetID(*u)
-	}
-	return acic
-}
-
-// SetAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID.
-func (acic *ActiveCodeInfoCreate) SetAppSdkID(id uuid.UUID) *ActiveCodeInfoCreate {
-	acic.mutation.SetAppSdkID(id)
-	return acic
-}
-
-// SetNillableAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID if the given value is not nil.
-func (acic *ActiveCodeInfoCreate) SetNillableAppSdkID(id *uuid.UUID) *ActiveCodeInfoCreate {
-	if id != nil {
-		acic = acic.SetAppSdkID(*id)
 	}
 	return acic
 }
@@ -438,7 +424,7 @@ func (acic *ActiveCodeInfoCreate) createSpec() (*ActiveCodeInfo, *sqlgraph.Creat
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.AppSkdID = nodes[0]
+		_node.AppSdkID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

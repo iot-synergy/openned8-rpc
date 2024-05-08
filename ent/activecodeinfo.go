@@ -53,7 +53,7 @@ type ActiveCodeInfo struct {
 	// 结束时间
 	ExpireDate time.Time `json:"expire_date,omitempty"`
 	// 关联app_key
-	AppSkdID uuid.UUID `json:"app_skd_id,omitempty"`
+	AppSdkID uuid.UUID `json:"app_sdk_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ActiveCodeInfoQuery when eager-loading is set.
 	Edges        ActiveCodeInfoEdges `json:"edges"`
@@ -91,7 +91,7 @@ func (*ActiveCodeInfo) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case activecodeinfo.FieldCreatedAt, activecodeinfo.FieldUpdatedAt, activecodeinfo.FieldActiveDate, activecodeinfo.FieldStartDate, activecodeinfo.FieldExpireDate:
 			values[i] = new(sql.NullTime)
-		case activecodeinfo.FieldID, activecodeinfo.FieldAppSkdID:
+		case activecodeinfo.FieldID, activecodeinfo.FieldAppSdkID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -210,11 +210,11 @@ func (aci *ActiveCodeInfo) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				aci.ExpireDate = value.Time
 			}
-		case activecodeinfo.FieldAppSkdID:
+		case activecodeinfo.FieldAppSdkID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field app_skd_id", values[i])
+				return fmt.Errorf("unexpected type %T for field app_sdk_id", values[i])
 			} else if value != nil {
-				aci.AppSkdID = *value
+				aci.AppSdkID = *value
 			}
 		default:
 			aci.selectValues.Set(columns[i], values[i])
@@ -305,8 +305,8 @@ func (aci *ActiveCodeInfo) String() string {
 	builder.WriteString("expire_date=")
 	builder.WriteString(aci.ExpireDate.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("app_skd_id=")
-	builder.WriteString(fmt.Sprintf("%v", aci.AppSkdID))
+	builder.WriteString("app_sdk_id=")
+	builder.WriteString(fmt.Sprintf("%v", aci.AppSdkID))
 	builder.WriteByte(')')
 	return builder.String()
 }

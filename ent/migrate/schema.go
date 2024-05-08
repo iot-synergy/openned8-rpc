@@ -28,7 +28,7 @@ var (
 		{Name: "version", Type: field.TypeString, Comment: "版本", SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "start_date", Type: field.TypeTime, Comment: "开始时间"},
 		{Name: "expire_date", Type: field.TypeTime, Comment: "结束时间"},
-		{Name: "app_skd_id", Type: field.TypeUUID, Nullable: true, Comment: "关联app_key"},
+		{Name: "app_sdk_id", Type: field.TypeUUID, Nullable: true, Comment: "关联app_key"},
 	}
 	// ActiveCodeInfoTable holds the schema information for the "active_code_info" table.
 	ActiveCodeInfoTable = &schema.Table{
@@ -132,7 +132,6 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
 		{Name: "name", Type: field.TypeString, Comment: "名字", SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "avatar", Type: field.TypeString, Comment: "头像", SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "desc", Type: field.TypeInt64, Comment: "排序"},

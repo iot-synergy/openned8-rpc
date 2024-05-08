@@ -252,37 +252,23 @@ func (aciu *ActiveCodeInfoUpdate) SetNillableExpireDate(t *time.Time) *ActiveCod
 	return aciu
 }
 
-// SetAppSkdID sets the "app_skd_id" field.
-func (aciu *ActiveCodeInfoUpdate) SetAppSkdID(u uuid.UUID) *ActiveCodeInfoUpdate {
-	aciu.mutation.SetAppSkdID(u)
+// SetAppSdkID sets the "app_sdk_id" field.
+func (aciu *ActiveCodeInfoUpdate) SetAppSdkID(u uuid.UUID) *ActiveCodeInfoUpdate {
+	aciu.mutation.SetAppSdkID(u)
 	return aciu
 }
 
-// SetNillableAppSkdID sets the "app_skd_id" field if the given value is not nil.
-func (aciu *ActiveCodeInfoUpdate) SetNillableAppSkdID(u *uuid.UUID) *ActiveCodeInfoUpdate {
+// SetNillableAppSdkID sets the "app_sdk_id" field if the given value is not nil.
+func (aciu *ActiveCodeInfoUpdate) SetNillableAppSdkID(u *uuid.UUID) *ActiveCodeInfoUpdate {
 	if u != nil {
-		aciu.SetAppSkdID(*u)
+		aciu.SetAppSdkID(*u)
 	}
 	return aciu
 }
 
-// ClearAppSkdID clears the value of the "app_skd_id" field.
-func (aciu *ActiveCodeInfoUpdate) ClearAppSkdID() *ActiveCodeInfoUpdate {
-	aciu.mutation.ClearAppSkdID()
-	return aciu
-}
-
-// SetAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID.
-func (aciu *ActiveCodeInfoUpdate) SetAppSdkID(id uuid.UUID) *ActiveCodeInfoUpdate {
-	aciu.mutation.SetAppSdkID(id)
-	return aciu
-}
-
-// SetNillableAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID if the given value is not nil.
-func (aciu *ActiveCodeInfoUpdate) SetNillableAppSdkID(id *uuid.UUID) *ActiveCodeInfoUpdate {
-	if id != nil {
-		aciu = aciu.SetAppSdkID(*id)
-	}
+// ClearAppSdkID clears the value of the "app_sdk_id" field.
+func (aciu *ActiveCodeInfoUpdate) ClearAppSdkID() *ActiveCodeInfoUpdate {
+	aciu.mutation.ClearAppSdkID()
 	return aciu
 }
 
@@ -672,37 +658,23 @@ func (aciuo *ActiveCodeInfoUpdateOne) SetNillableExpireDate(t *time.Time) *Activ
 	return aciuo
 }
 
-// SetAppSkdID sets the "app_skd_id" field.
-func (aciuo *ActiveCodeInfoUpdateOne) SetAppSkdID(u uuid.UUID) *ActiveCodeInfoUpdateOne {
-	aciuo.mutation.SetAppSkdID(u)
+// SetAppSdkID sets the "app_sdk_id" field.
+func (aciuo *ActiveCodeInfoUpdateOne) SetAppSdkID(u uuid.UUID) *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.SetAppSdkID(u)
 	return aciuo
 }
 
-// SetNillableAppSkdID sets the "app_skd_id" field if the given value is not nil.
-func (aciuo *ActiveCodeInfoUpdateOne) SetNillableAppSkdID(u *uuid.UUID) *ActiveCodeInfoUpdateOne {
+// SetNillableAppSdkID sets the "app_sdk_id" field if the given value is not nil.
+func (aciuo *ActiveCodeInfoUpdateOne) SetNillableAppSdkID(u *uuid.UUID) *ActiveCodeInfoUpdateOne {
 	if u != nil {
-		aciuo.SetAppSkdID(*u)
+		aciuo.SetAppSdkID(*u)
 	}
 	return aciuo
 }
 
-// ClearAppSkdID clears the value of the "app_skd_id" field.
-func (aciuo *ActiveCodeInfoUpdateOne) ClearAppSkdID() *ActiveCodeInfoUpdateOne {
-	aciuo.mutation.ClearAppSkdID()
-	return aciuo
-}
-
-// SetAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID.
-func (aciuo *ActiveCodeInfoUpdateOne) SetAppSdkID(id uuid.UUID) *ActiveCodeInfoUpdateOne {
-	aciuo.mutation.SetAppSdkID(id)
-	return aciuo
-}
-
-// SetNillableAppSdkID sets the "app_sdk" edge to the AppSdk entity by ID if the given value is not nil.
-func (aciuo *ActiveCodeInfoUpdateOne) SetNillableAppSdkID(id *uuid.UUID) *ActiveCodeInfoUpdateOne {
-	if id != nil {
-		aciuo = aciuo.SetAppSdkID(*id)
-	}
+// ClearAppSdkID clears the value of the "app_sdk_id" field.
+func (aciuo *ActiveCodeInfoUpdateOne) ClearAppSdkID() *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.ClearAppSdkID()
 	return aciuo
 }
 

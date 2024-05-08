@@ -37,7 +37,6 @@ func (SdkInfo) Fields() []ent.Field {
 func (SdkInfo) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixins.UUIDMixin{},
-		mixins.StatusMixin{},
 	}
 }
 

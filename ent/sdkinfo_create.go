@@ -50,20 +50,6 @@ func (sic *SdkInfoCreate) SetNillableUpdatedAt(t *time.Time) *SdkInfoCreate {
 	return sic
 }
 
-// SetStatus sets the "status" field.
-func (sic *SdkInfoCreate) SetStatus(u uint8) *SdkInfoCreate {
-	sic.mutation.SetStatus(u)
-	return sic
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (sic *SdkInfoCreate) SetNillableStatus(u *uint8) *SdkInfoCreate {
-	if u != nil {
-		sic.SetStatus(*u)
-	}
-	return sic
-}
-
 // SetName sets the "name" field.
 func (sic *SdkInfoCreate) SetName(s string) *SdkInfoCreate {
 	sic.mutation.SetName(s)
@@ -160,10 +146,6 @@ func (sic *SdkInfoCreate) defaults() {
 		v := sdkinfo.DefaultUpdatedAt()
 		sic.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sic.mutation.Status(); !ok {
-		v := sdkinfo.DefaultStatus
-		sic.mutation.SetStatus(v)
-	}
 	if _, ok := sic.mutation.ID(); !ok {
 		v := sdkinfo.DefaultID()
 		sic.mutation.SetID(v)
@@ -232,10 +214,6 @@ func (sic *SdkInfoCreate) createSpec() (*SdkInfo, *sqlgraph.CreateSpec) {
 	if value, ok := sic.mutation.UpdatedAt(); ok {
 		_spec.SetField(sdkinfo.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if value, ok := sic.mutation.Status(); ok {
-		_spec.SetField(sdkinfo.FieldStatus, field.TypeUint8, value)
-		_node.Status = value
 	}
 	if value, ok := sic.mutation.Name(); ok {
 		_spec.SetField(sdkinfo.FieldName, field.TypeString, value)

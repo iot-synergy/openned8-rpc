@@ -30,7 +30,7 @@ func (l *DownloadCodeByAppIdLogic) DownloadCodeByAppId(in *openned8.DownloadCode
 	if err != nil {
 		return nil, err
 	}
-	r, err := regexp.Compile(`^[A-Za-z0-9]+$`)
+	r, err := regexp.Compile(`^[A-Za-z0-9-]+$`)
 	if err != nil {
 		return nil, err
 	}

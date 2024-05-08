@@ -72,7 +72,7 @@ func (ActiveCodeInfo) Fields() []ent.Field {
 		field.Time("expire_date").
 			Comment("结束时间").
 			Annotations(entsql.WithComments(true)),
-		field.UUID("app_skd_id", uuid.UUID{}).
+		field.UUID("app_sdk_id", uuid.UUID{}).
 			Optional().
 			Comment("关联app_key").
 			Annotations(entsql.WithComments(true)),
@@ -100,6 +100,6 @@ func (ActiveCodeInfo) Annotations() []schema.Annotation {
 
 func (ActiveCodeInfo) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("app_sdk", AppSdk.Type).Ref("active_code").Field("app_skd_id").Unique(),
+		edge.From("app_sdk", AppSdk.Type).Ref("active_code").Field("app_sdk_id").Unique(),
 	}
 }

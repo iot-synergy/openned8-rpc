@@ -500,7 +500,7 @@ func (asq *AppSdkQuery) loadActiveCode(ctx context.Context, query *ActiveCodeInf
 		}
 	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(activecodeinfo.FieldAppSkdID)
+		query.ctx.AppendFieldOnce(activecodeinfo.FieldAppSdkID)
 	}
 	query.Where(predicate.ActiveCodeInfo(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(appsdk.ActiveCodeColumn), fks...))
@@ -510,10 +510,10 @@ func (asq *AppSdkQuery) loadActiveCode(ctx context.Context, query *ActiveCodeInf
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.AppSkdID
+		fk := n.AppSdkID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "app_skd_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "app_sdk_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

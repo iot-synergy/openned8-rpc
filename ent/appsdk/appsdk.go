@@ -39,7 +39,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "activecodeinfo" package.
 	ActiveCodeInverseTable = "active_code_info"
 	// ActiveCodeColumn is the table column denoting the active_code relation/edge.
-	ActiveCodeColumn = "app_skd_id"
+	ActiveCodeColumn = "app_sdk_id"
 	// AppInfoTable is the table that holds the app_info relation/edge.
 	AppInfoTable = "app_sdk"
 	// AppInfoInverseTable is the table name for the AppInfo entity.

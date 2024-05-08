@@ -405,7 +405,7 @@ func (aciq *ActiveCodeInfoQuery) loadAppSdk(ctx context.Context, query *AppSdkQu
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*ActiveCodeInfo)
 	for i := range nodes {
-		fk := nodes[i].AppSkdID
+		fk := nodes[i].AppSdkID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -422,7 +422,7 @@ func (aciq *ActiveCodeInfoQuery) loadAppSdk(ctx context.Context, query *AppSdkQu
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "app_skd_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "app_sdk_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -457,7 +457,7 @@ func (aciq *ActiveCodeInfoQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 		if aciq.withAppSdk != nil {
-			_spec.Node.AddColumnOnce(activecodeinfo.FieldAppSkdID)
+			_spec.Node.AddColumnOnce(activecodeinfo.FieldAppSdkID)
 		}
 	}
 	if ps := aciq.predicates; len(ps) > 0 {

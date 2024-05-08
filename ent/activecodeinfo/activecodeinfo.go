@@ -47,8 +47,8 @@ const (
 	FieldStartDate = "start_date"
 	// FieldExpireDate holds the string denoting the expire_date field in the database.
 	FieldExpireDate = "expire_date"
-	// FieldAppSkdID holds the string denoting the app_skd_id field in the database.
-	FieldAppSkdID = "app_skd_id"
+	// FieldAppSdkID holds the string denoting the app_sdk_id field in the database.
+	FieldAppSdkID = "app_sdk_id"
 	// EdgeAppSdk holds the string denoting the app_sdk edge name in mutations.
 	EdgeAppSdk = "app_sdk"
 	// Table holds the table name of the activecodeinfo in the database.
@@ -59,7 +59,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "appsdk" package.
 	AppSdkInverseTable = "app_sdk"
 	// AppSdkColumn is the table column denoting the app_sdk relation/edge.
-	AppSdkColumn = "app_skd_id"
+	AppSdkColumn = "app_sdk_id"
 )
 
 // Columns holds all SQL columns for activecodeinfo fields.
@@ -81,7 +81,7 @@ var Columns = []string{
 	FieldVersion,
 	FieldStartDate,
 	FieldExpireDate,
-	FieldAppSkdID,
+	FieldAppSdkID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -201,9 +201,9 @@ func ByExpireDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExpireDate, opts...).ToFunc()
 }
 
-// ByAppSkdID orders the results by the app_skd_id field.
-func ByAppSkdID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAppSkdID, opts...).ToFunc()
+// ByAppSdkID orders the results by the app_sdk_id field.
+func ByAppSdkID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAppSdkID, opts...).ToFunc()
 }
 
 // ByAppSdkField orders the results by app_sdk field.

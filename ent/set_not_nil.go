@@ -369,25 +369,25 @@ func (aci *ActiveCodeInfoCreate) SetNotNilExpireDate(value *time.Time) *ActiveCo
 }
 
 // set field if value's pointer is not nil.
-func (aci *ActiveCodeInfoUpdate) SetNotNilAppSkdID(value *uuid.UUID) *ActiveCodeInfoUpdate {
+func (aci *ActiveCodeInfoUpdate) SetNotNilAppSdkID(value *uuid.UUID) *ActiveCodeInfoUpdate {
 	if value != nil {
-		return aci.SetAppSkdID(*value)
+		return aci.SetAppSdkID(*value)
 	}
 	return aci
 }
 
 // set field if value's pointer is not nil.
-func (aci *ActiveCodeInfoUpdateOne) SetNotNilAppSkdID(value *uuid.UUID) *ActiveCodeInfoUpdateOne {
+func (aci *ActiveCodeInfoUpdateOne) SetNotNilAppSdkID(value *uuid.UUID) *ActiveCodeInfoUpdateOne {
 	if value != nil {
-		return aci.SetAppSkdID(*value)
+		return aci.SetAppSdkID(*value)
 	}
 	return aci
 }
 
 // set field if value's pointer is not nil.
-func (aci *ActiveCodeInfoCreate) SetNotNilAppSkdID(value *uuid.UUID) *ActiveCodeInfoCreate {
+func (aci *ActiveCodeInfoCreate) SetNotNilAppSdkID(value *uuid.UUID) *ActiveCodeInfoCreate {
 	if value != nil {
-		return aci.SetAppSkdID(*value)
+		return aci.SetAppSdkID(*value)
 	}
 	return aci
 }
@@ -844,30 +844,6 @@ func (si *SdkInfoUpdateOne) SetNotNilUpdatedAt(value *time.Time) *SdkInfoUpdateO
 func (si *SdkInfoCreate) SetNotNilUpdatedAt(value *time.Time) *SdkInfoCreate {
 	if value != nil {
 		return si.SetUpdatedAt(*value)
-	}
-	return si
-}
-
-// set field if value's pointer is not nil.
-func (si *SdkInfoUpdate) SetNotNilStatus(value *uint8) *SdkInfoUpdate {
-	if value != nil {
-		return si.SetStatus(*value)
-	}
-	return si
-}
-
-// set field if value's pointer is not nil.
-func (si *SdkInfoUpdateOne) SetNotNilStatus(value *uint8) *SdkInfoUpdateOne {
-	if value != nil {
-		return si.SetStatus(*value)
-	}
-	return si
-}
-
-// set field if value's pointer is not nil.
-func (si *SdkInfoCreate) SetNotNilStatus(value *uint8) *SdkInfoCreate {
-	if value != nil {
-		return si.SetStatus(*value)
 	}
 	return si
 }
