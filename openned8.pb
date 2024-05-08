@@ -1,5 +1,5 @@
 
-¾
+ý!
 openned8.protoopenned8"
 Empty"
 BeanMsg
@@ -137,7 +137,16 @@ ExpireDate
 Page (RPage
 PageSize (RPageSize
 AppId (	RAppId
-UserId (	RUserId2â
+UserId (	RUserId"F
+DownloadCodeByAppIdReq
+AppId (	RAppId
+UserId (	RUserId"E
+DownloadCodeByAppIdResp*
+data (2.openned8.DownloadCodeRdata"R
+DownloadCode
+AppKey (	RAppKey
+SdkKey (	RSdkKey
+Code (	RCode2¾
 openned8:
 	appCreate.openned8.AppInfoCreateReq.openned8.AppInfo:
 	appUpdate.openned8.AppInfoUpdateReq.openned8.AppInfo:
@@ -146,7 +155,8 @@ ExpireDate
 categoryQuery.openned8.Empty.openned8.CategorylistResp<
 industryQuery.openned8.Empty.openned8.IndustrylistRespL
 activeCodeQuery.openned8.ActiveCodeListReq.openned8.ActiveCodeListInfoI
-activeCodeCreat.openned8.ActiveCodeCreatReq.openned8.ActiveCodeResp@
+activeCodeCreat.openned8.ActiveCodeCreatReq.openned8.ActiveCodeRespZ
+downloadCodeByAppId .openned8.DownloadCodeByAppIdReq!.openned8.DownloadCodeByAppIdResp@
 sdkListQuery.openned8.SdkListQueryReq.openned8.SdkListRespB
 sdkQueryByApp.openned8.SdkQueryByAppReq.openned8.SdkListRespG
 queryUserSdkUsage.openned8.UserSdkUsageQueryReq.openned8.SdkUsageI
