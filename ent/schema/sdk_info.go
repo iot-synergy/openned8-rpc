@@ -19,6 +19,7 @@ func (SdkInfo) Fields() []ent.Field {
 		field.String("name").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(256)"}).
 			Comment("名字").
+			Unique().
 			Annotations(entsql.WithComments(true)),
 		field.String("avatar").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(256)"}).

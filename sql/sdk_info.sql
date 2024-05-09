@@ -12,5 +12,6 @@ create table `sdk_info` (
     `name` varchar (256),
     `avatar` varchar (256),
     `desc` bigint (20),
-    `download_url` varchar (512)
+    `download_url` varchar (512),
+    unique index name_unique(`name` ASC)
 );

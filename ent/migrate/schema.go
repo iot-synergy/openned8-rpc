@@ -132,7 +132,7 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "name", Type: field.TypeString, Comment: "名字", SchemaType: map[string]string{"mysql": "varchar(256)"}},
+		{Name: "name", Type: field.TypeString, Unique: true, Comment: "名字", SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "avatar", Type: field.TypeString, Comment: "头像", SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "desc", Type: field.TypeInt64, Comment: "排序"},
 		{Name: "download_url", Type: field.TypeString, Comment: "下载地址", SchemaType: map[string]string{"mysql": "varchar(512)"}},
