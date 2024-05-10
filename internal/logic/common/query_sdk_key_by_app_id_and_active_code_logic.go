@@ -25,9 +25,9 @@ func NewQuerySdkKeyByAppIdAndActiveCodeLogic(ctx context.Context, svcCtx *svc.Se
 }
 
 func (l *QuerySdkKeyByAppIdAndActiveCodeLogic) QuerySdkKeyByAppIdAndActiveCode(in *openned8.QuerySdkKeyByAppIdAndActiveCodeReq) (*openned8.BaseString, error) {
-	data, err := l.svcCtx.DB.ActiveCodeInfo.Query().Where(activecodeinfo.AppIDEQ(in.AppId), activecodeinfo.ActiveKey(in.ActiveCode)).First(l.ctx)
+	data, err := l.svcCtx.DB.ActiveCodeInfo.Query().Where(activecodeinfo.AppIDEQ(in.AppId), activecodeinfo.ActiveKey(in.ActiveCode)).QueryAppSdk().First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &openned8.BaseString{Data: data.ActiveKey}, nil
+	return &openned8.BaseString{Data: data.SdkKey}, nil
 }
