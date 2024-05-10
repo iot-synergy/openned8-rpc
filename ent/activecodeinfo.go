@@ -54,6 +54,8 @@ type ActiveCodeInfo struct {
 	ExpireDate time.Time `json:"expire_date,omitempty"`
 	// 关联app_key
 	AppSdkID uuid.UUID `json:"app_sdk_id,omitempty"`
+	// Imei holds the value of the "imei" field.
+	Imei string `json:"imei,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ActiveCodeInfoQuery when eager-loading is set.
 	Edges        ActiveCodeInfoEdges `json:"edges"`
@@ -87,7 +89,7 @@ func (*ActiveCodeInfo) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case activecodeinfo.FieldStatus, activecodeinfo.FieldActiveType:
 			values[i] = new(sql.NullInt64)
-		case activecodeinfo.FieldActiveKey, activecodeinfo.FieldUserID, activecodeinfo.FieldAppID, activecodeinfo.FieldActiveIP, activecodeinfo.FieldDeviceSn, activecodeinfo.FieldDeviceMAC, activecodeinfo.FieldDeviceIdentity, activecodeinfo.FieldActiveFile, activecodeinfo.FieldVersion:
+		case activecodeinfo.FieldActiveKey, activecodeinfo.FieldUserID, activecodeinfo.FieldAppID, activecodeinfo.FieldActiveIP, activecodeinfo.FieldDeviceSn, activecodeinfo.FieldDeviceMAC, activecodeinfo.FieldDeviceIdentity, activecodeinfo.FieldActiveFile, activecodeinfo.FieldVersion, activecodeinfo.FieldImei:
 			values[i] = new(sql.NullString)
 		case activecodeinfo.FieldCreatedAt, activecodeinfo.FieldUpdatedAt, activecodeinfo.FieldActiveDate, activecodeinfo.FieldStartDate, activecodeinfo.FieldExpireDate:
 			values[i] = new(sql.NullTime)
@@ -216,6 +218,12 @@ func (aci *ActiveCodeInfo) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				aci.AppSdkID = *value
 			}
+		case activecodeinfo.FieldImei:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field imei", values[i])
+			} else if value.Valid {
+				aci.Imei = value.String
+			}
 		default:
 			aci.selectValues.Set(columns[i], values[i])
 		}
@@ -307,6 +315,9 @@ func (aci *ActiveCodeInfo) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("app_sdk_id=")
 	builder.WriteString(fmt.Sprintf("%v", aci.AppSdkID))
+	builder.WriteString(", ")
+	builder.WriteString("imei=")
+	builder.WriteString(aci.Imei)
 	builder.WriteByte(')')
 	return builder.String()
 }

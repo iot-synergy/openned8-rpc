@@ -141,6 +141,11 @@ func AppSdkID(v uuid.UUID) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppSdkID, v))
 }
 
+// Imei applies equality check predicate on the "imei" field. It's identical to ImeiEQ.
+func Imei(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldImei, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldCreatedAt, v))
@@ -1044,6 +1049,81 @@ func AppSdkIDIsNil() predicate.ActiveCodeInfo {
 // AppSdkIDNotNil applies the NotNil predicate on the "app_sdk_id" field.
 func AppSdkIDNotNil() predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldNotNull(FieldAppSdkID))
+}
+
+// ImeiEQ applies the EQ predicate on the "imei" field.
+func ImeiEQ(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldImei, v))
+}
+
+// ImeiNEQ applies the NEQ predicate on the "imei" field.
+func ImeiNEQ(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNEQ(FieldImei, v))
+}
+
+// ImeiIn applies the In predicate on the "imei" field.
+func ImeiIn(vs ...string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldIn(FieldImei, vs...))
+}
+
+// ImeiNotIn applies the NotIn predicate on the "imei" field.
+func ImeiNotIn(vs ...string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNotIn(FieldImei, vs...))
+}
+
+// ImeiGT applies the GT predicate on the "imei" field.
+func ImeiGT(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldGT(FieldImei, v))
+}
+
+// ImeiGTE applies the GTE predicate on the "imei" field.
+func ImeiGTE(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldGTE(FieldImei, v))
+}
+
+// ImeiLT applies the LT predicate on the "imei" field.
+func ImeiLT(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldLT(FieldImei, v))
+}
+
+// ImeiLTE applies the LTE predicate on the "imei" field.
+func ImeiLTE(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldLTE(FieldImei, v))
+}
+
+// ImeiContains applies the Contains predicate on the "imei" field.
+func ImeiContains(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldContains(FieldImei, v))
+}
+
+// ImeiHasPrefix applies the HasPrefix predicate on the "imei" field.
+func ImeiHasPrefix(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldHasPrefix(FieldImei, v))
+}
+
+// ImeiHasSuffix applies the HasSuffix predicate on the "imei" field.
+func ImeiHasSuffix(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldHasSuffix(FieldImei, v))
+}
+
+// ImeiIsNil applies the IsNil predicate on the "imei" field.
+func ImeiIsNil() predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldIsNull(FieldImei))
+}
+
+// ImeiNotNil applies the NotNil predicate on the "imei" field.
+func ImeiNotNil() predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNotNull(FieldImei))
+}
+
+// ImeiEqualFold applies the EqualFold predicate on the "imei" field.
+func ImeiEqualFold(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEqualFold(FieldImei, v))
+}
+
+// ImeiContainsFold applies the ContainsFold predicate on the "imei" field.
+func ImeiContainsFold(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldContainsFold(FieldImei, v))
 }
 
 // HasAppSdk applies the HasEdge predicate on the "app_sdk" edge.

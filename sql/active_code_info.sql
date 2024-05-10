@@ -26,5 +26,6 @@ create table `active_code_info` (
     `expire_date` TIMESTAMP,
     `status` bigint(20),
     `app_sdk_id` varchar (36),
+    `imei` varchar (256),
     unique index address(`active_key` ASC)
 );

@@ -393,6 +393,30 @@ func (aci *ActiveCodeInfoCreate) SetNotNilAppSdkID(value *uuid.UUID) *ActiveCode
 }
 
 // set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoUpdate) SetNotNilImei(value *string) *ActiveCodeInfoUpdate {
+	if value != nil {
+		return aci.SetImei(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoUpdateOne) SetNotNilImei(value *string) *ActiveCodeInfoUpdateOne {
+	if value != nil {
+		return aci.SetImei(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoCreate) SetNotNilImei(value *string) *ActiveCodeInfoCreate {
+	if value != nil {
+		return aci.SetImei(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
 func (ai *AppInfoUpdate) SetNotNilUpdatedAt(value *time.Time) *AppInfoUpdate {
 	if value != nil {
 		return ai.SetUpdatedAt(*value)

@@ -76,6 +76,9 @@ func (ActiveCodeInfo) Fields() []ent.Field {
 			Optional().
 			Comment("关联app_key").
 			Annotations(entsql.WithComments(true)),
+		field.String("imei").
+			Optional().
+			SchemaType(map[string]string{dialect.MySQL: "varchar(256)"}),
 	}
 }
 

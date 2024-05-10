@@ -272,6 +272,26 @@ func (aciu *ActiveCodeInfoUpdate) ClearAppSdkID() *ActiveCodeInfoUpdate {
 	return aciu
 }
 
+// SetImei sets the "imei" field.
+func (aciu *ActiveCodeInfoUpdate) SetImei(s string) *ActiveCodeInfoUpdate {
+	aciu.mutation.SetImei(s)
+	return aciu
+}
+
+// SetNillableImei sets the "imei" field if the given value is not nil.
+func (aciu *ActiveCodeInfoUpdate) SetNillableImei(s *string) *ActiveCodeInfoUpdate {
+	if s != nil {
+		aciu.SetImei(*s)
+	}
+	return aciu
+}
+
+// ClearImei clears the value of the "imei" field.
+func (aciu *ActiveCodeInfoUpdate) ClearImei() *ActiveCodeInfoUpdate {
+	aciu.mutation.ClearImei()
+	return aciu
+}
+
 // SetAppSdk sets the "app_sdk" edge to the AppSdk entity.
 func (aciu *ActiveCodeInfoUpdate) SetAppSdk(a *AppSdk) *ActiveCodeInfoUpdate {
 	return aciu.SetAppSdkID(a.ID)
@@ -386,6 +406,12 @@ func (aciu *ActiveCodeInfoUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if value, ok := aciu.mutation.ExpireDate(); ok {
 		_spec.SetField(activecodeinfo.FieldExpireDate, field.TypeTime, value)
+	}
+	if value, ok := aciu.mutation.Imei(); ok {
+		_spec.SetField(activecodeinfo.FieldImei, field.TypeString, value)
+	}
+	if aciu.mutation.ImeiCleared() {
+		_spec.ClearField(activecodeinfo.FieldImei, field.TypeString)
 	}
 	if aciu.mutation.AppSdkCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -678,6 +704,26 @@ func (aciuo *ActiveCodeInfoUpdateOne) ClearAppSdkID() *ActiveCodeInfoUpdateOne {
 	return aciuo
 }
 
+// SetImei sets the "imei" field.
+func (aciuo *ActiveCodeInfoUpdateOne) SetImei(s string) *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.SetImei(s)
+	return aciuo
+}
+
+// SetNillableImei sets the "imei" field if the given value is not nil.
+func (aciuo *ActiveCodeInfoUpdateOne) SetNillableImei(s *string) *ActiveCodeInfoUpdateOne {
+	if s != nil {
+		aciuo.SetImei(*s)
+	}
+	return aciuo
+}
+
+// ClearImei clears the value of the "imei" field.
+func (aciuo *ActiveCodeInfoUpdateOne) ClearImei() *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.ClearImei()
+	return aciuo
+}
+
 // SetAppSdk sets the "app_sdk" edge to the AppSdk entity.
 func (aciuo *ActiveCodeInfoUpdateOne) SetAppSdk(a *AppSdk) *ActiveCodeInfoUpdateOne {
 	return aciuo.SetAppSdkID(a.ID)
@@ -822,6 +868,12 @@ func (aciuo *ActiveCodeInfoUpdateOne) sqlSave(ctx context.Context) (_node *Activ
 	}
 	if value, ok := aciuo.mutation.ExpireDate(); ok {
 		_spec.SetField(activecodeinfo.FieldExpireDate, field.TypeTime, value)
+	}
+	if value, ok := aciuo.mutation.Imei(); ok {
+		_spec.SetField(activecodeinfo.FieldImei, field.TypeString, value)
+	}
+	if aciuo.mutation.ImeiCleared() {
+		_spec.ClearField(activecodeinfo.FieldImei, field.TypeString)
 	}
 	if aciuo.mutation.AppSdkCleared() {
 		edge := &sqlgraph.EdgeSpec{

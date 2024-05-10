@@ -28,6 +28,7 @@ var (
 		{Name: "version", Type: field.TypeString, Comment: "版本", SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "start_date", Type: field.TypeTime, Comment: "开始时间"},
 		{Name: "expire_date", Type: field.TypeTime, Comment: "结束时间"},
+		{Name: "imei", Type: field.TypeString, Nullable: true, SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "app_sdk_id", Type: field.TypeUUID, Nullable: true, Comment: "关联app_key"},
 	}
 	// ActiveCodeInfoTable holds the schema information for the "active_code_info" table.
@@ -38,7 +39,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "active_code_info_app_sdk_active_code",
-				Columns:    []*schema.Column{ActiveCodeInfoColumns[17]},
+				Columns:    []*schema.Column{ActiveCodeInfoColumns[18]},
 				RefColumns: []*schema.Column{AppSdkColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

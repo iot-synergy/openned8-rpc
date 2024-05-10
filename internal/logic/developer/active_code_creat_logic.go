@@ -131,7 +131,6 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 			SetDeviceIdentity("").
 			SetActiveType(0).
 			SetActiveFile("").
-			SetActiveFile("").
 			SetVersion("v0.0.0").
 			SetStartDate(time.Now()).
 			SetExpireDate(time.Now().AddDate(0, 0, 3)).

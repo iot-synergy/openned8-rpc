@@ -49,6 +49,8 @@ const (
 	FieldExpireDate = "expire_date"
 	// FieldAppSdkID holds the string denoting the app_sdk_id field in the database.
 	FieldAppSdkID = "app_sdk_id"
+	// FieldImei holds the string denoting the imei field in the database.
+	FieldImei = "imei"
 	// EdgeAppSdk holds the string denoting the app_sdk edge name in mutations.
 	EdgeAppSdk = "app_sdk"
 	// Table holds the table name of the activecodeinfo in the database.
@@ -82,6 +84,7 @@ var Columns = []string{
 	FieldStartDate,
 	FieldExpireDate,
 	FieldAppSdkID,
+	FieldImei,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -204,6 +207,11 @@ func ByExpireDate(opts ...sql.OrderTermOption) OrderOption {
 // ByAppSdkID orders the results by the app_sdk_id field.
 func ByAppSdkID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAppSdkID, opts...).ToFunc()
+}
+
+// ByImei orders the results by the imei field.
+func ByImei(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImei, opts...).ToFunc()
 }
 
 // ByAppSdkField orders the results by app_sdk field.

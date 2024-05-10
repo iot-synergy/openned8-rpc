@@ -1,5 +1,5 @@
 
-˝!
+œ%
 openned8.protoopenned8"
 Empty"
 BeanMsg
@@ -146,7 +146,24 @@ ExpireDate
 DownloadCode
 AppKey (	RAppKey
 SdkKey (	RSdkKey
-Code (	RCode2æ
+Code (	RCode"Z
+"QuerySdkKeyByAppIdAndActiveCodeReq
+appId (	RappId
+
+activeCode (	R
+activeCode" 
+
+BaseString
+data (	Rdata"è
+ActiveDeviceReq
+appId (	RappId
+sdkKey (	RsdkKey
+
+activeCode (	R
+activeCode
+imei (	Rimei
+deviceSn (	RdeviceSn"
+ActiveDeviceResp2Ï
 openned8:
 	appCreate.openned8.AppInfoCreateReq.openned8.AppInfo:
 	appUpdate.openned8.AppInfoUpdateReq.openned8.AppInfo:
@@ -161,5 +178,7 @@ ExpireDate
 sdkQueryByApp.openned8.SdkQueryByAppReq.openned8.SdkListRespG
 queryUserSdkUsage.openned8.UserSdkUsageQueryReq.openned8.SdkUsageI
 updateUserSdkUsage.openned8.UserSdkUsageUpdateReq.openned8.SdkUsage:
-	createSdk.openned8.SdkInfoCreateReq.openned8.SdkInfoBZ
+	createSdk.openned8.SdkInfoCreateReq.openned8.SdkInfoe
+querySdkKeyByAppIdAndActiveCode,.openned8.QuerySdkKeyByAppIdAndActiveCodeReq.openned8.BaseStringE
+activeDevice.openned8.ActiveDeviceReq.openned8.ActiveDeviceRespBZ
 ./openned8bproto3

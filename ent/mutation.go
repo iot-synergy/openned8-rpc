@@ -64,6 +64,7 @@ type ActiveCodeInfoMutation struct {
 	version         *string
 	start_date      *time.Time
 	expire_date     *time.Time
+	imei            *string
 	clearedFields   map[string]struct{}
 	app_sdk         *uuid.UUID
 	clearedapp_sdk  bool
@@ -855,6 +856,55 @@ func (m *ActiveCodeInfoMutation) ResetAppSdkID() {
 	delete(m.clearedFields, activecodeinfo.FieldAppSdkID)
 }
 
+// SetImei sets the "imei" field.
+func (m *ActiveCodeInfoMutation) SetImei(s string) {
+	m.imei = &s
+}
+
+// Imei returns the value of the "imei" field in the mutation.
+func (m *ActiveCodeInfoMutation) Imei() (r string, exists bool) {
+	v := m.imei
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImei returns the old "imei" field's value of the ActiveCodeInfo entity.
+// If the ActiveCodeInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActiveCodeInfoMutation) OldImei(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImei is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImei requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImei: %w", err)
+	}
+	return oldValue.Imei, nil
+}
+
+// ClearImei clears the value of the "imei" field.
+func (m *ActiveCodeInfoMutation) ClearImei() {
+	m.imei = nil
+	m.clearedFields[activecodeinfo.FieldImei] = struct{}{}
+}
+
+// ImeiCleared returns if the "imei" field was cleared in this mutation.
+func (m *ActiveCodeInfoMutation) ImeiCleared() bool {
+	_, ok := m.clearedFields[activecodeinfo.FieldImei]
+	return ok
+}
+
+// ResetImei resets all changes to the "imei" field.
+func (m *ActiveCodeInfoMutation) ResetImei() {
+	m.imei = nil
+	delete(m.clearedFields, activecodeinfo.FieldImei)
+}
+
 // ClearAppSdk clears the "app_sdk" edge to the AppSdk entity.
 func (m *ActiveCodeInfoMutation) ClearAppSdk() {
 	m.clearedapp_sdk = true
@@ -916,7 +966,7 @@ func (m *ActiveCodeInfoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActiveCodeInfoMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, activecodeinfo.FieldCreatedAt)
 	}
@@ -968,6 +1018,9 @@ func (m *ActiveCodeInfoMutation) Fields() []string {
 	if m.app_sdk != nil {
 		fields = append(fields, activecodeinfo.FieldAppSdkID)
 	}
+	if m.imei != nil {
+		fields = append(fields, activecodeinfo.FieldImei)
+	}
 	return fields
 }
 
@@ -1010,6 +1063,8 @@ func (m *ActiveCodeInfoMutation) Field(name string) (ent.Value, bool) {
 		return m.ExpireDate()
 	case activecodeinfo.FieldAppSdkID:
 		return m.AppSdkID()
+	case activecodeinfo.FieldImei:
+		return m.Imei()
 	}
 	return nil, false
 }
@@ -1053,6 +1108,8 @@ func (m *ActiveCodeInfoMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldExpireDate(ctx)
 	case activecodeinfo.FieldAppSdkID:
 		return m.OldAppSdkID(ctx)
+	case activecodeinfo.FieldImei:
+		return m.OldImei(ctx)
 	}
 	return nil, fmt.Errorf("unknown ActiveCodeInfo field %s", name)
 }
@@ -1181,6 +1238,13 @@ func (m *ActiveCodeInfoMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAppSdkID(v)
 		return nil
+	case activecodeinfo.FieldImei:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImei(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ActiveCodeInfo field %s", name)
 }
@@ -1244,6 +1308,9 @@ func (m *ActiveCodeInfoMutation) ClearedFields() []string {
 	if m.FieldCleared(activecodeinfo.FieldAppSdkID) {
 		fields = append(fields, activecodeinfo.FieldAppSdkID)
 	}
+	if m.FieldCleared(activecodeinfo.FieldImei) {
+		fields = append(fields, activecodeinfo.FieldImei)
+	}
 	return fields
 }
 
@@ -1263,6 +1330,9 @@ func (m *ActiveCodeInfoMutation) ClearField(name string) error {
 		return nil
 	case activecodeinfo.FieldAppSdkID:
 		m.ClearAppSdkID()
+		return nil
+	case activecodeinfo.FieldImei:
+		m.ClearImei()
 		return nil
 	}
 	return fmt.Errorf("unknown ActiveCodeInfo nullable field %s", name)
@@ -1322,6 +1392,9 @@ func (m *ActiveCodeInfoMutation) ResetField(name string) error {
 		return nil
 	case activecodeinfo.FieldAppSdkID:
 		m.ResetAppSdkID()
+		return nil
+	case activecodeinfo.FieldImei:
+		m.ResetImei()
 		return nil
 	}
 	return fmt.Errorf("unknown ActiveCodeInfo field %s", name)

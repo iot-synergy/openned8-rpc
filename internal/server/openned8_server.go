@@ -7,6 +7,7 @@ import (
 	"context"
 
 	"github.com/iot-synergy/openned8-rpc/internal/logic/admin"
+	"github.com/iot-synergy/openned8-rpc/internal/logic/common"
 	"github.com/iot-synergy/openned8-rpc/internal/logic/developer"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -91,4 +92,14 @@ func (s *Openned8Server) UpdateUserSdkUsage(ctx context.Context, in *openned8.Us
 func (s *Openned8Server) CreateSdk(ctx context.Context, in *openned8.SdkInfoCreateReq) (*openned8.SdkInfo, error) {
 	l := admin.NewCreateSdkLogic(ctx, s.svcCtx)
 	return l.CreateSdk(in)
+}
+
+func (s *Openned8Server) QuerySdkKeyByAppIdAndActiveCode(ctx context.Context, in *openned8.QuerySdkKeyByAppIdAndActiveCodeReq) (*openned8.BaseString, error) {
+	l := common.NewQuerySdkKeyByAppIdAndActiveCodeLogic(ctx, s.svcCtx)
+	return l.QuerySdkKeyByAppIdAndActiveCode(in)
+}
+
+func (s *Openned8Server) ActiveDevice(ctx context.Context, in *openned8.ActiveDeviceReq) (*openned8.ActiveDeviceResp, error) {
+	l := common.NewActiveDeviceLogic(ctx, s.svcCtx)
+	return l.ActiveDevice(in)
 }

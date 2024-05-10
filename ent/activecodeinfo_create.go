@@ -180,6 +180,20 @@ func (acic *ActiveCodeInfoCreate) SetNillableAppSdkID(u *uuid.UUID) *ActiveCodeI
 	return acic
 }
 
+// SetImei sets the "imei" field.
+func (acic *ActiveCodeInfoCreate) SetImei(s string) *ActiveCodeInfoCreate {
+	acic.mutation.SetImei(s)
+	return acic
+}
+
+// SetNillableImei sets the "imei" field if the given value is not nil.
+func (acic *ActiveCodeInfoCreate) SetNillableImei(s *string) *ActiveCodeInfoCreate {
+	if s != nil {
+		acic.SetImei(*s)
+	}
+	return acic
+}
+
 // SetID sets the "id" field.
 func (acic *ActiveCodeInfoCreate) SetID(u uuid.UUID) *ActiveCodeInfoCreate {
 	acic.mutation.SetID(u)
@@ -409,6 +423,10 @@ func (acic *ActiveCodeInfoCreate) createSpec() (*ActiveCodeInfo, *sqlgraph.Creat
 	if value, ok := acic.mutation.ExpireDate(); ok {
 		_spec.SetField(activecodeinfo.FieldExpireDate, field.TypeTime, value)
 		_node.ExpireDate = value
+	}
+	if value, ok := acic.mutation.Imei(); ok {
+		_spec.SetField(activecodeinfo.FieldImei, field.TypeString, value)
+		_node.Imei = value
 	}
 	if nodes := acic.mutation.AppSdkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

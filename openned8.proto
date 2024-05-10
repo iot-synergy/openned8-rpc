@@ -192,6 +192,25 @@ message DownloadCode {
   string Code = 3;
 }
 
+message QuerySdkKeyByAppIdAndActiveCodeReq {
+  string appId = 1;
+  string activeCode = 2;
+}
+
+message BaseString{
+  string data = 1;
+}
+
+message ActiveDeviceReq {
+  string appId = 1;
+  string sdkKey = 2;
+  string activeCode = 3;
+  string imei = 4;
+  string deviceSn = 5;
+}
+
+message ActiveDeviceResp {}
+
 service openned8 {
   // group: developer
   rpc appCreate (AppInfoCreateReq) returns (AppInfo);
@@ -221,4 +240,8 @@ service openned8 {
   rpc updateUserSdkUsage(UserSdkUsageUpdateReq) returns (SdkUsage);
   // group: admin
   rpc createSdk (SdkInfoCreateReq) returns (SdkInfo);
+  // group: common
+  rpc querySdkKeyByAppIdAndActiveCode (QuerySdkKeyByAppIdAndActiveCodeReq) returns (BaseString);
+  // group: common
+  rpc activeDevice (ActiveDeviceReq) returns (ActiveDeviceResp);
 }
