@@ -63,6 +63,9 @@ func activeDevice(ctx context.Context, client *ent.Client, in *openned8.ActiveDe
 	if activeCode == nil {
 		return nil, errors.New("data is empty")
 	}
+	if activeCode.DeviceSn != "" && activeCode.DeviceSn != in.DeviceSn {
+		return nil, errors.New("The activation code cannot activate two devices")
+	}
 	activeCode.Status = 2
 	activeCode.Imei = in.Imei
 	activeCode.DeviceSn = in.DeviceSn
