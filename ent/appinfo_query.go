@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
@@ -107,8 +106,8 @@ func (aiq *AppInfoQuery) FirstX(ctx context.Context) *AppInfo {
 
 // FirstID returns the first AppInfo ID from the query.
 // Returns a *NotFoundError when no AppInfo ID was found.
-func (aiq *AppInfoQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (aiq *AppInfoQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = aiq.Limit(1).IDs(setContextOp(ctx, aiq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -120,7 +119,7 @@ func (aiq *AppInfoQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (aiq *AppInfoQuery) FirstIDX(ctx context.Context) uuid.UUID {
+func (aiq *AppInfoQuery) FirstIDX(ctx context.Context) string {
 	id, err := aiq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -158,8 +157,8 @@ func (aiq *AppInfoQuery) OnlyX(ctx context.Context) *AppInfo {
 // OnlyID is like Only, but returns the only AppInfo ID in the query.
 // Returns a *NotSingularError when more than one AppInfo ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (aiq *AppInfoQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (aiq *AppInfoQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = aiq.Limit(2).IDs(setContextOp(ctx, aiq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -175,7 +174,7 @@ func (aiq *AppInfoQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (aiq *AppInfoQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+func (aiq *AppInfoQuery) OnlyIDX(ctx context.Context) string {
 	id, err := aiq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -203,7 +202,7 @@ func (aiq *AppInfoQuery) AllX(ctx context.Context) []*AppInfo {
 }
 
 // IDs executes the query and returns a list of AppInfo IDs.
-func (aiq *AppInfoQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+func (aiq *AppInfoQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if aiq.ctx.Unique == nil && aiq.path != nil {
 		aiq.Unique(true)
 	}
@@ -215,7 +214,7 @@ func (aiq *AppInfoQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (aiq *AppInfoQuery) IDsX(ctx context.Context) []uuid.UUID {
+func (aiq *AppInfoQuery) IDsX(ctx context.Context) []string {
 	ids, err := aiq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -405,7 +404,7 @@ func (aiq *AppInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*App
 
 func (aiq *AppInfoQuery) loadAppSdk(ctx context.Context, query *AppSdkQuery, nodes []*AppInfo, init func(*AppInfo), assign func(*AppInfo, *AppSdk)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*AppInfo)
+	nodeids := make(map[string]*AppInfo)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -444,7 +443,7 @@ func (aiq *AppInfoQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (aiq *AppInfoQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(appinfo.Table, appinfo.Columns, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewQuerySpec(appinfo.Table, appinfo.Columns, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString))
 	_spec.From = aiq.sql
 	if unique := aiq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

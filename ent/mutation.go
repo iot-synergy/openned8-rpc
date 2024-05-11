@@ -1479,7 +1479,7 @@ type AppInfoMutation struct {
 	config
 	op                Op
 	typ               string
-	id                *uuid.UUID
+	id                *string
 	created_at        *time.Time
 	updated_at        *time.Time
 	user_id           *string
@@ -1522,7 +1522,7 @@ func newAppInfoMutation(c config, op Op, opts ...appinfoOption) *AppInfoMutation
 }
 
 // withAppInfoID sets the ID field of the mutation.
-func withAppInfoID(id uuid.UUID) appinfoOption {
+func withAppInfoID(id string) appinfoOption {
 	return func(m *AppInfoMutation) {
 		var (
 			err   error
@@ -1574,13 +1574,13 @@ func (m AppInfoMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of AppInfo entities.
-func (m *AppInfoMutation) SetID(id uuid.UUID) {
+func (m *AppInfoMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *AppInfoMutation) ID() (id uuid.UUID, exists bool) {
+func (m *AppInfoMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1591,12 +1591,12 @@ func (m *AppInfoMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *AppInfoMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *AppInfoMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2521,7 +2521,7 @@ type AppSdkMutation struct {
 	active_code        map[uuid.UUID]struct{}
 	removedactive_code map[uuid.UUID]struct{}
 	clearedactive_code bool
-	app_info           *uuid.UUID
+	app_info           *string
 	clearedapp_info    bool
 	sdk_info           *uuid.UUID
 	clearedsdk_info    bool
@@ -2707,12 +2707,12 @@ func (m *AppSdkMutation) ResetUpdatedAt() {
 }
 
 // SetApp sets the "app" field.
-func (m *AppSdkMutation) SetApp(u uuid.UUID) {
-	m.app_info = &u
+func (m *AppSdkMutation) SetApp(s string) {
+	m.app_info = &s
 }
 
 // App returns the value of the "app" field in the mutation.
-func (m *AppSdkMutation) App() (r uuid.UUID, exists bool) {
+func (m *AppSdkMutation) App() (r string, exists bool) {
 	v := m.app_info
 	if v == nil {
 		return
@@ -2723,7 +2723,7 @@ func (m *AppSdkMutation) App() (r uuid.UUID, exists bool) {
 // OldApp returns the old "app" field's value of the AppSdk entity.
 // If the AppSdk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AppSdkMutation) OldApp(ctx context.Context) (v uuid.UUID, err error) {
+func (m *AppSdkMutation) OldApp(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldApp is only allowed on UpdateOne operations")
 	}
@@ -2895,7 +2895,7 @@ func (m *AppSdkMutation) ResetActiveCode() {
 }
 
 // SetAppInfoID sets the "app_info" edge to the AppInfo entity by id.
-func (m *AppSdkMutation) SetAppInfoID(id uuid.UUID) {
+func (m *AppSdkMutation) SetAppInfoID(id string) {
 	m.app_info = &id
 }
 
@@ -2911,7 +2911,7 @@ func (m *AppSdkMutation) AppInfoCleared() bool {
 }
 
 // AppInfoID returns the "app_info" edge ID in the mutation.
-func (m *AppSdkMutation) AppInfoID() (id uuid.UUID, exists bool) {
+func (m *AppSdkMutation) AppInfoID() (id string, exists bool) {
 	if m.app_info != nil {
 		return *m.app_info, true
 	}
@@ -2921,7 +2921,7 @@ func (m *AppSdkMutation) AppInfoID() (id uuid.UUID, exists bool) {
 // AppInfoIDs returns the "app_info" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // AppInfoID instead. It exists only for internal usage by the builders.
-func (m *AppSdkMutation) AppInfoIDs() (ids []uuid.UUID) {
+func (m *AppSdkMutation) AppInfoIDs() (ids []string) {
 	if id := m.app_info; id != nil {
 		ids = append(ids, *id)
 	}
@@ -3085,7 +3085,7 @@ func (m *AppSdkMutation) SetField(name string, value ent.Value) error {
 		m.SetUpdatedAt(v)
 		return nil
 	case appsdk.FieldApp:
-		v, ok := value.(uuid.UUID)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

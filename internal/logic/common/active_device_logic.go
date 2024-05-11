@@ -3,7 +3,6 @@ package common
 import (
 	"context"
 	"errors"
-	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
@@ -52,11 +51,7 @@ func (l *ActiveDeviceLogic) ActiveDevice(in *openned8.ActiveDeviceReq) (*openned
 }
 
 func activeDevice(ctx context.Context, client *ent.Client, in *openned8.ActiveDeviceReq) (*openned8.ActiveDeviceResp, error) {
-	appId, err := uuid.FromString(in.AppId)
-	if err != nil {
-		return nil, err
-	}
-	activeCode, err := client.AppSdk.Query().Where(appsdk.AppEQ(appId)).QueryActiveCode().Where(activecodeinfo.ActiveKeyEQ(in.ActiveCode)).First(ctx)
+	activeCode, err := client.AppSdk.Query().Where(appsdk.AppEQ(in.AppId)).QueryActiveCode().Where(activecodeinfo.ActiveKeyEQ(in.ActiveCode)).First(ctx)
 	if err != nil {
 		return nil, err
 	}

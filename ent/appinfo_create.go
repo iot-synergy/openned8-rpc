@@ -105,16 +105,8 @@ func (aic *AppInfoCreate) SetAppSecret(s string) *AppInfoCreate {
 }
 
 // SetID sets the "id" field.
-func (aic *AppInfoCreate) SetID(u uuid.UUID) *AppInfoCreate {
-	aic.mutation.SetID(u)
-	return aic
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (aic *AppInfoCreate) SetNillableID(u *uuid.UUID) *AppInfoCreate {
-	if u != nil {
-		aic.SetID(*u)
-	}
+func (aic *AppInfoCreate) SetID(s string) *AppInfoCreate {
+	aic.mutation.SetID(s)
 	return aic
 }
 
@@ -176,10 +168,6 @@ func (aic *AppInfoCreate) defaults() {
 		v := appinfo.DefaultUpdatedAt()
 		aic.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := aic.mutation.ID(); !ok {
-		v := appinfo.DefaultID()
-		aic.mutation.SetID(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -232,10 +220,10 @@ func (aic *AppInfoCreate) sqlSave(ctx context.Context) (*AppInfo, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
+		if id, ok := _spec.ID.Value.(string); ok {
+			_node.ID = id
+		} else {
+			return nil, fmt.Errorf("unexpected AppInfo.ID type: %T", _spec.ID.Value)
 		}
 	}
 	aic.mutation.id = &_node.ID
@@ -246,11 +234,11 @@ func (aic *AppInfoCreate) sqlSave(ctx context.Context) (*AppInfo, error) {
 func (aic *AppInfoCreate) createSpec() (*AppInfo, *sqlgraph.CreateSpec) {
 	var (
 		_node = &AppInfo{config: aic.config}
-		_spec = sqlgraph.NewCreateSpec(appinfo.Table, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID))
+		_spec = sqlgraph.NewCreateSpec(appinfo.Table, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString))
 	)
 	if id, ok := aic.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
 	if value, ok := aic.mutation.CreatedAt(); ok {
 		_spec.SetField(appinfo.FieldCreatedAt, field.TypeTime, value)

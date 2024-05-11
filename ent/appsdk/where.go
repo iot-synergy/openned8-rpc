@@ -67,7 +67,7 @@ func UpdatedAt(v time.Time) predicate.AppSdk {
 }
 
 // App applies equality check predicate on the "app" field. It's identical to AppEQ.
-func App(v uuid.UUID) predicate.AppSdk {
+func App(v string) predicate.AppSdk {
 	return predicate.AppSdk(sql.FieldEQ(FieldApp, v))
 }
 
@@ -162,23 +162,58 @@ func UpdatedAtLTE(v time.Time) predicate.AppSdk {
 }
 
 // AppEQ applies the EQ predicate on the "app" field.
-func AppEQ(v uuid.UUID) predicate.AppSdk {
+func AppEQ(v string) predicate.AppSdk {
 	return predicate.AppSdk(sql.FieldEQ(FieldApp, v))
 }
 
 // AppNEQ applies the NEQ predicate on the "app" field.
-func AppNEQ(v uuid.UUID) predicate.AppSdk {
+func AppNEQ(v string) predicate.AppSdk {
 	return predicate.AppSdk(sql.FieldNEQ(FieldApp, v))
 }
 
 // AppIn applies the In predicate on the "app" field.
-func AppIn(vs ...uuid.UUID) predicate.AppSdk {
+func AppIn(vs ...string) predicate.AppSdk {
 	return predicate.AppSdk(sql.FieldIn(FieldApp, vs...))
 }
 
 // AppNotIn applies the NotIn predicate on the "app" field.
-func AppNotIn(vs ...uuid.UUID) predicate.AppSdk {
+func AppNotIn(vs ...string) predicate.AppSdk {
 	return predicate.AppSdk(sql.FieldNotIn(FieldApp, vs...))
+}
+
+// AppGT applies the GT predicate on the "app" field.
+func AppGT(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldGT(FieldApp, v))
+}
+
+// AppGTE applies the GTE predicate on the "app" field.
+func AppGTE(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldGTE(FieldApp, v))
+}
+
+// AppLT applies the LT predicate on the "app" field.
+func AppLT(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldLT(FieldApp, v))
+}
+
+// AppLTE applies the LTE predicate on the "app" field.
+func AppLTE(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldLTE(FieldApp, v))
+}
+
+// AppContains applies the Contains predicate on the "app" field.
+func AppContains(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldContains(FieldApp, v))
+}
+
+// AppHasPrefix applies the HasPrefix predicate on the "app" field.
+func AppHasPrefix(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldHasPrefix(FieldApp, v))
+}
+
+// AppHasSuffix applies the HasSuffix predicate on the "app" field.
+func AppHasSuffix(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldHasSuffix(FieldApp, v))
 }
 
 // AppIsNil applies the IsNil predicate on the "app" field.
@@ -189,6 +224,16 @@ func AppIsNil() predicate.AppSdk {
 // AppNotNil applies the NotNil predicate on the "app" field.
 func AppNotNil() predicate.AppSdk {
 	return predicate.AppSdk(sql.FieldNotNull(FieldApp))
+}
+
+// AppEqualFold applies the EqualFold predicate on the "app" field.
+func AppEqualFold(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldEqualFold(FieldApp, v))
+}
+
+// AppContainsFold applies the ContainsFold predicate on the "app" field.
+func AppContainsFold(v string) predicate.AppSdk {
+	return predicate.AppSdk(sql.FieldContainsFold(FieldApp, v))
 }
 
 // SdkEQ applies the EQ predicate on the "sdk" field.

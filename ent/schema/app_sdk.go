@@ -17,7 +17,7 @@ type AppSdk struct {
 
 func (AppSdk) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("app", uuid.UUID{}).
+		field.String("app").
 			Optional().
 			SchemaType(map[string]string{dialect.MySQL: "char(36)"}).
 			Comment("app的id").

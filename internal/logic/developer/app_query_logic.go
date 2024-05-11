@@ -41,7 +41,7 @@ func (l *AppQueryLogic) AppQuery(in *openned8.AppListReq) (*openned8.ApplistInfo
 	result := make([]*openned8.AppInfo, 0)
 	for _, datum := range data {
 		result = append(result, &openned8.AppInfo{
-			Id:              datum.ID.String(),
+			Id:              datum.ID,
 			CreatedAt:       datum.CreatedAt.UnixMilli(),
 			UpdatedAt:       datum.UpdatedAt.UnixMilli(),
 			UserId:          datum.UserID,

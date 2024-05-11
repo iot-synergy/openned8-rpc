@@ -39,15 +39,15 @@ func (asu *AppSdkUpdate) SetUpdatedAt(t time.Time) *AppSdkUpdate {
 }
 
 // SetApp sets the "app" field.
-func (asu *AppSdkUpdate) SetApp(u uuid.UUID) *AppSdkUpdate {
-	asu.mutation.SetApp(u)
+func (asu *AppSdkUpdate) SetApp(s string) *AppSdkUpdate {
+	asu.mutation.SetApp(s)
 	return asu
 }
 
 // SetNillableApp sets the "app" field if the given value is not nil.
-func (asu *AppSdkUpdate) SetNillableApp(u *uuid.UUID) *AppSdkUpdate {
-	if u != nil {
-		asu.SetApp(*u)
+func (asu *AppSdkUpdate) SetNillableApp(s *string) *AppSdkUpdate {
+	if s != nil {
+		asu.SetApp(*s)
 	}
 	return asu
 }
@@ -108,13 +108,13 @@ func (asu *AppSdkUpdate) AddActiveCode(a ...*ActiveCodeInfo) *AppSdkUpdate {
 }
 
 // SetAppInfoID sets the "app_info" edge to the AppInfo entity by ID.
-func (asu *AppSdkUpdate) SetAppInfoID(id uuid.UUID) *AppSdkUpdate {
+func (asu *AppSdkUpdate) SetAppInfoID(id string) *AppSdkUpdate {
 	asu.mutation.SetAppInfoID(id)
 	return asu
 }
 
 // SetNillableAppInfoID sets the "app_info" edge to the AppInfo entity by ID if the given value is not nil.
-func (asu *AppSdkUpdate) SetNillableAppInfoID(id *uuid.UUID) *AppSdkUpdate {
+func (asu *AppSdkUpdate) SetNillableAppInfoID(id *string) *AppSdkUpdate {
 	if id != nil {
 		asu = asu.SetAppInfoID(*id)
 	}
@@ -300,7 +300,7 @@ func (asu *AppSdkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{appsdk.AppInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -313,7 +313,7 @@ func (asu *AppSdkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{appsdk.AppInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -377,15 +377,15 @@ func (asuo *AppSdkUpdateOne) SetUpdatedAt(t time.Time) *AppSdkUpdateOne {
 }
 
 // SetApp sets the "app" field.
-func (asuo *AppSdkUpdateOne) SetApp(u uuid.UUID) *AppSdkUpdateOne {
-	asuo.mutation.SetApp(u)
+func (asuo *AppSdkUpdateOne) SetApp(s string) *AppSdkUpdateOne {
+	asuo.mutation.SetApp(s)
 	return asuo
 }
 
 // SetNillableApp sets the "app" field if the given value is not nil.
-func (asuo *AppSdkUpdateOne) SetNillableApp(u *uuid.UUID) *AppSdkUpdateOne {
-	if u != nil {
-		asuo.SetApp(*u)
+func (asuo *AppSdkUpdateOne) SetNillableApp(s *string) *AppSdkUpdateOne {
+	if s != nil {
+		asuo.SetApp(*s)
 	}
 	return asuo
 }
@@ -446,13 +446,13 @@ func (asuo *AppSdkUpdateOne) AddActiveCode(a ...*ActiveCodeInfo) *AppSdkUpdateOn
 }
 
 // SetAppInfoID sets the "app_info" edge to the AppInfo entity by ID.
-func (asuo *AppSdkUpdateOne) SetAppInfoID(id uuid.UUID) *AppSdkUpdateOne {
+func (asuo *AppSdkUpdateOne) SetAppInfoID(id string) *AppSdkUpdateOne {
 	asuo.mutation.SetAppInfoID(id)
 	return asuo
 }
 
 // SetNillableAppInfoID sets the "app_info" edge to the AppInfo entity by ID if the given value is not nil.
-func (asuo *AppSdkUpdateOne) SetNillableAppInfoID(id *uuid.UUID) *AppSdkUpdateOne {
+func (asuo *AppSdkUpdateOne) SetNillableAppInfoID(id *string) *AppSdkUpdateOne {
 	if id != nil {
 		asuo = asuo.SetAppInfoID(*id)
 	}
@@ -668,7 +668,7 @@ func (asuo *AppSdkUpdateOne) sqlSave(ctx context.Context) (_node *AppSdk, err er
 			Columns: []string{appsdk.AppInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -681,7 +681,7 @@ func (asuo *AppSdkUpdateOne) sqlSave(ctx context.Context) (_node *AppSdk, err er
 			Columns: []string{appsdk.AppInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

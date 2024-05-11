@@ -254,7 +254,7 @@ func (aiu *AppInfoUpdate) defaults() {
 }
 
 func (aiu *AppInfoUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(appinfo.Table, appinfo.Columns, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(appinfo.Table, appinfo.Columns, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString))
 	if ps := aiu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -600,7 +600,7 @@ func (aiuo *AppInfoUpdateOne) defaults() {
 }
 
 func (aiuo *AppInfoUpdateOne) sqlSave(ctx context.Context) (_node *AppInfo, err error) {
-	_spec := sqlgraph.NewUpdateSpec(appinfo.Table, appinfo.Columns, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(appinfo.Table, appinfo.Columns, sqlgraph.NewFieldSpec(appinfo.FieldID, field.TypeString))
 	id, ok := aiuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "AppInfo.id" for update`)}

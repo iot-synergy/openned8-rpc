@@ -26,7 +26,7 @@ type AppSdk struct {
 	// Update Time | 修改日期
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// app的id
-	App uuid.UUID `json:"app,omitempty"`
+	App string `json:"app,omitempty"`
 	// sdk的id
 	Sdk uuid.UUID `json:"sdk,omitempty"`
 	// 分配给app的sdk
@@ -86,11 +86,11 @@ func (*AppSdk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case appsdk.FieldSdkKey:
+		case appsdk.FieldApp, appsdk.FieldSdkKey:
 			values[i] = new(sql.NullString)
 		case appsdk.FieldCreatedAt, appsdk.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case appsdk.FieldID, appsdk.FieldApp, appsdk.FieldSdk:
+		case appsdk.FieldID, appsdk.FieldSdk:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -126,10 +126,10 @@ func (as *AppSdk) assignValues(columns []string, values []any) error {
 				as.UpdatedAt = value.Time
 			}
 		case appsdk.FieldApp:
-			if value, ok := values[i].(*uuid.UUID); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field app", values[i])
-			} else if value != nil {
-				as.App = *value
+			} else if value.Valid {
+				as.App = value.String
 			}
 		case appsdk.FieldSdk:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -201,7 +201,7 @@ func (as *AppSdk) String() string {
 	builder.WriteString(as.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("app=")
-	builder.WriteString(fmt.Sprintf("%v", as.App))
+	builder.WriteString(as.App)
 	builder.WriteString(", ")
 	builder.WriteString("sdk=")
 	builder.WriteString(fmt.Sprintf("%v", as.Sdk))

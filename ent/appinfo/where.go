@@ -7,53 +7,62 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id uuid.UUID) predicate.AppInfo {
+func ID(id string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id uuid.UUID) predicate.AppInfo {
+func IDEQ(id string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id uuid.UUID) predicate.AppInfo {
+func IDNEQ(id string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...uuid.UUID) predicate.AppInfo {
+func IDIn(ids ...string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...uuid.UUID) predicate.AppInfo {
+func IDNotIn(ids ...string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id uuid.UUID) predicate.AppInfo {
+func IDGT(id string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id uuid.UUID) predicate.AppInfo {
+func IDGTE(id string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id uuid.UUID) predicate.AppInfo {
+func IDLT(id string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id uuid.UUID) predicate.AppInfo {
+func IDLTE(id string) predicate.AppInfo {
 	return predicate.AppInfo(sql.FieldLTE(FieldID, id))
+}
+
+// IDEqualFold applies the EqualFold predicate on the ID field.
+func IDEqualFold(id string) predicate.AppInfo {
+	return predicate.AppInfo(sql.FieldEqualFold(FieldID, id))
+}
+
+// IDContainsFold applies the ContainsFold predicate on the ID field.
+func IDContainsFold(id string) predicate.AppInfo {
+	return predicate.AppInfo(sql.FieldContainsFold(FieldID, id))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.

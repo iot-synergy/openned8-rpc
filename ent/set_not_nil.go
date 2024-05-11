@@ -681,7 +681,7 @@ func (as *AppSdkCreate) SetNotNilUpdatedAt(value *time.Time) *AppSdkCreate {
 }
 
 // set field if value's pointer is not nil.
-func (as *AppSdkUpdate) SetNotNilApp(value *uuid.UUID) *AppSdkUpdate {
+func (as *AppSdkUpdate) SetNotNilApp(value *string) *AppSdkUpdate {
 	if value != nil {
 		return as.SetApp(*value)
 	}
@@ -689,7 +689,7 @@ func (as *AppSdkUpdate) SetNotNilApp(value *uuid.UUID) *AppSdkUpdate {
 }
 
 // set field if value's pointer is not nil.
-func (as *AppSdkUpdateOne) SetNotNilApp(value *uuid.UUID) *AppSdkUpdateOne {
+func (as *AppSdkUpdateOne) SetNotNilApp(value *string) *AppSdkUpdateOne {
 	if value != nil {
 		return as.SetApp(*value)
 	}
@@ -697,7 +697,7 @@ func (as *AppSdkUpdateOne) SetNotNilApp(value *uuid.UUID) *AppSdkUpdateOne {
 }
 
 // set field if value's pointer is not nil.
-func (as *AppSdkCreate) SetNotNilApp(value *uuid.UUID) *AppSdkCreate {
+func (as *AppSdkCreate) SetNotNilApp(value *string) *AppSdkCreate {
 	if value != nil {
 		return as.SetApp(*value)
 	}

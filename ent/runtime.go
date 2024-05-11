@@ -72,10 +72,6 @@ func init() {
 	appinfo.DefaultUpdatedAt = appinfoDescUpdatedAt.Default.(func() time.Time)
 	// appinfo.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	appinfo.UpdateDefaultUpdatedAt = appinfoDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// appinfoDescID is the schema descriptor for id field.
-	appinfoDescID := appinfoMixinFields0[0].Descriptor()
-	// appinfo.DefaultID holds the default value on creation for the id field.
-	appinfo.DefaultID = appinfoDescID.Default.(func() uuid.UUID)
 	appsdkMixin := schema.AppSdk{}.Mixin()
 	appsdkMixinFields0 := appsdkMixin[0].Fields()
 	_ = appsdkMixinFields0

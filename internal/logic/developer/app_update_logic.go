@@ -3,7 +3,6 @@ package developer
 import (
 	"context"
 	"errors"
-	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
@@ -30,18 +29,14 @@ func NewAppUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppUpda
 }
 
 func (l *AppUpdateLogic) AppUpdate(in *openned8.AppInfoUpdateReq) (*openned8.AppInfo, error) {
-	id, err := uuid.FromString(in.Id)
+	appinfo, err := l.svcCtx.DB.AppInfo.Query().Where(appinfo.ID(in.Id)).First(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	appinfo, err := l.svcCtx.DB.AppInfo.Query().Where(appinfo.ID(id)).First(l.ctx)
-	if err != nil {
-		return nil, err
-	}
-	if appinfo == nil || appinfo.ID.IsNil() {
+	if appinfo == nil || appinfo.ID != "" {
 		return nil, nil
 	}
-	update := l.svcCtx.DB.AppInfo.UpdateOneID(id).SetUpdatedAt(time.Now())
+	update := l.svcCtx.DB.AppInfo.UpdateOneID(in.Id).SetUpdatedAt(time.Now())
 	if in.UserId != appinfo.UserID {
 		return nil, errors.New("不是当前用户的数据")
 	}
@@ -72,7 +67,7 @@ func (l *AppUpdateLogic) AppUpdate(in *openned8.AppInfoUpdateReq) (*openned8.App
 		return nil, err
 	}
 	return &openned8.AppInfo{
-		Id:              save.ID.String(),
+		Id:              save.ID,
 		CreatedAt:       save.CreatedAt.UnixMilli(),
 		UpdatedAt:       save.UpdatedAt.UnixMilli(),
 		UserId:          save.UserID,

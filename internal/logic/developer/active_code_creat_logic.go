@@ -80,11 +80,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 	}
 
 	//查询应用数据
-	appId, err := uuid.FromString(in.AppId)
-	if err != nil {
-		return 0, "", err, nil
-	}
-	appInfo, err := client.AppInfo.Query().Where(appinfo.IDEQ(appId)).First(ctx)
+	appInfo, err := client.AppInfo.Query().Where(appinfo.IDEQ(in.AppId)).First(ctx)
 	if err != nil {
 		return 0, "", err, nil
 	}
@@ -97,14 +93,14 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 	if err != nil {
 		return 0, "", err, nil
 	}
-	where := client.AppSdk.Query().Where(appsdk.App(appId), appsdk.Sdk(sdkId))
+	where := client.AppSdk.Query().Where(appsdk.App(in.AppId), appsdk.Sdk(sdkId))
 	appSdkCount, err := where.Count(ctx)
 	if err != nil {
 		return 0, "", err, nil
 	}
 	var appSdk *ent.AppSdk
 	if appSdkCount == 0 {
-		appSdk, err = client.AppSdk.Create().SetApp(appId).SetSdk(sdkId).SetSdkKey(common.RandomString(32)).Save(ctx)
+		appSdk, err = client.AppSdk.Create().SetApp(in.AppId).SetSdk(sdkId).SetSdkKey(common.RandomString(32)).Save(ctx)
 		if err != nil {
 			return 0, "", err, nil
 		}
@@ -124,7 +120,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 		save, err := client.ActiveCodeInfo.Create().
 			SetActiveKey(common.RandomString(16)).
 			SetUserID(in.UserId).
-			SetAppID(appInfo.ID.String()).
+			SetAppID(appInfo.ID).
 			SetActiveIP("").
 			SetDeviceSn("").
 			SetDeviceMAC("").

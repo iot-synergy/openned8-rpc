@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/iot-synergy/openned8-rpc/ent/categoryinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/industryinfo"
+	"github.com/iot-synergy/openned8-rpc/internal/common"
 	"regexp"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -38,6 +39,7 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 	}
 	appKey, _ := uuid.NewRandom()
 	save, err := l.svcCtx.DB.AppInfo.Create().
+		SetID(common.RandomString(36)).
 		SetUserID(in.UserId).
 		SetAppName(in.AppName).
 		SetSummary(in.Summary).
@@ -52,7 +54,7 @@ func (l *AppCreateLogic) AppCreate(in *openned8.AppInfoCreateReq) (*openned8.App
 		return nil, err
 	}
 	return &openned8.AppInfo{
-		Id:              save.ID.String(),
+		Id:              save.ID,
 		CreatedAt:       save.CreatedAt.UnixMilli(),
 		UpdatedAt:       save.UpdatedAt.UnixMilli(),
 		UserId:          save.UserID,

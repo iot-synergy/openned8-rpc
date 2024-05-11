@@ -2,7 +2,6 @@ package developer
 
 import (
 	"context"
-	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -26,11 +25,7 @@ func NewSdkQueryByAppLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sdk
 }
 
 func (l *SdkQueryByAppLogic) SdkQueryByApp(in *openned8.SdkQueryByAppReq) (*openned8.SdkListResp, error) {
-	appId, err := uuid.FromString(in.AppId)
-	if err != nil {
-		return nil, err
-	}
-	where := l.svcCtx.DB.AppInfo.Query().Where(appinfo.UserID(in.UserId), appinfo.ID(appId)).
+	where := l.svcCtx.DB.AppInfo.Query().Where(appinfo.UserID(in.UserId), appinfo.ID(in.AppId)).
 		QueryAppSdk().QuerySdkInfo().Where()
 	count, err := where.Count(l.ctx)
 	if err != nil {

@@ -9,7 +9,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 )
 
@@ -17,8 +16,7 @@ import (
 type AppInfo struct {
 	config `json:"-"`
 	// ID of the ent.
-	// UUID
-	ID uuid.UUID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// Create Time | 创建日期
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Update Time | 修改日期
@@ -72,12 +70,10 @@ func (*AppInfo) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case appinfo.FieldAppCategory, appinfo.FieldUseIndustry:
 			values[i] = new(sql.NullInt64)
-		case appinfo.FieldUserID, appinfo.FieldAppName, appinfo.FieldSummary, appinfo.FieldAppCategoryName, appinfo.FieldUseIndustryName, appinfo.FieldAppKey, appinfo.FieldAppSecret:
+		case appinfo.FieldID, appinfo.FieldUserID, appinfo.FieldAppName, appinfo.FieldSummary, appinfo.FieldAppCategoryName, appinfo.FieldUseIndustryName, appinfo.FieldAppKey, appinfo.FieldAppSecret:
 			values[i] = new(sql.NullString)
 		case appinfo.FieldCreatedAt, appinfo.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case appinfo.FieldID:
-			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -94,10 +90,10 @@ func (ai *AppInfo) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case appinfo.FieldID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
-			} else if value != nil {
-				ai.ID = *value
+			} else if value.Valid {
+				ai.ID = value.String
 			}
 		case appinfo.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
