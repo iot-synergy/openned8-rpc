@@ -25,7 +25,7 @@ func NewDownloadCodeByAppIdLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *DownloadCodeByAppIdLogic) DownloadCodeByAppId(in *openned8.DownloadCodeByAppIdReq) (*openned8.DownloadCodeByAppIdResp, error) {
-	r, err := regexp.Compile(`^[A-Za-z0-9]+$`)
+	r, err := regexp.Compile(`^[A-Za-z0-9-]+$`)
 	if err != nil {
 		return nil, err
 	}
