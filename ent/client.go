@@ -1064,7 +1064,7 @@ func (c *SdkInfoClient) UpdateOne(si *SdkInfo) *SdkInfoUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *SdkInfoClient) UpdateOneID(id uuid.UUID) *SdkInfoUpdateOne {
+func (c *SdkInfoClient) UpdateOneID(id string) *SdkInfoUpdateOne {
 	mutation := newSdkInfoMutation(c.config, OpUpdateOne, withSdkInfoID(id))
 	return &SdkInfoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1081,7 +1081,7 @@ func (c *SdkInfoClient) DeleteOne(si *SdkInfo) *SdkInfoDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *SdkInfoClient) DeleteOneID(id uuid.UUID) *SdkInfoDeleteOne {
+func (c *SdkInfoClient) DeleteOneID(id string) *SdkInfoDeleteOne {
 	builder := c.Delete().Where(sdkinfo.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1098,12 +1098,12 @@ func (c *SdkInfoClient) Query() *SdkInfoQuery {
 }
 
 // Get returns a SdkInfo entity by its id.
-func (c *SdkInfoClient) Get(ctx context.Context, id uuid.UUID) (*SdkInfo, error) {
+func (c *SdkInfoClient) Get(ctx context.Context, id string) (*SdkInfo, error) {
 	return c.Query().Where(sdkinfo.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *SdkInfoClient) GetX(ctx context.Context, id uuid.UUID) *SdkInfo {
+func (c *SdkInfoClient) GetX(ctx context.Context, id string) *SdkInfo {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

@@ -3,7 +3,6 @@ package developer
 import (
 	"context"
 	"errors"
-	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
@@ -89,18 +88,17 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 	}
 
 	//判断app_sdk是否由数据没有添加数据
-	sdkId, err := uuid.FromString(in.SdkId)
 	if err != nil {
 		return 0, "", err, nil
 	}
-	where := client.AppSdk.Query().Where(appsdk.App(in.AppId), appsdk.Sdk(sdkId))
+	where := client.AppSdk.Query().Where(appsdk.App(in.AppId), appsdk.Sdk(in.SdkId))
 	appSdkCount, err := where.Count(ctx)
 	if err != nil {
 		return 0, "", err, nil
 	}
 	var appSdk *ent.AppSdk
 	if appSdkCount == 0 {
-		appSdk, err = client.AppSdk.Create().SetApp(in.AppId).SetSdk(sdkId).SetSdkKey(common.RandomString(32)).Save(ctx)
+		appSdk, err = client.AppSdk.Create().SetApp(in.AppId).SetSdk(in.SdkId).SetSdkKey(common.RandomString(32)).Save(ctx)
 		if err != nil {
 			return 0, "", err, nil
 		}

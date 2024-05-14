@@ -140,10 +140,6 @@ func init() {
 	sdkinfo.DefaultUpdatedAt = sdkinfoDescUpdatedAt.Default.(func() time.Time)
 	// sdkinfo.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	sdkinfo.UpdateDefaultUpdatedAt = sdkinfoDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// sdkinfoDescID is the schema descriptor for id field.
-	sdkinfoDescID := sdkinfoMixinFields0[0].Descriptor()
-	// sdkinfo.DefaultID holds the default value on creation for the id field.
-	sdkinfo.DefaultID = sdkinfoDescID.Default.(func() uuid.UUID)
 	sdkusageMixin := schema.SdkUsage{}.Mixin()
 	sdkusageMixinFields0 := sdkusageMixin[0].Fields()
 	_ = sdkusageMixinFields0

@@ -38,7 +38,7 @@ func (l *SdkQueryByAppLogic) SdkQueryByApp(in *openned8.SdkQueryByAppReq) (*open
 	result := make([]*openned8.SdkInfo, 0)
 	for _, datum := range data {
 		result = append(result, &openned8.SdkInfo{
-			Id:          datum.ID.String(),
+			Id:          datum.ID,
 			Name:        datum.Name,
 			Avatar:      datum.Avatar,
 			Desc:        datum.Desc,

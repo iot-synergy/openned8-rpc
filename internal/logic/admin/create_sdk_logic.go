@@ -2,6 +2,7 @@ package admin
 
 import (
 	"context"
+	"github.com/iot-synergy/openned8-rpc/internal/common"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -24,12 +25,12 @@ func NewCreateSdkLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateS
 }
 
 func (l *CreateSdkLogic) CreateSdk(in *openned8.SdkInfoCreateReq) (*openned8.SdkInfo, error) {
-	data, err := l.svcCtx.DB.SdkInfo.Create().SetName(in.Name).SetAvatar(in.Avatar).SetDesc(in.Desc).SetDownloadURL(in.DownloadUrl).Save(l.ctx)
+	data, err := l.svcCtx.DB.SdkInfo.Create().SetID(common.RandomString(36)).SetName(in.Name).SetAvatar(in.Avatar).SetDesc(in.Desc).SetDownloadURL(in.DownloadUrl).Save(l.ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &openned8.SdkInfo{
-		Id:          data.ID.String(),
+		Id:          data.ID,
 		Name:        data.Name,
 		Avatar:      data.Avatar,
 		Desc:        data.Desc,

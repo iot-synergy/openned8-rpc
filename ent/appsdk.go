@@ -28,7 +28,7 @@ type AppSdk struct {
 	// app的id
 	App string `json:"app,omitempty"`
 	// sdk的id
-	Sdk uuid.UUID `json:"sdk,omitempty"`
+	Sdk string `json:"sdk,omitempty"`
 	// 分配给app的sdk
 	SdkKey string `json:"sdk_key,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -86,11 +86,11 @@ func (*AppSdk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case appsdk.FieldApp, appsdk.FieldSdkKey:
+		case appsdk.FieldApp, appsdk.FieldSdk, appsdk.FieldSdkKey:
 			values[i] = new(sql.NullString)
 		case appsdk.FieldCreatedAt, appsdk.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case appsdk.FieldID, appsdk.FieldSdk:
+		case appsdk.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -132,10 +132,10 @@ func (as *AppSdk) assignValues(columns []string, values []any) error {
 				as.App = value.String
 			}
 		case appsdk.FieldSdk:
-			if value, ok := values[i].(*uuid.UUID); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sdk", values[i])
-			} else if value != nil {
-				as.Sdk = *value
+			} else if value.Valid {
+				as.Sdk = value.String
 			}
 		case appsdk.FieldSdkKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -204,7 +204,7 @@ func (as *AppSdk) String() string {
 	builder.WriteString(as.App)
 	builder.WriteString(", ")
 	builder.WriteString("sdk=")
-	builder.WriteString(fmt.Sprintf("%v", as.Sdk))
+	builder.WriteString(as.Sdk)
 	builder.WriteString(", ")
 	builder.WriteString("sdk_key=")
 	builder.WriteString(as.SdkKey)

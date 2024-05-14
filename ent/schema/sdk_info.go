@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/iot-synergy/synergy-common/orm/ent/mixins"
 )
 
 type SdkInfo struct {
@@ -37,7 +36,7 @@ func (SdkInfo) Fields() []ent.Field {
 
 func (SdkInfo) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixins.UUIDMixin{},
+		StringIdMixin{},
 	}
 }
 

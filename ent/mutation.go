@@ -2523,7 +2523,7 @@ type AppSdkMutation struct {
 	clearedactive_code bool
 	app_info           *string
 	clearedapp_info    bool
-	sdk_info           *uuid.UUID
+	sdk_info           *string
 	clearedsdk_info    bool
 	done               bool
 	oldValue           func(context.Context) (*AppSdk, error)
@@ -2756,12 +2756,12 @@ func (m *AppSdkMutation) ResetApp() {
 }
 
 // SetSdk sets the "sdk" field.
-func (m *AppSdkMutation) SetSdk(u uuid.UUID) {
-	m.sdk_info = &u
+func (m *AppSdkMutation) SetSdk(s string) {
+	m.sdk_info = &s
 }
 
 // Sdk returns the value of the "sdk" field in the mutation.
-func (m *AppSdkMutation) Sdk() (r uuid.UUID, exists bool) {
+func (m *AppSdkMutation) Sdk() (r string, exists bool) {
 	v := m.sdk_info
 	if v == nil {
 		return
@@ -2772,7 +2772,7 @@ func (m *AppSdkMutation) Sdk() (r uuid.UUID, exists bool) {
 // OldSdk returns the old "sdk" field's value of the AppSdk entity.
 // If the AppSdk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AppSdkMutation) OldSdk(ctx context.Context) (v uuid.UUID, err error) {
+func (m *AppSdkMutation) OldSdk(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSdk is only allowed on UpdateOne operations")
 	}
@@ -2935,7 +2935,7 @@ func (m *AppSdkMutation) ResetAppInfo() {
 }
 
 // SetSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by id.
-func (m *AppSdkMutation) SetSdkInfoID(id uuid.UUID) {
+func (m *AppSdkMutation) SetSdkInfoID(id string) {
 	m.sdk_info = &id
 }
 
@@ -2951,7 +2951,7 @@ func (m *AppSdkMutation) SdkInfoCleared() bool {
 }
 
 // SdkInfoID returns the "sdk_info" edge ID in the mutation.
-func (m *AppSdkMutation) SdkInfoID() (id uuid.UUID, exists bool) {
+func (m *AppSdkMutation) SdkInfoID() (id string, exists bool) {
 	if m.sdk_info != nil {
 		return *m.sdk_info, true
 	}
@@ -2961,7 +2961,7 @@ func (m *AppSdkMutation) SdkInfoID() (id uuid.UUID, exists bool) {
 // SdkInfoIDs returns the "sdk_info" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // SdkInfoID instead. It exists only for internal usage by the builders.
-func (m *AppSdkMutation) SdkInfoIDs() (ids []uuid.UUID) {
+func (m *AppSdkMutation) SdkInfoIDs() (ids []string) {
 	if id := m.sdk_info; id != nil {
 		ids = append(ids, *id)
 	}
@@ -3092,7 +3092,7 @@ func (m *AppSdkMutation) SetField(name string, value ent.Value) error {
 		m.SetApp(v)
 		return nil
 	case appsdk.FieldSdk:
-		v, ok := value.(uuid.UUID)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4193,7 +4193,7 @@ type SdkInfoMutation struct {
 	config
 	op             Op
 	typ            string
-	id             *uuid.UUID
+	id             *string
 	created_at     *time.Time
 	updated_at     *time.Time
 	name           *string
@@ -4230,7 +4230,7 @@ func newSdkInfoMutation(c config, op Op, opts ...sdkinfoOption) *SdkInfoMutation
 }
 
 // withSdkInfoID sets the ID field of the mutation.
-func withSdkInfoID(id uuid.UUID) sdkinfoOption {
+func withSdkInfoID(id string) sdkinfoOption {
 	return func(m *SdkInfoMutation) {
 		var (
 			err   error
@@ -4282,13 +4282,13 @@ func (m SdkInfoMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of SdkInfo entities.
-func (m *SdkInfoMutation) SetID(id uuid.UUID) {
+func (m *SdkInfoMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *SdkInfoMutation) ID() (id uuid.UUID, exists bool) {
+func (m *SdkInfoMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -4299,12 +4299,12 @@ func (m *SdkInfoMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *SdkInfoMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *SdkInfoMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):

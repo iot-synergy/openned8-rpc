@@ -75,16 +75,8 @@ func (sic *SdkInfoCreate) SetDownloadURL(s string) *SdkInfoCreate {
 }
 
 // SetID sets the "id" field.
-func (sic *SdkInfoCreate) SetID(u uuid.UUID) *SdkInfoCreate {
-	sic.mutation.SetID(u)
-	return sic
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (sic *SdkInfoCreate) SetNillableID(u *uuid.UUID) *SdkInfoCreate {
-	if u != nil {
-		sic.SetID(*u)
-	}
+func (sic *SdkInfoCreate) SetID(s string) *SdkInfoCreate {
+	sic.mutation.SetID(s)
 	return sic
 }
 
@@ -146,10 +138,6 @@ func (sic *SdkInfoCreate) defaults() {
 		v := sdkinfo.DefaultUpdatedAt()
 		sic.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sic.mutation.ID(); !ok {
-		v := sdkinfo.DefaultID()
-		sic.mutation.SetID(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -187,10 +175,10 @@ func (sic *SdkInfoCreate) sqlSave(ctx context.Context) (*SdkInfo, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
+		if id, ok := _spec.ID.Value.(string); ok {
+			_node.ID = id
+		} else {
+			return nil, fmt.Errorf("unexpected SdkInfo.ID type: %T", _spec.ID.Value)
 		}
 	}
 	sic.mutation.id = &_node.ID
@@ -201,11 +189,11 @@ func (sic *SdkInfoCreate) sqlSave(ctx context.Context) (*SdkInfo, error) {
 func (sic *SdkInfoCreate) createSpec() (*SdkInfo, *sqlgraph.CreateSpec) {
 	var (
 		_node = &SdkInfo{config: sic.config}
-		_spec = sqlgraph.NewCreateSpec(sdkinfo.Table, sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeUUID))
+		_spec = sqlgraph.NewCreateSpec(sdkinfo.Table, sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeString))
 	)
 	if id, ok := sic.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
 	if value, ok := sic.mutation.CreatedAt(); ok {
 		_spec.SetField(sdkinfo.FieldCreatedAt, field.TypeTime, value)

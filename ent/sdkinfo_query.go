@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	uuid "github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/predicate"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkinfo"
@@ -107,8 +106,8 @@ func (siq *SdkInfoQuery) FirstX(ctx context.Context) *SdkInfo {
 
 // FirstID returns the first SdkInfo ID from the query.
 // Returns a *NotFoundError when no SdkInfo ID was found.
-func (siq *SdkInfoQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (siq *SdkInfoQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = siq.Limit(1).IDs(setContextOp(ctx, siq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -120,7 +119,7 @@ func (siq *SdkInfoQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (siq *SdkInfoQuery) FirstIDX(ctx context.Context) uuid.UUID {
+func (siq *SdkInfoQuery) FirstIDX(ctx context.Context) string {
 	id, err := siq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -158,8 +157,8 @@ func (siq *SdkInfoQuery) OnlyX(ctx context.Context) *SdkInfo {
 // OnlyID is like Only, but returns the only SdkInfo ID in the query.
 // Returns a *NotSingularError when more than one SdkInfo ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (siq *SdkInfoQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
-	var ids []uuid.UUID
+func (siq *SdkInfoQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = siq.Limit(2).IDs(setContextOp(ctx, siq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -175,7 +174,7 @@ func (siq *SdkInfoQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (siq *SdkInfoQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+func (siq *SdkInfoQuery) OnlyIDX(ctx context.Context) string {
 	id, err := siq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -203,7 +202,7 @@ func (siq *SdkInfoQuery) AllX(ctx context.Context) []*SdkInfo {
 }
 
 // IDs executes the query and returns a list of SdkInfo IDs.
-func (siq *SdkInfoQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+func (siq *SdkInfoQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if siq.ctx.Unique == nil && siq.path != nil {
 		siq.Unique(true)
 	}
@@ -215,7 +214,7 @@ func (siq *SdkInfoQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (siq *SdkInfoQuery) IDsX(ctx context.Context) []uuid.UUID {
+func (siq *SdkInfoQuery) IDsX(ctx context.Context) []string {
 	ids, err := siq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -405,7 +404,7 @@ func (siq *SdkInfoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sdk
 
 func (siq *SdkInfoQuery) loadAppSdk(ctx context.Context, query *AppSdkQuery, nodes []*SdkInfo, init func(*SdkInfo), assign func(*SdkInfo, *AppSdk)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*SdkInfo)
+	nodeids := make(map[string]*SdkInfo)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -444,7 +443,7 @@ func (siq *SdkInfoQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (siq *SdkInfoQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(sdkinfo.Table, sdkinfo.Columns, sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewQuerySpec(sdkinfo.Table, sdkinfo.Columns, sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeString))
 	_spec.From = siq.sql
 	if unique := siq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

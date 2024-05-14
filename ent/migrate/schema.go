@@ -80,7 +80,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "sdk_key", Type: field.TypeString, Comment: "分配给app的sdk", SchemaType: map[string]string{"mysql": "char(32)"}},
 		{Name: "app", Type: field.TypeString, Nullable: true, Comment: "app的id", SchemaType: map[string]string{"mysql": "char(36)"}},
-		{Name: "sdk", Type: field.TypeUUID, Nullable: true, Comment: "sdk的id"},
+		{Name: "sdk", Type: field.TypeString, Nullable: true, Comment: "sdk的id", SchemaType: map[string]string{"mysql": "char(36)"}},
 	}
 	// AppSdkTable holds the schema information for the "app_sdk" table.
 	AppSdkTable = &schema.Table{
@@ -130,7 +130,7 @@ var (
 	}
 	// SdkInfoColumns holds the columns for the "sdk_info" table.
 	SdkInfoColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeString, SchemaType: map[string]string{"mysql": "char(36)"}},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "name", Type: field.TypeString, Unique: true, Comment: "名字", SchemaType: map[string]string{"mysql": "varchar(256)"}},

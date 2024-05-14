@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"github.com/gofrs/uuid/v5"
 	"github.com/iot-synergy/synergy-common/orm/ent/mixins"
 )
 
@@ -22,7 +21,7 @@ func (AppSdk) Fields() []ent.Field {
 			SchemaType(map[string]string{dialect.MySQL: "char(36)"}).
 			Comment("app的id").
 			Annotations(entsql.WithComments(true)),
-		field.UUID("sdk", uuid.UUID{}).Optional().
+		field.String("sdk").Optional().
 			SchemaType(map[string]string{dialect.MySQL: "char(36)"}).
 			Comment("sdk的id").
 			Annotations(entsql.WithComments(true)),

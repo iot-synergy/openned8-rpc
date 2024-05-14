@@ -67,15 +67,15 @@ func (asc *AppSdkCreate) SetNillableApp(s *string) *AppSdkCreate {
 }
 
 // SetSdk sets the "sdk" field.
-func (asc *AppSdkCreate) SetSdk(u uuid.UUID) *AppSdkCreate {
-	asc.mutation.SetSdk(u)
+func (asc *AppSdkCreate) SetSdk(s string) *AppSdkCreate {
+	asc.mutation.SetSdk(s)
 	return asc
 }
 
 // SetNillableSdk sets the "sdk" field if the given value is not nil.
-func (asc *AppSdkCreate) SetNillableSdk(u *uuid.UUID) *AppSdkCreate {
-	if u != nil {
-		asc.SetSdk(*u)
+func (asc *AppSdkCreate) SetNillableSdk(s *string) *AppSdkCreate {
+	if s != nil {
+		asc.SetSdk(*s)
 	}
 	return asc
 }
@@ -135,13 +135,13 @@ func (asc *AppSdkCreate) SetAppInfo(a *AppInfo) *AppSdkCreate {
 }
 
 // SetSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by ID.
-func (asc *AppSdkCreate) SetSdkInfoID(id uuid.UUID) *AppSdkCreate {
+func (asc *AppSdkCreate) SetSdkInfoID(id string) *AppSdkCreate {
 	asc.mutation.SetSdkInfoID(id)
 	return asc
 }
 
 // SetNillableSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by ID if the given value is not nil.
-func (asc *AppSdkCreate) SetNillableSdkInfoID(id *uuid.UUID) *AppSdkCreate {
+func (asc *AppSdkCreate) SetNillableSdkInfoID(id *string) *AppSdkCreate {
 	if id != nil {
 		asc = asc.SetSdkInfoID(*id)
 	}
@@ -306,7 +306,7 @@ func (asc *AppSdkCreate) createSpec() (*AppSdk, *sqlgraph.CreateSpec) {
 			Columns: []string{appsdk.SdkInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

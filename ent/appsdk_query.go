@@ -549,8 +549,8 @@ func (asq *AppSdkQuery) loadAppInfo(ctx context.Context, query *AppInfoQuery, no
 	return nil
 }
 func (asq *AppSdkQuery) loadSdkInfo(ctx context.Context, query *SdkInfoQuery, nodes []*AppSdk, init func(*AppSdk), assign func(*AppSdk, *SdkInfo)) error {
-	ids := make([]uuid.UUID, 0, len(nodes))
-	nodeids := make(map[uuid.UUID][]*AppSdk)
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*AppSdk)
 	for i := range nodes {
 		fk := nodes[i].Sdk
 		if _, ok := nodeids[fk]; !ok {

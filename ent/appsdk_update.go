@@ -59,15 +59,15 @@ func (asu *AppSdkUpdate) ClearApp() *AppSdkUpdate {
 }
 
 // SetSdk sets the "sdk" field.
-func (asu *AppSdkUpdate) SetSdk(u uuid.UUID) *AppSdkUpdate {
-	asu.mutation.SetSdk(u)
+func (asu *AppSdkUpdate) SetSdk(s string) *AppSdkUpdate {
+	asu.mutation.SetSdk(s)
 	return asu
 }
 
 // SetNillableSdk sets the "sdk" field if the given value is not nil.
-func (asu *AppSdkUpdate) SetNillableSdk(u *uuid.UUID) *AppSdkUpdate {
-	if u != nil {
-		asu.SetSdk(*u)
+func (asu *AppSdkUpdate) SetNillableSdk(s *string) *AppSdkUpdate {
+	if s != nil {
+		asu.SetSdk(*s)
 	}
 	return asu
 }
@@ -127,13 +127,13 @@ func (asu *AppSdkUpdate) SetAppInfo(a *AppInfo) *AppSdkUpdate {
 }
 
 // SetSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by ID.
-func (asu *AppSdkUpdate) SetSdkInfoID(id uuid.UUID) *AppSdkUpdate {
+func (asu *AppSdkUpdate) SetSdkInfoID(id string) *AppSdkUpdate {
 	asu.mutation.SetSdkInfoID(id)
 	return asu
 }
 
 // SetNillableSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by ID if the given value is not nil.
-func (asu *AppSdkUpdate) SetNillableSdkInfoID(id *uuid.UUID) *AppSdkUpdate {
+func (asu *AppSdkUpdate) SetNillableSdkInfoID(id *string) *AppSdkUpdate {
 	if id != nil {
 		asu = asu.SetSdkInfoID(*id)
 	}
@@ -329,7 +329,7 @@ func (asu *AppSdkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{appsdk.SdkInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -342,7 +342,7 @@ func (asu *AppSdkUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{appsdk.SdkInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -397,15 +397,15 @@ func (asuo *AppSdkUpdateOne) ClearApp() *AppSdkUpdateOne {
 }
 
 // SetSdk sets the "sdk" field.
-func (asuo *AppSdkUpdateOne) SetSdk(u uuid.UUID) *AppSdkUpdateOne {
-	asuo.mutation.SetSdk(u)
+func (asuo *AppSdkUpdateOne) SetSdk(s string) *AppSdkUpdateOne {
+	asuo.mutation.SetSdk(s)
 	return asuo
 }
 
 // SetNillableSdk sets the "sdk" field if the given value is not nil.
-func (asuo *AppSdkUpdateOne) SetNillableSdk(u *uuid.UUID) *AppSdkUpdateOne {
-	if u != nil {
-		asuo.SetSdk(*u)
+func (asuo *AppSdkUpdateOne) SetNillableSdk(s *string) *AppSdkUpdateOne {
+	if s != nil {
+		asuo.SetSdk(*s)
 	}
 	return asuo
 }
@@ -465,13 +465,13 @@ func (asuo *AppSdkUpdateOne) SetAppInfo(a *AppInfo) *AppSdkUpdateOne {
 }
 
 // SetSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by ID.
-func (asuo *AppSdkUpdateOne) SetSdkInfoID(id uuid.UUID) *AppSdkUpdateOne {
+func (asuo *AppSdkUpdateOne) SetSdkInfoID(id string) *AppSdkUpdateOne {
 	asuo.mutation.SetSdkInfoID(id)
 	return asuo
 }
 
 // SetNillableSdkInfoID sets the "sdk_info" edge to the SdkInfo entity by ID if the given value is not nil.
-func (asuo *AppSdkUpdateOne) SetNillableSdkInfoID(id *uuid.UUID) *AppSdkUpdateOne {
+func (asuo *AppSdkUpdateOne) SetNillableSdkInfoID(id *string) *AppSdkUpdateOne {
 	if id != nil {
 		asuo = asuo.SetSdkInfoID(*id)
 	}
@@ -697,7 +697,7 @@ func (asuo *AppSdkUpdateOne) sqlSave(ctx context.Context) (_node *AppSdk, err er
 			Columns: []string{appsdk.SdkInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -710,7 +710,7 @@ func (asuo *AppSdkUpdateOne) sqlSave(ctx context.Context) (_node *AppSdk, err er
 			Columns: []string{appsdk.SdkInfoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeUUID),
+				IDSpec: sqlgraph.NewFieldSpec(sdkinfo.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
