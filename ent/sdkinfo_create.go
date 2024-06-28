@@ -63,14 +63,32 @@ func (sic *SdkInfoCreate) SetAvatar(s string) *SdkInfoCreate {
 }
 
 // SetDesc sets the "desc" field.
-func (sic *SdkInfoCreate) SetDesc(i int64) *SdkInfoCreate {
-	sic.mutation.SetDesc(i)
+func (sic *SdkInfoCreate) SetDesc(s string) *SdkInfoCreate {
+	sic.mutation.SetDesc(s)
 	return sic
 }
 
 // SetDownloadURL sets the "download_url" field.
 func (sic *SdkInfoCreate) SetDownloadURL(s string) *SdkInfoCreate {
 	sic.mutation.SetDownloadURL(s)
+	return sic
+}
+
+// SetLanguage sets the "language" field.
+func (sic *SdkInfoCreate) SetLanguage(s string) *SdkInfoCreate {
+	sic.mutation.SetLanguage(s)
+	return sic
+}
+
+// SetLanguageID sets the "language_id" field.
+func (sic *SdkInfoCreate) SetLanguageID(i int64) *SdkInfoCreate {
+	sic.mutation.SetLanguageID(i)
+	return sic
+}
+
+// SetVersion sets the "version" field.
+func (sic *SdkInfoCreate) SetVersion(s string) *SdkInfoCreate {
+	sic.mutation.SetVersion(s)
 	return sic
 }
 
@@ -160,6 +178,15 @@ func (sic *SdkInfoCreate) check() error {
 	if _, ok := sic.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`ent: missing required field "SdkInfo.download_url"`)}
 	}
+	if _, ok := sic.mutation.Language(); !ok {
+		return &ValidationError{Name: "language", err: errors.New(`ent: missing required field "SdkInfo.language"`)}
+	}
+	if _, ok := sic.mutation.LanguageID(); !ok {
+		return &ValidationError{Name: "language_id", err: errors.New(`ent: missing required field "SdkInfo.language_id"`)}
+	}
+	if _, ok := sic.mutation.Version(); !ok {
+		return &ValidationError{Name: "version", err: errors.New(`ent: missing required field "SdkInfo.version"`)}
+	}
 	return nil
 }
 
@@ -212,12 +239,24 @@ func (sic *SdkInfoCreate) createSpec() (*SdkInfo, *sqlgraph.CreateSpec) {
 		_node.Avatar = value
 	}
 	if value, ok := sic.mutation.Desc(); ok {
-		_spec.SetField(sdkinfo.FieldDesc, field.TypeInt64, value)
+		_spec.SetField(sdkinfo.FieldDesc, field.TypeString, value)
 		_node.Desc = value
 	}
 	if value, ok := sic.mutation.DownloadURL(); ok {
 		_spec.SetField(sdkinfo.FieldDownloadURL, field.TypeString, value)
 		_node.DownloadURL = value
+	}
+	if value, ok := sic.mutation.Language(); ok {
+		_spec.SetField(sdkinfo.FieldLanguage, field.TypeString, value)
+		_node.Language = value
+	}
+	if value, ok := sic.mutation.LanguageID(); ok {
+		_spec.SetField(sdkinfo.FieldLanguageID, field.TypeInt64, value)
+		_node.LanguageID = value
+	}
+	if value, ok := sic.mutation.Version(); ok {
+		_spec.SetField(sdkinfo.FieldVersion, field.TypeString, value)
+		_node.Version = value
 	}
 	if nodes := sic.mutation.AppSdkIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

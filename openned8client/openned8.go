@@ -25,9 +25,11 @@ type (
 	AppInfoDeleteReq                   = openned8.AppInfoDeleteReq
 	AppInfoUpdateReq                   = openned8.AppInfoUpdateReq
 	AppListReq                         = openned8.AppListReq
+	AppSdkInfo                         = openned8.AppSdkInfo
+	AppSdkListResp                     = openned8.AppSdkListResp
 	ApplistInfo                        = openned8.ApplistInfo
+	BaseMsg                            = openned8.BaseMsg
 	BaseString                         = openned8.BaseString
-	BeanMsg                            = openned8.BeanMsg
 	CategoryInfo                       = openned8.CategoryInfo
 	CategorylistResp                   = openned8.CategorylistResp
 	DownloadCode                       = openned8.DownloadCode
@@ -49,9 +51,10 @@ type (
 	UserSdkUsageUpdateReq              = openned8.UserSdkUsageUpdateReq
 
 	Openned8 interface {
+		InitDatabase(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*BaseMsg, error)
 		AppCreate(ctx context.Context, in *AppInfoCreateReq, opts ...grpc.CallOption) (*AppInfo, error)
 		AppUpdate(ctx context.Context, in *AppInfoUpdateReq, opts ...grpc.CallOption) (*AppInfo, error)
-		AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BeanMsg, error)
+		AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BaseMsg, error)
 		AppQuery(ctx context.Context, in *AppListReq, opts ...grpc.CallOption) (*ApplistInfo, error)
 		CategoryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CategorylistResp, error)
 		IndustryQuery(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*IndustrylistResp, error)
@@ -59,7 +62,7 @@ type (
 		ActiveCodeCreat(ctx context.Context, in *ActiveCodeCreatReq, opts ...grpc.CallOption) (*ActiveCodeResp, error)
 		DownloadCodeByAppId(ctx context.Context, in *DownloadCodeByAppIdReq, opts ...grpc.CallOption) (*DownloadCodeByAppIdResp, error)
 		SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error)
-		SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*SdkListResp, error)
+		SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*AppSdkListResp, error)
 		QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error)
@@ -78,6 +81,11 @@ func NewOpenned8(cli zrpc.Client) Openned8 {
 	}
 }
 
+func (m *defaultOpenned8) InitDatabase(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*BaseMsg, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.InitDatabase(ctx, in, opts...)
+}
+
 func (m *defaultOpenned8) AppCreate(ctx context.Context, in *AppInfoCreateReq, opts ...grpc.CallOption) (*AppInfo, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.AppCreate(ctx, in, opts...)
@@ -88,7 +96,7 @@ func (m *defaultOpenned8) AppUpdate(ctx context.Context, in *AppInfoUpdateReq, o
 	return client.AppUpdate(ctx, in, opts...)
 }
 
-func (m *defaultOpenned8) AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BeanMsg, error) {
+func (m *defaultOpenned8) AppDelete(ctx context.Context, in *AppInfoDeleteReq, opts ...grpc.CallOption) (*BaseMsg, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.AppDelete(ctx, in, opts...)
 }
@@ -128,7 +136,7 @@ func (m *defaultOpenned8) SdkListQuery(ctx context.Context, in *SdkListQueryReq,
 	return client.SdkListQuery(ctx, in, opts...)
 }
 
-func (m *defaultOpenned8) SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*SdkListResp, error) {
+func (m *defaultOpenned8) SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*AppSdkListResp, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.SdkQueryByApp(ctx, in, opts...)
 }

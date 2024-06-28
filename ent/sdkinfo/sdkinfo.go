@@ -26,6 +26,12 @@ const (
 	FieldDesc = "desc"
 	// FieldDownloadURL holds the string denoting the download_url field in the database.
 	FieldDownloadURL = "download_url"
+	// FieldLanguage holds the string denoting the language field in the database.
+	FieldLanguage = "language"
+	// FieldLanguageID holds the string denoting the language_id field in the database.
+	FieldLanguageID = "language_id"
+	// FieldVersion holds the string denoting the version field in the database.
+	FieldVersion = "version"
 	// EdgeAppSdk holds the string denoting the app_sdk edge name in mutations.
 	EdgeAppSdk = "app_sdk"
 	// Table holds the table name of the sdkinfo in the database.
@@ -48,6 +54,9 @@ var Columns = []string{
 	FieldAvatar,
 	FieldDesc,
 	FieldDownloadURL,
+	FieldLanguage,
+	FieldLanguageID,
+	FieldVersion,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -105,6 +114,21 @@ func ByDesc(opts ...sql.OrderTermOption) OrderOption {
 // ByDownloadURL orders the results by the download_url field.
 func ByDownloadURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDownloadURL, opts...).ToFunc()
+}
+
+// ByLanguage orders the results by the language field.
+func ByLanguage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLanguage, opts...).ToFunc()
+}
+
+// ByLanguageID orders the results by the language_id field.
+func ByLanguageID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLanguageID, opts...).ToFunc()
+}
+
+// ByVersion orders the results by the version field.
+func ByVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
 // ByAppSdkCount orders the results by app_sdk count.

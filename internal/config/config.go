@@ -8,4 +8,5 @@ import (
 type Config struct {
 	zrpc.RpcServerConf
 	DatabaseConf config.DatabaseConf
+	RedisConf    config.RedisConf
 }

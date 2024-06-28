@@ -26,9 +26,15 @@ type SdkInfo struct {
 	// 头像
 	Avatar string `json:"avatar,omitempty"`
 	// 排序
-	Desc int64 `json:"desc,omitempty"`
+	Desc string `json:"desc,omitempty"`
 	// 下载地址
 	DownloadURL string `json:"download_url,omitempty"`
+	// 开发语言
+	Language string `json:"language,omitempty"`
+	// 开发语言ID
+	LanguageID int64 `json:"language_id,omitempty"`
+	// 版本号
+	Version string `json:"version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SdkInfoQuery when eager-loading is set.
 	Edges        SdkInfoEdges `json:"edges"`
@@ -58,9 +64,9 @@ func (*SdkInfo) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case sdkinfo.FieldDesc:
+		case sdkinfo.FieldLanguageID:
 			values[i] = new(sql.NullInt64)
-		case sdkinfo.FieldID, sdkinfo.FieldName, sdkinfo.FieldAvatar, sdkinfo.FieldDownloadURL:
+		case sdkinfo.FieldID, sdkinfo.FieldName, sdkinfo.FieldAvatar, sdkinfo.FieldDesc, sdkinfo.FieldDownloadURL, sdkinfo.FieldLanguage, sdkinfo.FieldVersion:
 			values[i] = new(sql.NullString)
 		case sdkinfo.FieldCreatedAt, sdkinfo.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -110,16 +116,34 @@ func (si *SdkInfo) assignValues(columns []string, values []any) error {
 				si.Avatar = value.String
 			}
 		case sdkinfo.FieldDesc:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field desc", values[i])
 			} else if value.Valid {
-				si.Desc = value.Int64
+				si.Desc = value.String
 			}
 		case sdkinfo.FieldDownloadURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field download_url", values[i])
 			} else if value.Valid {
 				si.DownloadURL = value.String
+			}
+		case sdkinfo.FieldLanguage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field language", values[i])
+			} else if value.Valid {
+				si.Language = value.String
+			}
+		case sdkinfo.FieldLanguageID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field language_id", values[i])
+			} else if value.Valid {
+				si.LanguageID = value.Int64
+			}
+		case sdkinfo.FieldVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field version", values[i])
+			} else if value.Valid {
+				si.Version = value.String
 			}
 		default:
 			si.selectValues.Set(columns[i], values[i])
@@ -175,10 +199,19 @@ func (si *SdkInfo) String() string {
 	builder.WriteString(si.Avatar)
 	builder.WriteString(", ")
 	builder.WriteString("desc=")
-	builder.WriteString(fmt.Sprintf("%v", si.Desc))
+	builder.WriteString(si.Desc)
 	builder.WriteString(", ")
 	builder.WriteString("download_url=")
 	builder.WriteString(si.DownloadURL)
+	builder.WriteString(", ")
+	builder.WriteString("language=")
+	builder.WriteString(si.Language)
+	builder.WriteString(", ")
+	builder.WriteString("language_id=")
+	builder.WriteString(fmt.Sprintf("%v", si.LanguageID))
+	builder.WriteString(", ")
+	builder.WriteString("version=")
+	builder.WriteString(si.Version)
 	builder.WriteByte(')')
 	return builder.String()
 }

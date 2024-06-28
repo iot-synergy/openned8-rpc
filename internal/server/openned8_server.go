@@ -7,6 +7,7 @@ import (
 	"context"
 
 	"github.com/iot-synergy/openned8-rpc/internal/logic/admin"
+	"github.com/iot-synergy/openned8-rpc/internal/logic/base"
 	"github.com/iot-synergy/openned8-rpc/internal/logic/common"
 	"github.com/iot-synergy/openned8-rpc/internal/logic/developer"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -24,6 +25,11 @@ func NewOpenned8Server(svcCtx *svc.ServiceContext) *Openned8Server {
 	}
 }
 
+func (s *Openned8Server) InitDatabase(ctx context.Context, in *openned8.Empty) (*openned8.BaseMsg, error) {
+	l := base.NewInitDatabaseLogic(ctx, s.svcCtx)
+	return l.InitDatabase(in)
+}
+
 func (s *Openned8Server) AppCreate(ctx context.Context, in *openned8.AppInfoCreateReq) (*openned8.AppInfo, error) {
 	l := developer.NewAppCreateLogic(ctx, s.svcCtx)
 	return l.AppCreate(in)
@@ -34,7 +40,7 @@ func (s *Openned8Server) AppUpdate(ctx context.Context, in *openned8.AppInfoUpda
 	return l.AppUpdate(in)
 }
 
-func (s *Openned8Server) AppDelete(ctx context.Context, in *openned8.AppInfoDeleteReq) (*openned8.BeanMsg, error) {
+func (s *Openned8Server) AppDelete(ctx context.Context, in *openned8.AppInfoDeleteReq) (*openned8.BaseMsg, error) {
 	l := developer.NewAppDeleteLogic(ctx, s.svcCtx)
 	return l.AppDelete(in)
 }
@@ -74,7 +80,7 @@ func (s *Openned8Server) SdkListQuery(ctx context.Context, in *openned8.SdkListQ
 	return l.SdkListQuery(in)
 }
 
-func (s *Openned8Server) SdkQueryByApp(ctx context.Context, in *openned8.SdkQueryByAppReq) (*openned8.SdkListResp, error) {
+func (s *Openned8Server) SdkQueryByApp(ctx context.Context, in *openned8.SdkQueryByAppReq) (*openned8.AppSdkListResp, error) {
 	l := developer.NewSdkQueryByAppLogic(ctx, s.svcCtx)
 	return l.SdkQueryByApp(in)
 }

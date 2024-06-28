@@ -86,13 +86,28 @@ func Avatar(v string) predicate.SdkInfo {
 }
 
 // Desc applies equality check predicate on the "desc" field. It's identical to DescEQ.
-func Desc(v int64) predicate.SdkInfo {
+func Desc(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldEQ(FieldDesc, v))
 }
 
 // DownloadURL applies equality check predicate on the "download_url" field. It's identical to DownloadURLEQ.
 func DownloadURL(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldEQ(FieldDownloadURL, v))
+}
+
+// Language applies equality check predicate on the "language" field. It's identical to LanguageEQ.
+func Language(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEQ(FieldLanguage, v))
+}
+
+// LanguageID applies equality check predicate on the "language_id" field. It's identical to LanguageIDEQ.
+func LanguageID(v int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEQ(FieldLanguageID, v))
+}
+
+// Version applies equality check predicate on the "version" field. It's identical to VersionEQ.
+func Version(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEQ(FieldVersion, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -306,43 +321,68 @@ func AvatarContainsFold(v string) predicate.SdkInfo {
 }
 
 // DescEQ applies the EQ predicate on the "desc" field.
-func DescEQ(v int64) predicate.SdkInfo {
+func DescEQ(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldEQ(FieldDesc, v))
 }
 
 // DescNEQ applies the NEQ predicate on the "desc" field.
-func DescNEQ(v int64) predicate.SdkInfo {
+func DescNEQ(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldNEQ(FieldDesc, v))
 }
 
 // DescIn applies the In predicate on the "desc" field.
-func DescIn(vs ...int64) predicate.SdkInfo {
+func DescIn(vs ...string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldIn(FieldDesc, vs...))
 }
 
 // DescNotIn applies the NotIn predicate on the "desc" field.
-func DescNotIn(vs ...int64) predicate.SdkInfo {
+func DescNotIn(vs ...string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldNotIn(FieldDesc, vs...))
 }
 
 // DescGT applies the GT predicate on the "desc" field.
-func DescGT(v int64) predicate.SdkInfo {
+func DescGT(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldGT(FieldDesc, v))
 }
 
 // DescGTE applies the GTE predicate on the "desc" field.
-func DescGTE(v int64) predicate.SdkInfo {
+func DescGTE(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldGTE(FieldDesc, v))
 }
 
 // DescLT applies the LT predicate on the "desc" field.
-func DescLT(v int64) predicate.SdkInfo {
+func DescLT(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldLT(FieldDesc, v))
 }
 
 // DescLTE applies the LTE predicate on the "desc" field.
-func DescLTE(v int64) predicate.SdkInfo {
+func DescLTE(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldLTE(FieldDesc, v))
+}
+
+// DescContains applies the Contains predicate on the "desc" field.
+func DescContains(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldContains(FieldDesc, v))
+}
+
+// DescHasPrefix applies the HasPrefix predicate on the "desc" field.
+func DescHasPrefix(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldHasPrefix(FieldDesc, v))
+}
+
+// DescHasSuffix applies the HasSuffix predicate on the "desc" field.
+func DescHasSuffix(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldHasSuffix(FieldDesc, v))
+}
+
+// DescEqualFold applies the EqualFold predicate on the "desc" field.
+func DescEqualFold(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEqualFold(FieldDesc, v))
+}
+
+// DescContainsFold applies the ContainsFold predicate on the "desc" field.
+func DescContainsFold(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldContainsFold(FieldDesc, v))
 }
 
 // DownloadURLEQ applies the EQ predicate on the "download_url" field.
@@ -408,6 +448,176 @@ func DownloadURLEqualFold(v string) predicate.SdkInfo {
 // DownloadURLContainsFold applies the ContainsFold predicate on the "download_url" field.
 func DownloadURLContainsFold(v string) predicate.SdkInfo {
 	return predicate.SdkInfo(sql.FieldContainsFold(FieldDownloadURL, v))
+}
+
+// LanguageEQ applies the EQ predicate on the "language" field.
+func LanguageEQ(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEQ(FieldLanguage, v))
+}
+
+// LanguageNEQ applies the NEQ predicate on the "language" field.
+func LanguageNEQ(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldNEQ(FieldLanguage, v))
+}
+
+// LanguageIn applies the In predicate on the "language" field.
+func LanguageIn(vs ...string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldIn(FieldLanguage, vs...))
+}
+
+// LanguageNotIn applies the NotIn predicate on the "language" field.
+func LanguageNotIn(vs ...string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldNotIn(FieldLanguage, vs...))
+}
+
+// LanguageGT applies the GT predicate on the "language" field.
+func LanguageGT(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldGT(FieldLanguage, v))
+}
+
+// LanguageGTE applies the GTE predicate on the "language" field.
+func LanguageGTE(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldGTE(FieldLanguage, v))
+}
+
+// LanguageLT applies the LT predicate on the "language" field.
+func LanguageLT(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldLT(FieldLanguage, v))
+}
+
+// LanguageLTE applies the LTE predicate on the "language" field.
+func LanguageLTE(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldLTE(FieldLanguage, v))
+}
+
+// LanguageContains applies the Contains predicate on the "language" field.
+func LanguageContains(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldContains(FieldLanguage, v))
+}
+
+// LanguageHasPrefix applies the HasPrefix predicate on the "language" field.
+func LanguageHasPrefix(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldHasPrefix(FieldLanguage, v))
+}
+
+// LanguageHasSuffix applies the HasSuffix predicate on the "language" field.
+func LanguageHasSuffix(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldHasSuffix(FieldLanguage, v))
+}
+
+// LanguageEqualFold applies the EqualFold predicate on the "language" field.
+func LanguageEqualFold(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEqualFold(FieldLanguage, v))
+}
+
+// LanguageContainsFold applies the ContainsFold predicate on the "language" field.
+func LanguageContainsFold(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldContainsFold(FieldLanguage, v))
+}
+
+// LanguageIDEQ applies the EQ predicate on the "language_id" field.
+func LanguageIDEQ(v int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEQ(FieldLanguageID, v))
+}
+
+// LanguageIDNEQ applies the NEQ predicate on the "language_id" field.
+func LanguageIDNEQ(v int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldNEQ(FieldLanguageID, v))
+}
+
+// LanguageIDIn applies the In predicate on the "language_id" field.
+func LanguageIDIn(vs ...int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldIn(FieldLanguageID, vs...))
+}
+
+// LanguageIDNotIn applies the NotIn predicate on the "language_id" field.
+func LanguageIDNotIn(vs ...int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldNotIn(FieldLanguageID, vs...))
+}
+
+// LanguageIDGT applies the GT predicate on the "language_id" field.
+func LanguageIDGT(v int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldGT(FieldLanguageID, v))
+}
+
+// LanguageIDGTE applies the GTE predicate on the "language_id" field.
+func LanguageIDGTE(v int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldGTE(FieldLanguageID, v))
+}
+
+// LanguageIDLT applies the LT predicate on the "language_id" field.
+func LanguageIDLT(v int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldLT(FieldLanguageID, v))
+}
+
+// LanguageIDLTE applies the LTE predicate on the "language_id" field.
+func LanguageIDLTE(v int64) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldLTE(FieldLanguageID, v))
+}
+
+// VersionEQ applies the EQ predicate on the "version" field.
+func VersionEQ(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEQ(FieldVersion, v))
+}
+
+// VersionNEQ applies the NEQ predicate on the "version" field.
+func VersionNEQ(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldNEQ(FieldVersion, v))
+}
+
+// VersionIn applies the In predicate on the "version" field.
+func VersionIn(vs ...string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldIn(FieldVersion, vs...))
+}
+
+// VersionNotIn applies the NotIn predicate on the "version" field.
+func VersionNotIn(vs ...string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldNotIn(FieldVersion, vs...))
+}
+
+// VersionGT applies the GT predicate on the "version" field.
+func VersionGT(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldGT(FieldVersion, v))
+}
+
+// VersionGTE applies the GTE predicate on the "version" field.
+func VersionGTE(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldGTE(FieldVersion, v))
+}
+
+// VersionLT applies the LT predicate on the "version" field.
+func VersionLT(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldLT(FieldVersion, v))
+}
+
+// VersionLTE applies the LTE predicate on the "version" field.
+func VersionLTE(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldLTE(FieldVersion, v))
+}
+
+// VersionContains applies the Contains predicate on the "version" field.
+func VersionContains(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldContains(FieldVersion, v))
+}
+
+// VersionHasPrefix applies the HasPrefix predicate on the "version" field.
+func VersionHasPrefix(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldHasPrefix(FieldVersion, v))
+}
+
+// VersionHasSuffix applies the HasSuffix predicate on the "version" field.
+func VersionHasSuffix(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldHasSuffix(FieldVersion, v))
+}
+
+// VersionEqualFold applies the EqualFold predicate on the "version" field.
+func VersionEqualFold(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldEqualFold(FieldVersion, v))
+}
+
+// VersionContainsFold applies the ContainsFold predicate on the "version" field.
+func VersionContainsFold(v string) predicate.SdkInfo {
+	return predicate.SdkInfo(sql.FieldContainsFold(FieldVersion, v))
 }
 
 // HasAppSdk applies the HasEdge predicate on the "app_sdk" edge.

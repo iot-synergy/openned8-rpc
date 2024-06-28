@@ -921,7 +921,7 @@ func (si *SdkInfoCreate) SetNotNilAvatar(value *string) *SdkInfoCreate {
 }
 
 // set field if value's pointer is not nil.
-func (si *SdkInfoUpdate) SetNotNilDesc(value *int64) *SdkInfoUpdate {
+func (si *SdkInfoUpdate) SetNotNilDesc(value *string) *SdkInfoUpdate {
 	if value != nil {
 		return si.SetDesc(*value)
 	}
@@ -929,7 +929,7 @@ func (si *SdkInfoUpdate) SetNotNilDesc(value *int64) *SdkInfoUpdate {
 }
 
 // set field if value's pointer is not nil.
-func (si *SdkInfoUpdateOne) SetNotNilDesc(value *int64) *SdkInfoUpdateOne {
+func (si *SdkInfoUpdateOne) SetNotNilDesc(value *string) *SdkInfoUpdateOne {
 	if value != nil {
 		return si.SetDesc(*value)
 	}
@@ -937,7 +937,7 @@ func (si *SdkInfoUpdateOne) SetNotNilDesc(value *int64) *SdkInfoUpdateOne {
 }
 
 // set field if value's pointer is not nil.
-func (si *SdkInfoCreate) SetNotNilDesc(value *int64) *SdkInfoCreate {
+func (si *SdkInfoCreate) SetNotNilDesc(value *string) *SdkInfoCreate {
 	if value != nil {
 		return si.SetDesc(*value)
 	}
@@ -964,6 +964,78 @@ func (si *SdkInfoUpdateOne) SetNotNilDownloadURL(value *string) *SdkInfoUpdateOn
 func (si *SdkInfoCreate) SetNotNilDownloadURL(value *string) *SdkInfoCreate {
 	if value != nil {
 		return si.SetDownloadURL(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilLanguage(value *string) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetLanguage(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilLanguage(value *string) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetLanguage(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilLanguage(value *string) *SdkInfoCreate {
+	if value != nil {
+		return si.SetLanguage(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilLanguageID(value *int64) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetLanguageID(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilLanguageID(value *int64) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetLanguageID(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilLanguageID(value *int64) *SdkInfoCreate {
+	if value != nil {
+		return si.SetLanguageID(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdate) SetNotNilVersion(value *string) *SdkInfoUpdate {
+	if value != nil {
+		return si.SetVersion(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoUpdateOne) SetNotNilVersion(value *string) *SdkInfoUpdateOne {
+	if value != nil {
+		return si.SetVersion(*value)
+	}
+	return si
+}
+
+// set field if value's pointer is not nil.
+func (si *SdkInfoCreate) SetNotNilVersion(value *string) *SdkInfoCreate {
+	if value != nil {
+		return si.SetVersion(*value)
 	}
 	return si
 }

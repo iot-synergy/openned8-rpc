@@ -65,23 +65,16 @@ func (siu *SdkInfoUpdate) SetNillableAvatar(s *string) *SdkInfoUpdate {
 }
 
 // SetDesc sets the "desc" field.
-func (siu *SdkInfoUpdate) SetDesc(i int64) *SdkInfoUpdate {
-	siu.mutation.ResetDesc()
-	siu.mutation.SetDesc(i)
+func (siu *SdkInfoUpdate) SetDesc(s string) *SdkInfoUpdate {
+	siu.mutation.SetDesc(s)
 	return siu
 }
 
 // SetNillableDesc sets the "desc" field if the given value is not nil.
-func (siu *SdkInfoUpdate) SetNillableDesc(i *int64) *SdkInfoUpdate {
-	if i != nil {
-		siu.SetDesc(*i)
+func (siu *SdkInfoUpdate) SetNillableDesc(s *string) *SdkInfoUpdate {
+	if s != nil {
+		siu.SetDesc(*s)
 	}
-	return siu
-}
-
-// AddDesc adds i to the "desc" field.
-func (siu *SdkInfoUpdate) AddDesc(i int64) *SdkInfoUpdate {
-	siu.mutation.AddDesc(i)
 	return siu
 }
 
@@ -95,6 +88,55 @@ func (siu *SdkInfoUpdate) SetDownloadURL(s string) *SdkInfoUpdate {
 func (siu *SdkInfoUpdate) SetNillableDownloadURL(s *string) *SdkInfoUpdate {
 	if s != nil {
 		siu.SetDownloadURL(*s)
+	}
+	return siu
+}
+
+// SetLanguage sets the "language" field.
+func (siu *SdkInfoUpdate) SetLanguage(s string) *SdkInfoUpdate {
+	siu.mutation.SetLanguage(s)
+	return siu
+}
+
+// SetNillableLanguage sets the "language" field if the given value is not nil.
+func (siu *SdkInfoUpdate) SetNillableLanguage(s *string) *SdkInfoUpdate {
+	if s != nil {
+		siu.SetLanguage(*s)
+	}
+	return siu
+}
+
+// SetLanguageID sets the "language_id" field.
+func (siu *SdkInfoUpdate) SetLanguageID(i int64) *SdkInfoUpdate {
+	siu.mutation.ResetLanguageID()
+	siu.mutation.SetLanguageID(i)
+	return siu
+}
+
+// SetNillableLanguageID sets the "language_id" field if the given value is not nil.
+func (siu *SdkInfoUpdate) SetNillableLanguageID(i *int64) *SdkInfoUpdate {
+	if i != nil {
+		siu.SetLanguageID(*i)
+	}
+	return siu
+}
+
+// AddLanguageID adds i to the "language_id" field.
+func (siu *SdkInfoUpdate) AddLanguageID(i int64) *SdkInfoUpdate {
+	siu.mutation.AddLanguageID(i)
+	return siu
+}
+
+// SetVersion sets the "version" field.
+func (siu *SdkInfoUpdate) SetVersion(s string) *SdkInfoUpdate {
+	siu.mutation.SetVersion(s)
+	return siu
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (siu *SdkInfoUpdate) SetNillableVersion(s *string) *SdkInfoUpdate {
+	if s != nil {
+		siu.SetVersion(*s)
 	}
 	return siu
 }
@@ -195,13 +237,22 @@ func (siu *SdkInfoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(sdkinfo.FieldAvatar, field.TypeString, value)
 	}
 	if value, ok := siu.mutation.Desc(); ok {
-		_spec.SetField(sdkinfo.FieldDesc, field.TypeInt64, value)
-	}
-	if value, ok := siu.mutation.AddedDesc(); ok {
-		_spec.AddField(sdkinfo.FieldDesc, field.TypeInt64, value)
+		_spec.SetField(sdkinfo.FieldDesc, field.TypeString, value)
 	}
 	if value, ok := siu.mutation.DownloadURL(); ok {
 		_spec.SetField(sdkinfo.FieldDownloadURL, field.TypeString, value)
+	}
+	if value, ok := siu.mutation.Language(); ok {
+		_spec.SetField(sdkinfo.FieldLanguage, field.TypeString, value)
+	}
+	if value, ok := siu.mutation.LanguageID(); ok {
+		_spec.SetField(sdkinfo.FieldLanguageID, field.TypeInt64, value)
+	}
+	if value, ok := siu.mutation.AddedLanguageID(); ok {
+		_spec.AddField(sdkinfo.FieldLanguageID, field.TypeInt64, value)
+	}
+	if value, ok := siu.mutation.Version(); ok {
+		_spec.SetField(sdkinfo.FieldVersion, field.TypeString, value)
 	}
 	if siu.mutation.AppSdkCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -303,23 +354,16 @@ func (siuo *SdkInfoUpdateOne) SetNillableAvatar(s *string) *SdkInfoUpdateOne {
 }
 
 // SetDesc sets the "desc" field.
-func (siuo *SdkInfoUpdateOne) SetDesc(i int64) *SdkInfoUpdateOne {
-	siuo.mutation.ResetDesc()
-	siuo.mutation.SetDesc(i)
+func (siuo *SdkInfoUpdateOne) SetDesc(s string) *SdkInfoUpdateOne {
+	siuo.mutation.SetDesc(s)
 	return siuo
 }
 
 // SetNillableDesc sets the "desc" field if the given value is not nil.
-func (siuo *SdkInfoUpdateOne) SetNillableDesc(i *int64) *SdkInfoUpdateOne {
-	if i != nil {
-		siuo.SetDesc(*i)
+func (siuo *SdkInfoUpdateOne) SetNillableDesc(s *string) *SdkInfoUpdateOne {
+	if s != nil {
+		siuo.SetDesc(*s)
 	}
-	return siuo
-}
-
-// AddDesc adds i to the "desc" field.
-func (siuo *SdkInfoUpdateOne) AddDesc(i int64) *SdkInfoUpdateOne {
-	siuo.mutation.AddDesc(i)
 	return siuo
 }
 
@@ -333,6 +377,55 @@ func (siuo *SdkInfoUpdateOne) SetDownloadURL(s string) *SdkInfoUpdateOne {
 func (siuo *SdkInfoUpdateOne) SetNillableDownloadURL(s *string) *SdkInfoUpdateOne {
 	if s != nil {
 		siuo.SetDownloadURL(*s)
+	}
+	return siuo
+}
+
+// SetLanguage sets the "language" field.
+func (siuo *SdkInfoUpdateOne) SetLanguage(s string) *SdkInfoUpdateOne {
+	siuo.mutation.SetLanguage(s)
+	return siuo
+}
+
+// SetNillableLanguage sets the "language" field if the given value is not nil.
+func (siuo *SdkInfoUpdateOne) SetNillableLanguage(s *string) *SdkInfoUpdateOne {
+	if s != nil {
+		siuo.SetLanguage(*s)
+	}
+	return siuo
+}
+
+// SetLanguageID sets the "language_id" field.
+func (siuo *SdkInfoUpdateOne) SetLanguageID(i int64) *SdkInfoUpdateOne {
+	siuo.mutation.ResetLanguageID()
+	siuo.mutation.SetLanguageID(i)
+	return siuo
+}
+
+// SetNillableLanguageID sets the "language_id" field if the given value is not nil.
+func (siuo *SdkInfoUpdateOne) SetNillableLanguageID(i *int64) *SdkInfoUpdateOne {
+	if i != nil {
+		siuo.SetLanguageID(*i)
+	}
+	return siuo
+}
+
+// AddLanguageID adds i to the "language_id" field.
+func (siuo *SdkInfoUpdateOne) AddLanguageID(i int64) *SdkInfoUpdateOne {
+	siuo.mutation.AddLanguageID(i)
+	return siuo
+}
+
+// SetVersion sets the "version" field.
+func (siuo *SdkInfoUpdateOne) SetVersion(s string) *SdkInfoUpdateOne {
+	siuo.mutation.SetVersion(s)
+	return siuo
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (siuo *SdkInfoUpdateOne) SetNillableVersion(s *string) *SdkInfoUpdateOne {
+	if s != nil {
+		siuo.SetVersion(*s)
 	}
 	return siuo
 }
@@ -463,13 +556,22 @@ func (siuo *SdkInfoUpdateOne) sqlSave(ctx context.Context) (_node *SdkInfo, err 
 		_spec.SetField(sdkinfo.FieldAvatar, field.TypeString, value)
 	}
 	if value, ok := siuo.mutation.Desc(); ok {
-		_spec.SetField(sdkinfo.FieldDesc, field.TypeInt64, value)
-	}
-	if value, ok := siuo.mutation.AddedDesc(); ok {
-		_spec.AddField(sdkinfo.FieldDesc, field.TypeInt64, value)
+		_spec.SetField(sdkinfo.FieldDesc, field.TypeString, value)
 	}
 	if value, ok := siuo.mutation.DownloadURL(); ok {
 		_spec.SetField(sdkinfo.FieldDownloadURL, field.TypeString, value)
+	}
+	if value, ok := siuo.mutation.Language(); ok {
+		_spec.SetField(sdkinfo.FieldLanguage, field.TypeString, value)
+	}
+	if value, ok := siuo.mutation.LanguageID(); ok {
+		_spec.SetField(sdkinfo.FieldLanguageID, field.TypeInt64, value)
+	}
+	if value, ok := siuo.mutation.AddedLanguageID(); ok {
+		_spec.AddField(sdkinfo.FieldLanguageID, field.TypeInt64, value)
+	}
+	if value, ok := siuo.mutation.Version(); ok {
+		_spec.SetField(sdkinfo.FieldVersion, field.TypeString, value)
 	}
 	if siuo.mutation.AppSdkCleared() {
 		edge := &sqlgraph.EdgeSpec{

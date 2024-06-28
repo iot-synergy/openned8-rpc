@@ -24,12 +24,24 @@ func (SdkInfo) Fields() []ent.Field {
 			SchemaType(map[string]string{dialect.MySQL: "varchar(256)"}).
 			Comment("头像").
 			Annotations(entsql.WithComments(true)),
-		field.Int64("desc").
+		field.String("desc").
+			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Comment("排序").
 			Annotations(entsql.WithComments(true)),
 		field.String("download_url").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Comment("下载地址").
+			Annotations(entsql.WithComments(true)),
+		field.String("language").
+			SchemaType(map[string]string{dialect.MySQL: "varchar(32)"}).
+			Comment("开发语言").
+			Annotations(entsql.WithComments(true)),
+		field.Int64("language_id").
+			Comment("开发语言ID").
+			Annotations(entsql.WithComments(true)),
+		field.String("version").
+			SchemaType(map[string]string{dialect.MySQL: "varchar(32)"}).
+			Comment("版本号").
 			Annotations(entsql.WithComments(true)),
 	}
 }

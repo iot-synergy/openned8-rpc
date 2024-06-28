@@ -135,8 +135,11 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "name", Type: field.TypeString, Unique: true, Comment: "名字", SchemaType: map[string]string{"mysql": "varchar(256)"}},
 		{Name: "avatar", Type: field.TypeString, Comment: "头像", SchemaType: map[string]string{"mysql": "varchar(256)"}},
-		{Name: "desc", Type: field.TypeInt64, Comment: "排序"},
+		{Name: "desc", Type: field.TypeString, Comment: "排序", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "download_url", Type: field.TypeString, Comment: "下载地址", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "language", Type: field.TypeString, Comment: "开发语言", SchemaType: map[string]string{"mysql": "varchar(32)"}},
+		{Name: "language_id", Type: field.TypeInt64, Comment: "开发语言ID"},
+		{Name: "version", Type: field.TypeString, Comment: "版本号", SchemaType: map[string]string{"mysql": "varchar(32)"}},
 	}
 	// SdkInfoTable holds the schema information for the "sdk_info" table.
 	SdkInfoTable = &schema.Table{

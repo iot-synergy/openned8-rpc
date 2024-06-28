@@ -3,12 +3,14 @@ package svc
 import (
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/internal/config"
+	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ServiceContext struct {
 	Config config.Config
 	DB     *ent.Client
+	Redis  redis.UniversalClient
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -20,5 +22,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
 		DB:     db,
+		Redis:  c.RedisConf.MustNewUniversalRedis(),
 	}
 }

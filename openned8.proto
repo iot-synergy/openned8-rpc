@@ -5,7 +5,7 @@ option go_package="./openned8";
 
 message Empty {}
 
-message BeanMsg {
+message BaseMsg {
   string msg = 1;
 }
 
@@ -95,8 +95,9 @@ message ActiveCodeListReq {
   PageInfo PageInfo = 1;
   string UserId = 2;
   string AppId = 3;
-  int64 Status = 4;
-  int64 ExpireDate = 5;
+  string AppSdkId = 4;
+  int64 Status = 5;
+  int64 ExpireDate = 6;
 }
 
 message ActiveCodeListInfo {
@@ -148,7 +149,7 @@ message UserSdkUsageUpdateReq {
 message SdkInfoCreateReq {
   string name = 1;
   string avatar = 2;
-  int64 desc = 3;
+  string desc = 3;
   string download_url = 4;
 }
 
@@ -156,8 +157,21 @@ message SdkInfo {
   string id = 1;
   string name = 2;
   string avatar = 3;
-  int64 desc = 4;
+  string desc = 4;
   string download_url = 5;
+}
+
+message AppSdkInfo {
+  string id = 1;
+  string appId = 2;
+  string appName = 3;
+  string sdkId = 4;
+  string sdkName = 5;
+  string sdkKey = 6;
+  string sdkAvatar = 7;
+  string sdkDesc = 8;
+  string download_url = 9;
+
 }
 
 message SdkListQueryReq{
@@ -168,6 +182,11 @@ message SdkListQueryReq{
 message SdkListResp {
   int64 count = 1;
   repeated SdkInfo data = 2;
+}
+
+message AppSdkListResp {
+  int64 count = 1;
+  repeated AppSdkInfo data = 2;
 }
 
 message SdkQueryByAppReq {
@@ -212,12 +231,14 @@ message ActiveDeviceReq {
 message ActiveDeviceResp {}
 
 service openned8 {
+  // group: base
+  rpc initDatabase (Empty) returns (BaseMsg);
   // group: developer
   rpc appCreate (AppInfoCreateReq) returns (AppInfo);
   // group: developer
   rpc appUpdate (AppInfoUpdateReq) returns (AppInfo);
   // group: developer
-  rpc appDelete (AppInfoDeleteReq) returns (BeanMsg);
+  rpc appDelete (AppInfoDeleteReq) returns (BaseMsg);
   // group: developer
   rpc appQuery (AppListReq) returns (ApplistInfo);
   // group: developer
@@ -233,7 +254,7 @@ service openned8 {
   // group: developer
   rpc sdkListQuery(SdkListQueryReq) returns (SdkListResp);
   // group: developer
-  rpc sdkQueryByApp(SdkQueryByAppReq) returns (SdkListResp);
+  rpc sdkQueryByApp(SdkQueryByAppReq) returns (AppSdkListResp);
   // group: admin
   rpc queryUserSdkUsage(UserSdkUsageQueryReq) returns (SdkUsage);
   // group: admin

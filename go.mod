@@ -4,6 +4,7 @@ go 1.21.0
 
 toolchain go1.21.6
 
+
 require (
 	entgo.io/ent v0.13.1
 	github.com/gofrs/uuid/v5 v5.0.0
@@ -19,6 +20,7 @@ require (
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/bsm/redislock v0.9.4
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect

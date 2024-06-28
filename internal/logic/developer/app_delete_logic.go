@@ -2,6 +2,7 @@ package developer
 
 import (
 	"context"
+
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -23,10 +24,10 @@ func NewAppDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AppDele
 	}
 }
 
-func (l *AppDeleteLogic) AppDelete(in *openned8.AppInfoDeleteReq) (*openned8.BeanMsg, error) {
+func (l *AppDeleteLogic) AppDelete(in *openned8.AppInfoDeleteReq) (*openned8.BaseMsg, error) {
 	err := l.svcCtx.DB.AppInfo.DeleteOneID(in.Id).Where(appinfo.UserIDEQ(in.UserId)).Exec(l.ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &openned8.BeanMsg{Msg: "成功"}, nil
+	return &openned8.BaseMsg{Msg: "成功"}, nil
 }

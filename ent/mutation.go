@@ -4198,9 +4198,12 @@ type SdkInfoMutation struct {
 	updated_at     *time.Time
 	name           *string
 	avatar         *string
-	desc           *int64
-	adddesc        *int64
+	desc           *string
 	download_url   *string
+	language       *string
+	language_id    *int64
+	addlanguage_id *int64
+	version        *string
 	clearedFields  map[string]struct{}
 	app_sdk        map[uuid.UUID]struct{}
 	removedapp_sdk map[uuid.UUID]struct{}
@@ -4459,13 +4462,12 @@ func (m *SdkInfoMutation) ResetAvatar() {
 }
 
 // SetDesc sets the "desc" field.
-func (m *SdkInfoMutation) SetDesc(i int64) {
-	m.desc = &i
-	m.adddesc = nil
+func (m *SdkInfoMutation) SetDesc(s string) {
+	m.desc = &s
 }
 
 // Desc returns the value of the "desc" field in the mutation.
-func (m *SdkInfoMutation) Desc() (r int64, exists bool) {
+func (m *SdkInfoMutation) Desc() (r string, exists bool) {
 	v := m.desc
 	if v == nil {
 		return
@@ -4476,7 +4478,7 @@ func (m *SdkInfoMutation) Desc() (r int64, exists bool) {
 // OldDesc returns the old "desc" field's value of the SdkInfo entity.
 // If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SdkInfoMutation) OldDesc(ctx context.Context) (v int64, err error) {
+func (m *SdkInfoMutation) OldDesc(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDesc is only allowed on UpdateOne operations")
 	}
@@ -4490,28 +4492,9 @@ func (m *SdkInfoMutation) OldDesc(ctx context.Context) (v int64, err error) {
 	return oldValue.Desc, nil
 }
 
-// AddDesc adds i to the "desc" field.
-func (m *SdkInfoMutation) AddDesc(i int64) {
-	if m.adddesc != nil {
-		*m.adddesc += i
-	} else {
-		m.adddesc = &i
-	}
-}
-
-// AddedDesc returns the value that was added to the "desc" field in this mutation.
-func (m *SdkInfoMutation) AddedDesc() (r int64, exists bool) {
-	v := m.adddesc
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ResetDesc resets all changes to the "desc" field.
 func (m *SdkInfoMutation) ResetDesc() {
 	m.desc = nil
-	m.adddesc = nil
 }
 
 // SetDownloadURL sets the "download_url" field.
@@ -4548,6 +4531,134 @@ func (m *SdkInfoMutation) OldDownloadURL(ctx context.Context) (v string, err err
 // ResetDownloadURL resets all changes to the "download_url" field.
 func (m *SdkInfoMutation) ResetDownloadURL() {
 	m.download_url = nil
+}
+
+// SetLanguage sets the "language" field.
+func (m *SdkInfoMutation) SetLanguage(s string) {
+	m.language = &s
+}
+
+// Language returns the value of the "language" field in the mutation.
+func (m *SdkInfoMutation) Language() (r string, exists bool) {
+	v := m.language
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLanguage returns the old "language" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldLanguage(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLanguage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLanguage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLanguage: %w", err)
+	}
+	return oldValue.Language, nil
+}
+
+// ResetLanguage resets all changes to the "language" field.
+func (m *SdkInfoMutation) ResetLanguage() {
+	m.language = nil
+}
+
+// SetLanguageID sets the "language_id" field.
+func (m *SdkInfoMutation) SetLanguageID(i int64) {
+	m.language_id = &i
+	m.addlanguage_id = nil
+}
+
+// LanguageID returns the value of the "language_id" field in the mutation.
+func (m *SdkInfoMutation) LanguageID() (r int64, exists bool) {
+	v := m.language_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLanguageID returns the old "language_id" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldLanguageID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLanguageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLanguageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLanguageID: %w", err)
+	}
+	return oldValue.LanguageID, nil
+}
+
+// AddLanguageID adds i to the "language_id" field.
+func (m *SdkInfoMutation) AddLanguageID(i int64) {
+	if m.addlanguage_id != nil {
+		*m.addlanguage_id += i
+	} else {
+		m.addlanguage_id = &i
+	}
+}
+
+// AddedLanguageID returns the value that was added to the "language_id" field in this mutation.
+func (m *SdkInfoMutation) AddedLanguageID() (r int64, exists bool) {
+	v := m.addlanguage_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetLanguageID resets all changes to the "language_id" field.
+func (m *SdkInfoMutation) ResetLanguageID() {
+	m.language_id = nil
+	m.addlanguage_id = nil
+}
+
+// SetVersion sets the "version" field.
+func (m *SdkInfoMutation) SetVersion(s string) {
+	m.version = &s
+}
+
+// Version returns the value of the "version" field in the mutation.
+func (m *SdkInfoMutation) Version() (r string, exists bool) {
+	v := m.version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVersion returns the old "version" field's value of the SdkInfo entity.
+// If the SdkInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SdkInfoMutation) OldVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVersion: %w", err)
+	}
+	return oldValue.Version, nil
+}
+
+// ResetVersion resets all changes to the "version" field.
+func (m *SdkInfoMutation) ResetVersion() {
+	m.version = nil
 }
 
 // AddAppSdkIDs adds the "app_sdk" edge to the AppSdk entity by ids.
@@ -4638,7 +4749,7 @@ func (m *SdkInfoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SdkInfoMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, sdkinfo.FieldCreatedAt)
 	}
@@ -4656,6 +4767,15 @@ func (m *SdkInfoMutation) Fields() []string {
 	}
 	if m.download_url != nil {
 		fields = append(fields, sdkinfo.FieldDownloadURL)
+	}
+	if m.language != nil {
+		fields = append(fields, sdkinfo.FieldLanguage)
+	}
+	if m.language_id != nil {
+		fields = append(fields, sdkinfo.FieldLanguageID)
+	}
+	if m.version != nil {
+		fields = append(fields, sdkinfo.FieldVersion)
 	}
 	return fields
 }
@@ -4677,6 +4797,12 @@ func (m *SdkInfoMutation) Field(name string) (ent.Value, bool) {
 		return m.Desc()
 	case sdkinfo.FieldDownloadURL:
 		return m.DownloadURL()
+	case sdkinfo.FieldLanguage:
+		return m.Language()
+	case sdkinfo.FieldLanguageID:
+		return m.LanguageID()
+	case sdkinfo.FieldVersion:
+		return m.Version()
 	}
 	return nil, false
 }
@@ -4698,6 +4824,12 @@ func (m *SdkInfoMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldDesc(ctx)
 	case sdkinfo.FieldDownloadURL:
 		return m.OldDownloadURL(ctx)
+	case sdkinfo.FieldLanguage:
+		return m.OldLanguage(ctx)
+	case sdkinfo.FieldLanguageID:
+		return m.OldLanguageID(ctx)
+	case sdkinfo.FieldVersion:
+		return m.OldVersion(ctx)
 	}
 	return nil, fmt.Errorf("unknown SdkInfo field %s", name)
 }
@@ -4736,7 +4868,7 @@ func (m *SdkInfoMutation) SetField(name string, value ent.Value) error {
 		m.SetAvatar(v)
 		return nil
 	case sdkinfo.FieldDesc:
-		v, ok := value.(int64)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4749,6 +4881,27 @@ func (m *SdkInfoMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDownloadURL(v)
 		return nil
+	case sdkinfo.FieldLanguage:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLanguage(v)
+		return nil
+	case sdkinfo.FieldLanguageID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLanguageID(v)
+		return nil
+	case sdkinfo.FieldVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVersion(v)
+		return nil
 	}
 	return fmt.Errorf("unknown SdkInfo field %s", name)
 }
@@ -4757,8 +4910,8 @@ func (m *SdkInfoMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *SdkInfoMutation) AddedFields() []string {
 	var fields []string
-	if m.adddesc != nil {
-		fields = append(fields, sdkinfo.FieldDesc)
+	if m.addlanguage_id != nil {
+		fields = append(fields, sdkinfo.FieldLanguageID)
 	}
 	return fields
 }
@@ -4768,8 +4921,8 @@ func (m *SdkInfoMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *SdkInfoMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case sdkinfo.FieldDesc:
-		return m.AddedDesc()
+	case sdkinfo.FieldLanguageID:
+		return m.AddedLanguageID()
 	}
 	return nil, false
 }
@@ -4779,12 +4932,12 @@ func (m *SdkInfoMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *SdkInfoMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case sdkinfo.FieldDesc:
+	case sdkinfo.FieldLanguageID:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddDesc(v)
+		m.AddLanguageID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown SdkInfo numeric field %s", name)
@@ -4830,6 +4983,15 @@ func (m *SdkInfoMutation) ResetField(name string) error {
 		return nil
 	case sdkinfo.FieldDownloadURL:
 		m.ResetDownloadURL()
+		return nil
+	case sdkinfo.FieldLanguage:
+		m.ResetLanguage()
+		return nil
+	case sdkinfo.FieldLanguageID:
+		m.ResetLanguageID()
+		return nil
+	case sdkinfo.FieldVersion:
+		m.ResetVersion()
 		return nil
 	}
 	return fmt.Errorf("unknown SdkInfo field %s", name)
