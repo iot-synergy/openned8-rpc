@@ -85,6 +85,11 @@ func (s *Openned8Server) SdkQueryByApp(ctx context.Context, in *openned8.SdkQuer
 	return l.SdkQueryByApp(in)
 }
 
+func (s *Openned8Server) AppBindSdk(ctx context.Context, in *openned8.AppBindSdkReq) (*openned8.AppSdkInfo, error) {
+	l := developer.NewAppBindSdkLogic(ctx, s.svcCtx)
+	return l.AppBindSdk(in)
+}
+
 func (s *Openned8Server) QueryUserSdkUsage(ctx context.Context, in *openned8.UserSdkUsageQueryReq) (*openned8.SdkUsage, error) {
 	l := admin.NewQueryUserSdkUsageLogic(ctx, s.svcCtx)
 	return l.QueryUserSdkUsage(in)

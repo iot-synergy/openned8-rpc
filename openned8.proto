@@ -91,6 +91,11 @@ message IndustryInfo {
   string Name = 2;
 }
 
+message AppBindSdkReq {
+  string appId = 1;
+  string sdkId = 2;
+}
+
 message ActiveCodeListReq {
   PageInfo PageInfo = 1;
   string UserId = 2;
@@ -255,6 +260,8 @@ service openned8 {
   rpc sdkListQuery(SdkListQueryReq) returns (SdkListResp);
   // group: developer
   rpc sdkQueryByApp(SdkQueryByAppReq) returns (AppSdkListResp);
+  // group: developer
+  rpc appBindSdk(AppBindSdkReq) returns (AppSdkInfo);
   // group: admin
   rpc queryUserSdkUsage(UserSdkUsageQueryReq) returns (SdkUsage);
   // group: admin

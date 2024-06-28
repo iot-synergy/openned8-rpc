@@ -20,6 +20,7 @@ type (
 	ActiveCodeResp                     = openned8.ActiveCodeResp
 	ActiveDeviceReq                    = openned8.ActiveDeviceReq
 	ActiveDeviceResp                   = openned8.ActiveDeviceResp
+	AppBindSdkReq                      = openned8.AppBindSdkReq
 	AppInfo                            = openned8.AppInfo
 	AppInfoCreateReq                   = openned8.AppInfoCreateReq
 	AppInfoDeleteReq                   = openned8.AppInfoDeleteReq
@@ -63,6 +64,7 @@ type (
 		DownloadCodeByAppId(ctx context.Context, in *DownloadCodeByAppIdReq, opts ...grpc.CallOption) (*DownloadCodeByAppIdResp, error)
 		SdkListQuery(ctx context.Context, in *SdkListQueryReq, opts ...grpc.CallOption) (*SdkListResp, error)
 		SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*AppSdkListResp, error)
+		AppBindSdk(ctx context.Context, in *AppBindSdkReq, opts ...grpc.CallOption) (*AppSdkInfo, error)
 		QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error)
@@ -139,6 +141,11 @@ func (m *defaultOpenned8) SdkListQuery(ctx context.Context, in *SdkListQueryReq,
 func (m *defaultOpenned8) SdkQueryByApp(ctx context.Context, in *SdkQueryByAppReq, opts ...grpc.CallOption) (*AppSdkListResp, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.SdkQueryByApp(ctx, in, opts...)
+}
+
+func (m *defaultOpenned8) AppBindSdk(ctx context.Context, in *AppBindSdkReq, opts ...grpc.CallOption) (*AppSdkInfo, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.AppBindSdk(ctx, in, opts...)
 }
 
 func (m *defaultOpenned8) QueryUserSdkUsage(ctx context.Context, in *UserSdkUsageQueryReq, opts ...grpc.CallOption) (*SdkUsage, error) {
