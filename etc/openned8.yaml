@@ -2,28 +2,21 @@ Name: openned8.rpc
 ListenOn: 0.0.0.0:9190
 
 
-Log:
-  ServiceName: openned8RpcLogger
-  Mode: file
-  Path: /home/data/logs/openned8/rpc
-  Encoding: json
-  Level: info
-  Compress: false
-  KeepDays: 7
-  StackCoolDownMillis: 100
-
 Etcd:
   Hosts:
-    - 127.0.0.1:2379
+    - 192.168.10.181:2379
   Key: openned8.rpc
-
+RedisConf:
+  Host: 192.168.10.181:6379
+  Db: 0
+  
 DatabaseConf:
   Type: mysql
-  Host: 127.0.0.1
+  Host: 192.168.10.181
   Port: 3306
-  DBName: database240219
+  DBName: openned8
   Username: root # set your username
-  Password: xiaocaihong # set your password
+  Password: "123456" # set your password
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5

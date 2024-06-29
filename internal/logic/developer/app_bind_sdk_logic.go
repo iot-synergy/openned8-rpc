@@ -47,6 +47,12 @@ func (l *AppBindSdkLogic) AppBindSdk(in *openned8.AppBindSdkReq) (*openned8.AppS
 		SetSdkKey(common.RandomString(32)).
 		SaveX(l.ctx)
 
+	err = tx.Commit()
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &openned8.AppSdkInfo{
 		Id:          appSdk.ID.String(),
 		AppId:       appSdk.App,
