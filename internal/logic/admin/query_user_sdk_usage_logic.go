@@ -2,6 +2,7 @@ package admin
 
 import (
 	"context"
+
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -59,7 +60,7 @@ func QueryUserSdk(client *ent.Client, in *openned8.UserSdkUsageQueryReq, ctx con
 	if count == 0 {
 		save, err := client.SdkUsage.Create().
 			SetUserID(in.UserId).
-			SetAll(0).
+			SetAll(100).
 			SetUsed(0).
 			Save(ctx)
 		if err != nil {
