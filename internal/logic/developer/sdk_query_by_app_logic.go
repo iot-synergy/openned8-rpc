@@ -47,7 +47,7 @@ func (l *SdkQueryByAppLogic) SdkQueryByApp(in *openned8.SdkQueryByAppReq) (*open
 			SdkKey:      datum.SdkKey,
 			SdkAvatar:   datum.Edges.SdkInfo.Avatar,
 			SdkDesc:     datum.Edges.SdkInfo.Desc,
-			DownloadUrl: datum.Edges.SdkInfo.Avatar,
+			DownloadUrl: datum.Edges.SdkInfo.DownloadURL,
 		})
 	}
 	return &openned8.AppSdkListResp{
