@@ -2,8 +2,10 @@ package developer
 
 import (
 	"context"
-	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 	"time"
+
+	"github.com/gofrs/uuid/v5"
+	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -29,6 +31,9 @@ func (l *ActiveCodeQueryLogic) ActiveCodeQuery(in *openned8.ActiveCodeListReq) (
 	where := l.svcCtx.DB.ActiveCodeInfo.Query().Where(activecodeinfo.UserIDEQ(in.UserId))
 	if in.AppId != "" {
 		where.Where(activecodeinfo.AppIDEQ(in.AppId))
+	}
+	if in.AppSdkId != "" {
+		where.Where(activecodeinfo.AppSdkIDEQ(uuid.FromStringOrNil(in.AppSdkId)))
 	}
 	if in.Status != 0 {
 		where.Where(activecodeinfo.StatusEQ(uint8(in.Status)))
