@@ -1,10 +1,11 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/index"
 	"github.com/gofrs/uuid/v5"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -32,6 +33,10 @@ func (ActiveCodeInfo) Fields() []ent.Field {
 		field.String("app_id").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(64)"}).
 			Comment("appid").
+			Annotations(entsql.WithComments(true)),
+		field.String("app_key").
+			SchemaType(map[string]string{dialect.MySQL: "varchar(64)"}).
+			Comment("appkey").
 			Annotations(entsql.WithComments(true)),
 		field.String("active_ip").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(64)"}).

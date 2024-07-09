@@ -82,6 +82,12 @@ func (acic *ActiveCodeInfoCreate) SetAppID(s string) *ActiveCodeInfoCreate {
 	return acic
 }
 
+// SetAppKey sets the "app_key" field.
+func (acic *ActiveCodeInfoCreate) SetAppKey(s string) *ActiveCodeInfoCreate {
+	acic.mutation.SetAppKey(s)
+	return acic
+}
+
 // SetActiveIP sets the "active_ip" field.
 func (acic *ActiveCodeInfoCreate) SetActiveIP(s string) *ActiveCodeInfoCreate {
 	acic.mutation.SetActiveIP(s)
@@ -295,6 +301,9 @@ func (acic *ActiveCodeInfoCreate) check() error {
 	if _, ok := acic.mutation.AppID(); !ok {
 		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "ActiveCodeInfo.app_id"`)}
 	}
+	if _, ok := acic.mutation.AppKey(); !ok {
+		return &ValidationError{Name: "app_key", err: errors.New(`ent: missing required field "ActiveCodeInfo.app_key"`)}
+	}
 	if _, ok := acic.mutation.ActiveIP(); !ok {
 		return &ValidationError{Name: "active_ip", err: errors.New(`ent: missing required field "ActiveCodeInfo.active_ip"`)}
 	}
@@ -383,6 +392,10 @@ func (acic *ActiveCodeInfoCreate) createSpec() (*ActiveCodeInfo, *sqlgraph.Creat
 	if value, ok := acic.mutation.AppID(); ok {
 		_spec.SetField(activecodeinfo.FieldAppID, field.TypeString, value)
 		_node.AppID = value
+	}
+	if value, ok := acic.mutation.AppKey(); ok {
+		_spec.SetField(activecodeinfo.FieldAppKey, field.TypeString, value)
+		_node.AppKey = value
 	}
 	if value, ok := acic.mutation.ActiveIP(); ok {
 		_spec.SetField(activecodeinfo.FieldActiveIP, field.TypeString, value)

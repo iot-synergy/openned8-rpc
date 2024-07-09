@@ -32,6 +32,8 @@ type ActiveCodeInfo struct {
 	UserID string `json:"user_id,omitempty"`
 	// appid
 	AppID string `json:"app_id,omitempty"`
+	// appkey
+	AppKey string `json:"app_key,omitempty"`
 	// 激活的ip
 	ActiveIP string `json:"active_ip,omitempty"`
 	// 设备的sn码
@@ -89,7 +91,7 @@ func (*ActiveCodeInfo) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case activecodeinfo.FieldStatus, activecodeinfo.FieldActiveType:
 			values[i] = new(sql.NullInt64)
-		case activecodeinfo.FieldActiveKey, activecodeinfo.FieldUserID, activecodeinfo.FieldAppID, activecodeinfo.FieldActiveIP, activecodeinfo.FieldDeviceSn, activecodeinfo.FieldDeviceMAC, activecodeinfo.FieldDeviceIdentity, activecodeinfo.FieldActiveFile, activecodeinfo.FieldVersion, activecodeinfo.FieldImei:
+		case activecodeinfo.FieldActiveKey, activecodeinfo.FieldUserID, activecodeinfo.FieldAppID, activecodeinfo.FieldAppKey, activecodeinfo.FieldActiveIP, activecodeinfo.FieldDeviceSn, activecodeinfo.FieldDeviceMAC, activecodeinfo.FieldDeviceIdentity, activecodeinfo.FieldActiveFile, activecodeinfo.FieldVersion, activecodeinfo.FieldImei:
 			values[i] = new(sql.NullString)
 		case activecodeinfo.FieldCreatedAt, activecodeinfo.FieldUpdatedAt, activecodeinfo.FieldActiveDate, activecodeinfo.FieldStartDate, activecodeinfo.FieldExpireDate:
 			values[i] = new(sql.NullTime)
@@ -151,6 +153,12 @@ func (aci *ActiveCodeInfo) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
 			} else if value.Valid {
 				aci.AppID = value.String
+			}
+		case activecodeinfo.FieldAppKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field app_key", values[i])
+			} else if value.Valid {
+				aci.AppKey = value.String
 			}
 		case activecodeinfo.FieldActiveIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -282,6 +290,9 @@ func (aci *ActiveCodeInfo) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("app_id=")
 	builder.WriteString(aci.AppID)
+	builder.WriteString(", ")
+	builder.WriteString("app_key=")
+	builder.WriteString(aci.AppKey)
 	builder.WriteString(", ")
 	builder.WriteString("active_ip=")
 	builder.WriteString(aci.ActiveIP)

@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
@@ -25,7 +26,7 @@ func NewQuerySdkKeyByAppIdAndActiveCodeLogic(ctx context.Context, svcCtx *svc.Se
 }
 
 func (l *QuerySdkKeyByAppIdAndActiveCodeLogic) QuerySdkKeyByAppIdAndActiveCode(in *openned8.QuerySdkKeyByAppIdAndActiveCodeReq) (*openned8.BaseString, error) {
-	data, err := l.svcCtx.DB.ActiveCodeInfo.Query().Where(activecodeinfo.AppIDEQ(in.AppId), activecodeinfo.ActiveKey(in.ActiveCode)).QueryAppSdk().First(l.ctx)
+	data, err := l.svcCtx.DB.ActiveCodeInfo.Query().Where(activecodeinfo.AppKey(in.AppId), activecodeinfo.ActiveKey(in.ActiveCode)).QueryAppSdk().First(l.ctx)
 	if err != nil {
 		return nil, err
 	}

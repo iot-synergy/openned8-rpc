@@ -53,6 +53,7 @@ type ActiveCodeInfoMutation struct {
 	active_key      *string
 	user_id         *string
 	app_id          *string
+	app_key         *string
 	active_ip       *string
 	device_sn       *string
 	device_mac      *string
@@ -425,6 +426,42 @@ func (m *ActiveCodeInfoMutation) OldAppID(ctx context.Context) (v string, err er
 // ResetAppID resets all changes to the "app_id" field.
 func (m *ActiveCodeInfoMutation) ResetAppID() {
 	m.app_id = nil
+}
+
+// SetAppKey sets the "app_key" field.
+func (m *ActiveCodeInfoMutation) SetAppKey(s string) {
+	m.app_key = &s
+}
+
+// AppKey returns the value of the "app_key" field in the mutation.
+func (m *ActiveCodeInfoMutation) AppKey() (r string, exists bool) {
+	v := m.app_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppKey returns the old "app_key" field's value of the ActiveCodeInfo entity.
+// If the ActiveCodeInfo object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActiveCodeInfoMutation) OldAppKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAppKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAppKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppKey: %w", err)
+	}
+	return oldValue.AppKey, nil
+}
+
+// ResetAppKey resets all changes to the "app_key" field.
+func (m *ActiveCodeInfoMutation) ResetAppKey() {
+	m.app_key = nil
 }
 
 // SetActiveIP sets the "active_ip" field.
@@ -966,7 +1003,7 @@ func (m *ActiveCodeInfoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActiveCodeInfoMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, activecodeinfo.FieldCreatedAt)
 	}
@@ -984,6 +1021,9 @@ func (m *ActiveCodeInfoMutation) Fields() []string {
 	}
 	if m.app_id != nil {
 		fields = append(fields, activecodeinfo.FieldAppID)
+	}
+	if m.app_key != nil {
+		fields = append(fields, activecodeinfo.FieldAppKey)
 	}
 	if m.active_ip != nil {
 		fields = append(fields, activecodeinfo.FieldActiveIP)
@@ -1041,6 +1081,8 @@ func (m *ActiveCodeInfoMutation) Field(name string) (ent.Value, bool) {
 		return m.UserID()
 	case activecodeinfo.FieldAppID:
 		return m.AppID()
+	case activecodeinfo.FieldAppKey:
+		return m.AppKey()
 	case activecodeinfo.FieldActiveIP:
 		return m.ActiveIP()
 	case activecodeinfo.FieldDeviceSn:
@@ -1086,6 +1128,8 @@ func (m *ActiveCodeInfoMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldUserID(ctx)
 	case activecodeinfo.FieldAppID:
 		return m.OldAppID(ctx)
+	case activecodeinfo.FieldAppKey:
+		return m.OldAppKey(ctx)
 	case activecodeinfo.FieldActiveIP:
 		return m.OldActiveIP(ctx)
 	case activecodeinfo.FieldDeviceSn:
@@ -1160,6 +1204,13 @@ func (m *ActiveCodeInfoMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAppID(v)
+		return nil
+	case activecodeinfo.FieldAppKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppKey(v)
 		return nil
 	case activecodeinfo.FieldActiveIP:
 		v, ok := value.(string)
@@ -1359,6 +1410,9 @@ func (m *ActiveCodeInfoMutation) ResetField(name string) error {
 		return nil
 	case activecodeinfo.FieldAppID:
 		m.ResetAppID()
+		return nil
+	case activecodeinfo.FieldAppKey:
+		m.ResetAppKey()
 		return nil
 	case activecodeinfo.FieldActiveIP:
 		m.ResetActiveIP()

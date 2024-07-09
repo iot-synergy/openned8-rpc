@@ -42,15 +42,15 @@ func init() {
 	// activecodeinfo.DefaultStatus holds the default value on creation for the status field.
 	activecodeinfo.DefaultStatus = activecodeinfoDescStatus.Default.(uint8)
 	// activecodeinfoDescActiveDate is the schema descriptor for active_date field.
-	activecodeinfoDescActiveDate := activecodeinfoFields[7].Descriptor()
+	activecodeinfoDescActiveDate := activecodeinfoFields[8].Descriptor()
 	// activecodeinfo.DefaultActiveDate holds the default value on creation for the active_date field.
 	activecodeinfo.DefaultActiveDate = activecodeinfoDescActiveDate.Default.(time.Time)
 	// activecodeinfoDescActiveType is the schema descriptor for active_type field.
-	activecodeinfoDescActiveType := activecodeinfoFields[8].Descriptor()
+	activecodeinfoDescActiveType := activecodeinfoFields[9].Descriptor()
 	// activecodeinfo.DefaultActiveType holds the default value on creation for the active_type field.
 	activecodeinfo.DefaultActiveType = activecodeinfoDescActiveType.Default.(int64)
 	// activecodeinfoDescStartDate is the schema descriptor for start_date field.
-	activecodeinfoDescStartDate := activecodeinfoFields[11].Descriptor()
+	activecodeinfoDescStartDate := activecodeinfoFields[12].Descriptor()
 	// activecodeinfo.DefaultStartDate holds the default value on creation for the start_date field.
 	activecodeinfo.DefaultStartDate = activecodeinfoDescStartDate.Default.(time.Time)
 	// activecodeinfoDescID is the schema descriptor for id field.

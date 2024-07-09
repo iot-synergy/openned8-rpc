@@ -27,6 +27,8 @@ const (
 	FieldUserID = "user_id"
 	// FieldAppID holds the string denoting the app_id field in the database.
 	FieldAppID = "app_id"
+	// FieldAppKey holds the string denoting the app_key field in the database.
+	FieldAppKey = "app_key"
 	// FieldActiveIP holds the string denoting the active_ip field in the database.
 	FieldActiveIP = "active_ip"
 	// FieldDeviceSn holds the string denoting the device_sn field in the database.
@@ -73,6 +75,7 @@ var Columns = []string{
 	FieldActiveKey,
 	FieldUserID,
 	FieldAppID,
+	FieldAppKey,
 	FieldActiveIP,
 	FieldDeviceSn,
 	FieldDeviceMAC,
@@ -152,6 +155,11 @@ func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByAppID orders the results by the app_id field.
 func ByAppID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAppID, opts...).ToFunc()
+}
+
+// ByAppKey orders the results by the app_key field.
+func ByAppKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAppKey, opts...).ToFunc()
 }
 
 // ByActiveIP orders the results by the active_ip field.

@@ -129,6 +129,30 @@ func (aci *ActiveCodeInfoCreate) SetNotNilAppID(value *string) *ActiveCodeInfoCr
 }
 
 // set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoUpdate) SetNotNilAppKey(value *string) *ActiveCodeInfoUpdate {
+	if value != nil {
+		return aci.SetAppKey(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoUpdateOne) SetNotNilAppKey(value *string) *ActiveCodeInfoUpdateOne {
+	if value != nil {
+		return aci.SetAppKey(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
+func (aci *ActiveCodeInfoCreate) SetNotNilAppKey(value *string) *ActiveCodeInfoCreate {
+	if value != nil {
+		return aci.SetAppKey(*value)
+	}
+	return aci
+}
+
+// set field if value's pointer is not nil.
 func (aci *ActiveCodeInfoUpdate) SetNotNilActiveIP(value *string) *ActiveCodeInfoUpdate {
 	if value != nil {
 		return aci.SetActiveIP(*value)

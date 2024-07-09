@@ -3,12 +3,13 @@ package developer
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/ent/appinfo"
 	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 	"github.com/iot-synergy/openned8-rpc/ent/sdkusage"
 	"github.com/iot-synergy/openned8-rpc/internal/common"
-	"time"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -119,6 +120,7 @@ func creatActiveCode(ctx context.Context, in *openned8.ActiveCodeCreatReq, clien
 			SetActiveKey(common.RandomString(16)).
 			SetUserID(in.UserId).
 			SetAppID(appInfo.ID).
+			SetAppKey(appInfo.AppKey).
 			SetActiveIP("").
 			SetDeviceSn("").
 			SetDeviceMAC("").

@@ -86,6 +86,11 @@ func AppID(v string) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppID, v))
 }
 
+// AppKey applies equality check predicate on the "app_key" field. It's identical to AppKeyEQ.
+func AppKey(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppKey, v))
+}
+
 // ActiveIP applies equality check predicate on the "active_ip" field. It's identical to ActiveIPEQ.
 func ActiveIP(v string) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldActiveIP, v))
@@ -469,6 +474,71 @@ func AppIDEqualFold(v string) predicate.ActiveCodeInfo {
 // AppIDContainsFold applies the ContainsFold predicate on the "app_id" field.
 func AppIDContainsFold(v string) predicate.ActiveCodeInfo {
 	return predicate.ActiveCodeInfo(sql.FieldContainsFold(FieldAppID, v))
+}
+
+// AppKeyEQ applies the EQ predicate on the "app_key" field.
+func AppKeyEQ(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEQ(FieldAppKey, v))
+}
+
+// AppKeyNEQ applies the NEQ predicate on the "app_key" field.
+func AppKeyNEQ(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNEQ(FieldAppKey, v))
+}
+
+// AppKeyIn applies the In predicate on the "app_key" field.
+func AppKeyIn(vs ...string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldIn(FieldAppKey, vs...))
+}
+
+// AppKeyNotIn applies the NotIn predicate on the "app_key" field.
+func AppKeyNotIn(vs ...string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldNotIn(FieldAppKey, vs...))
+}
+
+// AppKeyGT applies the GT predicate on the "app_key" field.
+func AppKeyGT(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldGT(FieldAppKey, v))
+}
+
+// AppKeyGTE applies the GTE predicate on the "app_key" field.
+func AppKeyGTE(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldGTE(FieldAppKey, v))
+}
+
+// AppKeyLT applies the LT predicate on the "app_key" field.
+func AppKeyLT(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldLT(FieldAppKey, v))
+}
+
+// AppKeyLTE applies the LTE predicate on the "app_key" field.
+func AppKeyLTE(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldLTE(FieldAppKey, v))
+}
+
+// AppKeyContains applies the Contains predicate on the "app_key" field.
+func AppKeyContains(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldContains(FieldAppKey, v))
+}
+
+// AppKeyHasPrefix applies the HasPrefix predicate on the "app_key" field.
+func AppKeyHasPrefix(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldHasPrefix(FieldAppKey, v))
+}
+
+// AppKeyHasSuffix applies the HasSuffix predicate on the "app_key" field.
+func AppKeyHasSuffix(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldHasSuffix(FieldAppKey, v))
+}
+
+// AppKeyEqualFold applies the EqualFold predicate on the "app_key" field.
+func AppKeyEqualFold(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldEqualFold(FieldAppKey, v))
+}
+
+// AppKeyContainsFold applies the ContainsFold predicate on the "app_key" field.
+func AppKeyContainsFold(v string) predicate.ActiveCodeInfo {
+	return predicate.ActiveCodeInfo(sql.FieldContainsFold(FieldAppKey, v))
 }
 
 // ActiveIPEQ applies the EQ predicate on the "active_ip" field.

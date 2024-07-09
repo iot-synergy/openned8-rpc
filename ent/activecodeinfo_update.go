@@ -105,6 +105,20 @@ func (aciu *ActiveCodeInfoUpdate) SetNillableAppID(s *string) *ActiveCodeInfoUpd
 	return aciu
 }
 
+// SetAppKey sets the "app_key" field.
+func (aciu *ActiveCodeInfoUpdate) SetAppKey(s string) *ActiveCodeInfoUpdate {
+	aciu.mutation.SetAppKey(s)
+	return aciu
+}
+
+// SetNillableAppKey sets the "app_key" field if the given value is not nil.
+func (aciu *ActiveCodeInfoUpdate) SetNillableAppKey(s *string) *ActiveCodeInfoUpdate {
+	if s != nil {
+		aciu.SetAppKey(*s)
+	}
+	return aciu
+}
+
 // SetActiveIP sets the "active_ip" field.
 func (aciu *ActiveCodeInfoUpdate) SetActiveIP(s string) *ActiveCodeInfoUpdate {
 	aciu.mutation.SetActiveIP(s)
@@ -374,6 +388,9 @@ func (aciu *ActiveCodeInfoUpdate) sqlSave(ctx context.Context) (n int, err error
 	if value, ok := aciu.mutation.AppID(); ok {
 		_spec.SetField(activecodeinfo.FieldAppID, field.TypeString, value)
 	}
+	if value, ok := aciu.mutation.AppKey(); ok {
+		_spec.SetField(activecodeinfo.FieldAppKey, field.TypeString, value)
+	}
 	if value, ok := aciu.mutation.ActiveIP(); ok {
 		_spec.SetField(activecodeinfo.FieldActiveIP, field.TypeString, value)
 	}
@@ -533,6 +550,20 @@ func (aciuo *ActiveCodeInfoUpdateOne) SetAppID(s string) *ActiveCodeInfoUpdateOn
 func (aciuo *ActiveCodeInfoUpdateOne) SetNillableAppID(s *string) *ActiveCodeInfoUpdateOne {
 	if s != nil {
 		aciuo.SetAppID(*s)
+	}
+	return aciuo
+}
+
+// SetAppKey sets the "app_key" field.
+func (aciuo *ActiveCodeInfoUpdateOne) SetAppKey(s string) *ActiveCodeInfoUpdateOne {
+	aciuo.mutation.SetAppKey(s)
+	return aciuo
+}
+
+// SetNillableAppKey sets the "app_key" field if the given value is not nil.
+func (aciuo *ActiveCodeInfoUpdateOne) SetNillableAppKey(s *string) *ActiveCodeInfoUpdateOne {
+	if s != nil {
+		aciuo.SetAppKey(*s)
 	}
 	return aciuo
 }
@@ -835,6 +866,9 @@ func (aciuo *ActiveCodeInfoUpdateOne) sqlSave(ctx context.Context) (_node *Activ
 	}
 	if value, ok := aciuo.mutation.AppID(); ok {
 		_spec.SetField(activecodeinfo.FieldAppID, field.TypeString, value)
+	}
+	if value, ok := aciuo.mutation.AppKey(); ok {
+		_spec.SetField(activecodeinfo.FieldAppKey, field.TypeString, value)
 	}
 	if value, ok := aciuo.mutation.ActiveIP(); ok {
 		_spec.SetField(activecodeinfo.FieldActiveIP, field.TypeString, value)

@@ -18,6 +18,7 @@ var (
 		{Name: "active_key", Type: field.TypeString, Unique: true, Comment: "激活码", SchemaType: map[string]string{"mysql": "char(16)"}},
 		{Name: "user_id", Type: field.TypeString, Comment: "用户id", SchemaType: map[string]string{"mysql": "varchar(64)"}},
 		{Name: "app_id", Type: field.TypeString, Comment: "appid", SchemaType: map[string]string{"mysql": "varchar(64)"}},
+		{Name: "app_key", Type: field.TypeString, Comment: "appkey", SchemaType: map[string]string{"mysql": "varchar(64)"}},
 		{Name: "active_ip", Type: field.TypeString, Comment: "激活的ip", SchemaType: map[string]string{"mysql": "varchar(64)"}},
 		{Name: "device_sn", Type: field.TypeString, Comment: "设备的sn码", SchemaType: map[string]string{"mysql": "varchar(64)"}},
 		{Name: "device_mac", Type: field.TypeString, Comment: "设备的mac", SchemaType: map[string]string{"mysql": "varchar(256)"}},
@@ -39,7 +40,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "active_code_info_app_sdk_active_code",
-				Columns:    []*schema.Column{ActiveCodeInfoColumns[18]},
+				Columns:    []*schema.Column{ActiveCodeInfoColumns[19]},
 				RefColumns: []*schema.Column{AppSdkColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
