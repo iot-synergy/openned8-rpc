@@ -110,6 +110,11 @@ func (s *Openned8Server) QuerySdkKeyByAppIdAndActiveCode(ctx context.Context, in
 	return l.QuerySdkKeyByAppIdAndActiveCode(in)
 }
 
+func (s *Openned8Server) QueryAppSdkByActiveCode(ctx context.Context, in *openned8.QuerySdkKeyByAppIdAndActiveCodeReq) (*openned8.AppSdkInfo, error) {
+	l := common.NewQueryAppSdkByActiveCodeLogic(ctx, s.svcCtx)
+	return l.QueryAppSdkByActiveCode(in)
+}
+
 func (s *Openned8Server) ActiveDevice(ctx context.Context, in *openned8.ActiveDeviceReq) (*openned8.ActiveDeviceResp, error) {
 	l := common.NewActiveDeviceLogic(ctx, s.svcCtx)
 	return l.ActiveDevice(in)

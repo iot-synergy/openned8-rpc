@@ -3,9 +3,9 @@ package common
 import (
 	"context"
 	"errors"
+
 	"github.com/iot-synergy/openned8-rpc/ent"
 	"github.com/iot-synergy/openned8-rpc/ent/activecodeinfo"
-	"github.com/iot-synergy/openned8-rpc/ent/appsdk"
 
 	"github.com/iot-synergy/openned8-rpc/internal/svc"
 	"github.com/iot-synergy/openned8-rpc/types/openned8"
@@ -51,7 +51,9 @@ func (l *ActiveDeviceLogic) ActiveDevice(in *openned8.ActiveDeviceReq) (*openned
 }
 
 func activeDevice(ctx context.Context, client *ent.Client, in *openned8.ActiveDeviceReq) (*openned8.ActiveDeviceResp, error) {
-	activeCode, err := client.AppSdk.Query().Where(appsdk.AppEQ(in.AppId)).QueryActiveCode().Where(activecodeinfo.ActiveKeyEQ(in.ActiveCode)).First(ctx)
+	// client.ActiveCodeInfo.Query().Where(activecodeinfo.AppKey(in.AppId), activecodeinfo.ActiveKey(in.ActiveCode))
+	// data, err := l.svcCtx.DB.ActiveCodeInfo.Query().Where(activecodeinfo.AppKey(in.AppId), activecodeinfo.ActiveKey(in.ActiveCode)).QueryAppSdk().First(ctx)
+	activeCode, err := client.ActiveCodeInfo.Query().Where(activecodeinfo.AppKey(in.AppId), activecodeinfo.ActiveKey(in.ActiveCode)).First(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -36,6 +36,7 @@ const (
 	Openned8_UpdateUserSdkUsage_FullMethodName              = "/openned8.openned8/updateUserSdkUsage"
 	Openned8_CreateSdk_FullMethodName                       = "/openned8.openned8/createSdk"
 	Openned8_QuerySdkKeyByAppIdAndActiveCode_FullMethodName = "/openned8.openned8/querySdkKeyByAppIdAndActiveCode"
+	Openned8_QueryAppSdkByActiveCode_FullMethodName         = "/openned8.openned8/queryAppSdkByActiveCode"
 	Openned8_ActiveDevice_FullMethodName                    = "/openned8.openned8/activeDevice"
 )
 
@@ -77,6 +78,8 @@ type Openned8Client interface {
 	CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error)
 	// group: common
 	QuerySdkKeyByAppIdAndActiveCode(ctx context.Context, in *QuerySdkKeyByAppIdAndActiveCodeReq, opts ...grpc.CallOption) (*BaseString, error)
+	// group: common
+	QueryAppSdkByActiveCode(ctx context.Context, in *QuerySdkKeyByAppIdAndActiveCodeReq, opts ...grpc.CallOption) (*AppSdkInfo, error)
 	// group: common
 	ActiveDevice(ctx context.Context, in *ActiveDeviceReq, opts ...grpc.CallOption) (*ActiveDeviceResp, error)
 }
@@ -242,6 +245,15 @@ func (c *openned8Client) QuerySdkKeyByAppIdAndActiveCode(ctx context.Context, in
 	return out, nil
 }
 
+func (c *openned8Client) QueryAppSdkByActiveCode(ctx context.Context, in *QuerySdkKeyByAppIdAndActiveCodeReq, opts ...grpc.CallOption) (*AppSdkInfo, error) {
+	out := new(AppSdkInfo)
+	err := c.cc.Invoke(ctx, Openned8_QueryAppSdkByActiveCode_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *openned8Client) ActiveDevice(ctx context.Context, in *ActiveDeviceReq, opts ...grpc.CallOption) (*ActiveDeviceResp, error) {
 	out := new(ActiveDeviceResp)
 	err := c.cc.Invoke(ctx, Openned8_ActiveDevice_FullMethodName, in, out, opts...)
@@ -289,6 +301,8 @@ type Openned8Server interface {
 	CreateSdk(context.Context, *SdkInfoCreateReq) (*SdkInfo, error)
 	// group: common
 	QuerySdkKeyByAppIdAndActiveCode(context.Context, *QuerySdkKeyByAppIdAndActiveCodeReq) (*BaseString, error)
+	// group: common
+	QueryAppSdkByActiveCode(context.Context, *QuerySdkKeyByAppIdAndActiveCodeReq) (*AppSdkInfo, error)
 	// group: common
 	ActiveDevice(context.Context, *ActiveDeviceReq) (*ActiveDeviceResp, error)
 	mustEmbedUnimplementedOpenned8Server()
@@ -348,6 +362,9 @@ func (UnimplementedOpenned8Server) CreateSdk(context.Context, *SdkInfoCreateReq)
 }
 func (UnimplementedOpenned8Server) QuerySdkKeyByAppIdAndActiveCode(context.Context, *QuerySdkKeyByAppIdAndActiveCodeReq) (*BaseString, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QuerySdkKeyByAppIdAndActiveCode not implemented")
+}
+func (UnimplementedOpenned8Server) QueryAppSdkByActiveCode(context.Context, *QuerySdkKeyByAppIdAndActiveCodeReq) (*AppSdkInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryAppSdkByActiveCode not implemented")
 }
 func (UnimplementedOpenned8Server) ActiveDevice(context.Context, *ActiveDeviceReq) (*ActiveDeviceResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActiveDevice not implemented")
@@ -671,6 +688,24 @@ func _Openned8_QuerySdkKeyByAppIdAndActiveCode_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openned8_QueryAppSdkByActiveCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QuerySdkKeyByAppIdAndActiveCodeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Openned8Server).QueryAppSdkByActiveCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Openned8_QueryAppSdkByActiveCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Openned8Server).QueryAppSdkByActiveCode(ctx, req.(*QuerySdkKeyByAppIdAndActiveCodeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Openned8_ActiveDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ActiveDeviceReq)
 	if err := dec(in); err != nil {
@@ -763,6 +798,10 @@ var Openned8_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "querySdkKeyByAppIdAndActiveCode",
 			Handler:    _Openned8_QuerySdkKeyByAppIdAndActiveCode_Handler,
+		},
+		{
+			MethodName: "queryAppSdkByActiveCode",
+			Handler:    _Openned8_QueryAppSdkByActiveCode_Handler,
 		},
 		{
 			MethodName: "activeDevice",

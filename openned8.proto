@@ -271,5 +271,7 @@ service openned8 {
   // group: common
   rpc querySdkKeyByAppIdAndActiveCode (QuerySdkKeyByAppIdAndActiveCodeReq) returns (BaseString);
   // group: common
+  rpc queryAppSdkByActiveCode (QuerySdkKeyByAppIdAndActiveCodeReq) returns (AppSdkInfo);
+  // group: common
   rpc activeDevice (ActiveDeviceReq) returns (ActiveDeviceResp);
 }

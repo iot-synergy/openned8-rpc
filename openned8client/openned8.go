@@ -69,6 +69,7 @@ type (
 		UpdateUserSdkUsage(ctx context.Context, in *UserSdkUsageUpdateReq, opts ...grpc.CallOption) (*SdkUsage, error)
 		CreateSdk(ctx context.Context, in *SdkInfoCreateReq, opts ...grpc.CallOption) (*SdkInfo, error)
 		QuerySdkKeyByAppIdAndActiveCode(ctx context.Context, in *QuerySdkKeyByAppIdAndActiveCodeReq, opts ...grpc.CallOption) (*BaseString, error)
+		QueryAppSdkByActiveCode(ctx context.Context, in *QuerySdkKeyByAppIdAndActiveCodeReq, opts ...grpc.CallOption) (*AppSdkInfo, error)
 		ActiveDevice(ctx context.Context, in *ActiveDeviceReq, opts ...grpc.CallOption) (*ActiveDeviceResp, error)
 	}
 
@@ -166,6 +167,11 @@ func (m *defaultOpenned8) CreateSdk(ctx context.Context, in *SdkInfoCreateReq, o
 func (m *defaultOpenned8) QuerySdkKeyByAppIdAndActiveCode(ctx context.Context, in *QuerySdkKeyByAppIdAndActiveCodeReq, opts ...grpc.CallOption) (*BaseString, error) {
 	client := openned8.NewOpenned8Client(m.cli.Conn())
 	return client.QuerySdkKeyByAppIdAndActiveCode(ctx, in, opts...)
+}
+
+func (m *defaultOpenned8) QueryAppSdkByActiveCode(ctx context.Context, in *QuerySdkKeyByAppIdAndActiveCodeReq, opts ...grpc.CallOption) (*AppSdkInfo, error) {
+	client := openned8.NewOpenned8Client(m.cli.Conn())
+	return client.QueryAppSdkByActiveCode(ctx, in, opts...)
 }
 
 func (m *defaultOpenned8) ActiveDevice(ctx context.Context, in *ActiveDeviceReq, opts ...grpc.CallOption) (*ActiveDeviceResp, error) {
