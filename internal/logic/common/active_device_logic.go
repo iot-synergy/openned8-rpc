@@ -66,6 +66,6 @@ func activeDevice(ctx context.Context, client *ent.Client, in *openned8.ActiveDe
 	activeCode.Status = 2
 	activeCode.Imei = in.Imei
 	activeCode.DeviceSn = in.DeviceSn
-	client.ActiveCodeInfo.UpdateOne(activeCode)
+	client.ActiveCodeInfo.UpdateOne(activeCode).Save(ctx)
 	return &openned8.ActiveDeviceResp{}, nil
 }
