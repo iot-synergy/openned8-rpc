@@ -63,9 +63,21 @@ func activeDevice(ctx context.Context, client *ent.Client, in *openned8.ActiveDe
 	if activeCode.DeviceSn != "" && activeCode.DeviceSn != in.DeviceSn {
 		return nil, errors.New("The activation code cannot activate two devices")
 	}
+	if len(in.DeviceSn) <= 0 {
+		return nil, errors.New("DeviceSn is empty")
+	}
 	activeCode.Status = 2
 	activeCode.Imei = in.Imei
 	activeCode.DeviceSn = in.DeviceSn
-	client.ActiveCodeInfo.UpdateOne(activeCode).Save(ctx)
+	_, err = client.ActiveCodeInfo.UpdateOne(activeCode).
+		SetStatus(2).
+		SetImei(in.Imei).
+		SetDeviceSn(in.DeviceSn).
+		Save(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &openned8.ActiveDeviceResp{}, nil
 }
